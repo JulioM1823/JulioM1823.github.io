@@ -48,7 +48,8 @@
   }
 
   window.fetch = async function(input, init) {
-    const url = new URL(typeof input === 'string' ? input : input.url, location.href);
+    const source = input instanceof URL ? input.href : (typeof input === 'string' ? input : input.url);
+    const url = new URL(source, location.href);
     if (!recordAdapted && /\/professional\.html$/.test(url.pathname)) {
       recordAdapted = true;
       const response = await nativeFetch(input, init);
