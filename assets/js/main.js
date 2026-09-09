@@ -1,424 +1,85 @@
 /*
-	Dimension by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-*/
-
-// Load the 2026 redesign as an additive layer so the original HTML, routes, and
-// content remain the compatibility foundation of the site.
-(function() {
-	if (document.body) document.body.classList.add('jm-redesign');
-	if (!document.querySelector('link[data-jm-redesign]')) {
-		var redesignStyles = document.createElement('link');
-		redesignStyles.rel = 'stylesheet';
-		redesignStyles.href = 'assets/css/redesign.css';
-		redesignStyles.setAttribute('data-jm-redesign', '');
-		document.head.appendChild(redesignStyles);
-	}
-})();
-
-(function($) {
-
-	var	$window = $(window),
-		$body = $('body'),
-		$wrapper = $('#wrapper'),
-		$header = $('#header'),
-		$footer = $('#footer'),
-		$main = $('#main'),
-		$main_articles = $main.children('article');
-
-	// Breakpoints.
-		breakpoints({
-			xlarge:   [ '1281px',  '1680px' ],
-			large:    [ '981px',   '1280px' ],
-			medium:   [ '737px',   '980px'  ],
-			small:    [ '481px',   '736px'  ],
-			xsmall:   [ '361px',   '480px'  ],
-			xxsmall:  [ null,      '360px'  ]
-		});
-
-	// Play initial animations on page load.
-		$window.on('load', function() {
-			window.setTimeout(function() {
-				$body.removeClass('is-preload');
-			}, 100);
-		});
-
-	// Fix: Flexbox min-height bug on IE.
-		if (browser.name == 'ie') {
-
-			var flexboxFixTimeoutId;
-
-			$window.on('resize.flexbox-fix', function() {
-
-				clearTimeout(flexboxFixTimeoutId);
-
-				flexboxFixTimeoutId = setTimeout(function() {
-
-					if ($wrapper.prop('scrollHeight') > $window.height())
-						$wrapper.css('height', 'auto');
-					else
-						$wrapper.css('height', '100vh');
-
-				}, 250);
-
-			}).triggerHandler('resize.flexbox-fix');
-
-		}
-
-	// Nav.
-		var $nav = $header.children('nav'),
-			$nav_li = $nav.find('li');
-
-		// Add "middle" alignment classes if we're dealing with an even number of items.
-			if ($nav_li.length % 2 == 0) {
-
-				$nav.addClass('use-middle');
-				$nav_li.eq( ($nav_li.length / 2) ).addClass('is-middle');
-
-			}
-
-	// Main.
-		var	delay = 325,
-			locked = false;
-
-		// Methods.
-			$main._show = function(id, initial) {
-
-				var $article = $main_articles.filter('#' + id);
-
-				// No such article? Bail.
-					if ($article.length == 0)
-						return;
-
-				// Handle lock.
-
-					// Already locked? Speed through "show" steps w/o delays.
-						if (locked || (typeof initial != 'undefined' && initial === true)) {
-
-							// Mark as switching.
-								$body.addClass('is-switching');
-
-							// Mark as visible.
-								$body.addClass('is-article-visible');
-
-							// Deactivate all articles (just in case one's already active).
-								$main_articles.removeClass('active');
-
-							// Hide header, footer.
-								$header.hide();
-								$footer.hide();
-
-							// Show main, article.
-								$main.show();
-								$article.show();
-
-							// Activate article.
-								$article.addClass('active');
-
-							// Unlock.
-								locked = false;
-
-							// Unmark as switching.
-								setTimeout(function() {
-									$body.removeClass('is-switching');
-								}, (initial ? 1000 : 0));
-
-							return;
-
-						}
-
-				// Lock.
-						locked = true;
-
-				// Article already visible? Just swap articles.
-					if ($body.hasClass('is-article-visible')) {
-
-						// Deactivate current article.
-							var $currentArticle = $main_articles.filter('.active');
-
-							$currentArticle.removeClass('active');
-
-						// Show article.
-							setTimeout(function() {
-
-								// Hide current article.
-									$currentArticle.hide();
-
-								// Show article.
-									$article.show();
-
-								// Activate article.
-									setTimeout(function() {
-
-										$article.addClass('active');
-
-										// Window stuff.
-											$window
-												.scrollTop(0)
-												.triggerHandler('resize.flexbox-fix');
-
-										// Unlock.
-											setTimeout(function() {
-												locked = false;
-											}, delay);
-
-									}, 25);
-
-							}, delay);
-
-					}
-
-				// Otherwise, handle as normal.
-					else {
-
-						// Mark as visible.
-							$body
-								.addClass('is-article-visible');
-
-						// Show article.
-							setTimeout(function() {
-
-								// Hide header, footer.
-									$header.hide();
-									$footer.hide();
-
-								// Show main, article.
-									$main.show();
-									$article.show();
-
-								// Activate article.
-									setTimeout(function() {
-
-										$article.addClass('active');
-
-										// Window stuff.
-											$window
-												.scrollTop(0)
-												.triggerHandler('resize.flexbox-fix');
-
-										// Unlock.
-											setTimeout(function() {
-												locked = false;
-											}, delay);
-
-									}, 25);
-
-							}, delay);
-
-					}
-
-			};
-
-			$main._hide = function(addState) {
-
-				var $article = $main_articles.filter('.active');
-
-				// Article not visible? Bail.
-					if (!$body.hasClass('is-article-visible'))
-						return;
-
-				// Add state?
-					if (typeof addState != 'undefined'
-					&&	addState === true)
-						history.pushState(null, null, '#');
-
-				// Handle lock.
-
-					// Already locked? Speed through "hide" steps w/o delays.
-						if (locked) {
-
-							// Mark as switching.
-								$body.addClass('is-switching');
-
-							// Deactivate article.
-								$article.removeClass('active');
-
-							// Hide article, main.
-								$article.hide();
-								$main.hide();
-
-							// Show footer, header.
-								$footer.show();
-								$header.show();
-
-							// Unmark as visible.
-								$body.removeClass('is-article-visible');
-
-							// Unlock.
-								locked = false;
-
-							// Unmark as switching.
-								$body.removeClass('is-switching');
-
-							// Window stuff.
-								$window
-									.scrollTop(0)
-									.triggerHandler('resize.flexbox-fix');
-
-							return;
-
-						}
-
-					// Lock.
-						locked = true;
-
-				// Deactivate article.
-					$article.removeClass('active');
-
-				// Hide article.
-					setTimeout(function() {
-
-						// Hide article, main.
-							$article.hide();
-							$main.hide();
-
-						// Show footer, header.
-							$footer.show();
-							$header.show();
-
-						// Unmark as visible.
-							setTimeout(function() {
-
-								$body.removeClass('is-article-visible');
-
-								// Window stuff.
-									$window
-										.scrollTop(0)
-										.triggerHandler('resize.flexbox-fix');
-
-								// Unlock.
-									setTimeout(function() {
-										locked = false;
-									}, delay);
-
-							}, 25);
-
-					}, delay);
-
-
-			};
-
-		// Articles.
-			$main_articles.each(function() {
-
-				var $this = $(this);
-
-				// Close.
-					$('<div class="close">Close</div>')
-						.appendTo($this)
-						.on('click', function() {
-							location.hash = '';
-						});
-
-				// Prevent clicks from inside article from bubbling.
-					$this.on('click', function(event) {
-						event.stopPropagation();
-					});
-
-			});
-
-		// Events.
-			$body.on('click', function(event) {
-
-				// Article visible? Hide.
-					if ($body.hasClass('is-article-visible'))
-						$main._hide(true);
-
-			});
-
-			$window.on('keyup', function(event) {
-
-				switch (event.keyCode) {
-
-					case 27:
-
-						// Article visible? Hide.
-							if ($body.hasClass('is-article-visible'))
-								$main._hide(true);
-
-						break;
-
-					default:
-						break;
-
-				}
-
-			});
-
-			$window.on('hashchange', function(event) {
-
-				// Empty hash?
-					if (location.hash == ''
-					||	location.hash == '#') {
-
-						// Prevent default.
-							event.preventDefault();
-							event.stopPropagation();
-
-						// Hide.
-							$main._hide();
-
-					}
-
-				// Otherwise, check for a matching article.
-					else if ($main_articles.filter(location.hash).length > 0) {
-
-						// Prevent default.
-							event.preventDefault();
-							event.stopPropagation();
-
-						// Show article.
-							$main._show(location.hash.substr(1));
-
-					}
-
-			});
-
-		// Scroll restoration.
-		// This prevents the page from scrolling back to the top on a hashchange.
-			if ('scrollRestoration' in history)
-				history.scrollRestoration = 'manual';
-			else {
-
-				var	oldScrollPos = 0,
-					scrollPos = 0,
-					$htmlbody = $('html,body');
-
-				$window
-					.on('scroll', function() {
-
-						oldScrollPos = scrollPos;
-						scrollPos = $htmlbody.scrollTop();
-
-					})
-					.on('hashchange', function() {
-						$window.scrollTop(oldScrollPos);
-					});
-
-			}
-
-		// Initialize.
-
-			// Hide main, articles.
-				$main.hide();
-				$main_articles.hide();
-
-			// Initial article.
-				if (location.hash != ''
-				&&	location.hash != '#')
-					$window.on('load', function() {
-						$main._show(location.hash.substr(1), true);
-					});
-
-})(jQuery);
-
-// Load content/accessibility enhancements after Dimension has created its modal
-// controls. The enhancement script is deliberately dependency-free.
-(function() {
-	if (document.querySelector('script[data-jm-redesign]')) return;
-	var redesignScript = document.createElement('script');
-	redesignScript.src = 'assets/js/redesign.js';
-	redesignScript.setAttribute('data-jm-redesign', '');
-	document.body.appendChild(redesignScript);
+ * Compatibility bootstrap for the 2026 redesign.
+ * The full, validated route/navigation implementation lives in redesign-core.js.
+ * This small layer adapts professional.html's standalone section IDs into the
+ * internal IDs expected by the legacy-site augmentation, without duplicating
+ * the academic content in index.html.
+ */
+(() => {
+  'use strict';
+
+  const nativeFetch = window.fetch.bind(window);
+  let recordAdapted = false;
+
+  function adaptAcademicRecord(html) {
+    const replacements = [
+      ['id="research"', 'id="Research-current" data-augment="Research" data-title="Research"'],
+      ['id="publications"', 'id="Publications" data-title="Publications & presentations"'],
+      ['id="teaching"', 'id="Teaching-current" data-augment="Teaching" data-title="Teaching & mentorship"'],
+      ['id="service"', 'id="DEI-current" data-augment="DEI" data-title="Equity, service & leadership"'],
+      ['id="outreach"', 'id="Outreach-current" data-augment="Outreach" data-title="Outreach"'],
+      ['id="software"', 'id="Software" data-title="Software & research workflows"'],
+      ['id="experience"', 'id="CV" data-title="Education & experience"'],
+      ['id="contact"', 'id="Contact" data-title="Contact"'],
+      ['href="#research"', 'href="#Research-current"'],
+      ['href="#publications"', 'href="#Publications"'],
+      ['href="#teaching"', 'href="#Teaching-current"'],
+      ['href="#service"', 'href="#DEI-current"'],
+      ['href="#outreach"', 'href="#Outreach-current"'],
+      ['href="#software"', 'href="#Software"'],
+      ['href="#experience"', 'href="#CV"'],
+      ['href="#contact"', 'href="#Contact"']
+    ];
+    replacements.forEach(([from, to]) => { html = html.split(from).join(to); });
+
+    if (!html.includes('id="gravitywaves"')) {
+      const gravityWaves = `
+        <article id="gravitywaves" data-title="Atmospheric gravity waves" class="jm-record-section">
+          <p class="jm-eyebrow">Graduate research / Solar atmosphere</p>
+          <h2>Atmospheric gravity waves</h2>
+          <p class="jm-lead">Computational diagnostics of waves in the lower solar atmosphere.</p>
+          <p>My Ph.D. research at New Mexico State University includes helioseismology and solar atmospheric gravity waves, with an emphasis on computational analysis of solar oscillation and atmospheric-wave diagnostics. Alongside that research, I develop reproducible workflows for analysis, visualization, documentation, and version control.</p>
+          <section class="jm-callout"><h3>Related publication</h3><p>Vesa, O., Morales, J. M., Jackiewicz, J., Vigeesh, G., &amp; Reardon, K. (2025). <em>Atmospheric Gravity Waves Modulated by the Magnetic Field Configuration.</em> <em>ApJ</em>, 992, 201.</p><a class="jm-text-link" href="https://doi.org/10.3847/1538-4357/ae0a55">Read the publication →</a></section>
+          <p><a href="#Publications">All publications &amp; presentations →</a></p>
+        </article>`;
+      html = html.replace('</main>', gravityWaves + '\n  </main>');
+    }
+    return html;
+  }
+
+  window.fetch = async function(input, init) {
+    const url = new URL(typeof input === 'string' ? input : input.url, location.href);
+    if (!recordAdapted && /\/professional\.html$/.test(url.pathname)) {
+      recordAdapted = true;
+      const response = await nativeFetch(input, init);
+      const text = adaptAcademicRecord(await response.text());
+      const headers = new Headers(response.headers);
+      headers.set('content-type', 'text/html; charset=utf-8');
+      return new Response(text, {
+        status: response.status,
+        statusText: response.statusText,
+        headers
+      });
+    }
+    return nativeFetch(input, init);
+  };
+
+  const core = document.createElement('script');
+  core.src = new URL('redesign-core.js', document.currentScript.src).href;
+  core.onerror = () => {
+    console.error('Website enhancement unavailable: redesign-core.js could not load.');
+    document.body.classList.remove('is-preload');
+    const main = document.getElementById('main');
+    if (main) {
+      main.hidden = false;
+      main.style.display = 'block';
+      main.querySelectorAll('article').forEach(article => {
+        article.hidden = false;
+        article.style.display = 'block';
+        article.style.opacity = '1';
+        article.style.transform = 'none';
+      });
+    }
+  };
+  document.body.appendChild(core);
 })();
