@@ -4,6 +4,19 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
 
+// Load the 2026 redesign as an additive layer so the original HTML, routes, and
+// content remain the compatibility foundation of the site.
+(function() {
+	if (document.body) document.body.classList.add('jm-redesign');
+	if (!document.querySelector('link[data-jm-redesign]')) {
+		var redesignStyles = document.createElement('link');
+		redesignStyles.rel = 'stylesheet';
+		redesignStyles.href = 'assets/css/redesign.css';
+		redesignStyles.setAttribute('data-jm-redesign', '');
+		document.head.appendChild(redesignStyles);
+	}
+})();
+
 (function($) {
 
 	var	$window = $(window),
@@ -115,7 +128,7 @@
 
 						}
 
-					// Lock.
+				// Lock.
 						locked = true;
 
 				// Article already visible? Just swap articles.
@@ -399,3 +412,13 @@
 					});
 
 })(jQuery);
+
+// Load content/accessibility enhancements after Dimension has created its modal
+// controls. The enhancement script is deliberately dependency-free.
+(function() {
+	if (document.querySelector('script[data-jm-redesign]')) return;
+	var redesignScript = document.createElement('script');
+	redesignScript.src = 'assets/js/redesign.js';
+	redesignScript.setAttribute('data-jm-redesign', '');
+	document.body.appendChild(redesignScript);
+})();
