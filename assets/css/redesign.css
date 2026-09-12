@@ -1,134 +1,64 @@
-/*
- * Redesign entrypoint.
- * The route-based legacy-site refinement is kept in redesign-core.css.
- * The scoped rules below make professional.html fully usable without JavaScript.
- */
+/* One shared component system; only the standalone document shell differs. */
 @import url("redesign-core.css");
 
-html.jm-standalone {
-  color-scheme: dark;
-  scroll-behavior: smooth;
-  scroll-padding-top: 6.5rem;
-  font-size: 17px;
-  background: var(--jm-bg);
-}
-.jm-standalone *, .jm-standalone *::before, .jm-standalone *::after { box-sizing: border-box; }
+html.jm-standalone {background: var(--jm-bg); scroll-behavior: smooth;}
 .jm-standalone body {
-  margin: 0;
-  min-width: 0;
-  min-height: 100vh;
-  color: var(--jm-ink);
-  background:
-    linear-gradient(100deg, rgba(27,31,34,.94), rgba(27,31,34,.86)),
-    url("../../images/bg.jpg") center / cover fixed;
-  font: 400 1rem/1.72 var(--jm-font);
-  letter-spacing: 0;
+  background: linear-gradient(90deg, #10191ff5, #10191fe0 55%, #10191fa8),
+    url("../../images/bg.jpg") 65% center / cover fixed;
 }
-.jm-standalone a { color: inherit; text-decoration: underline; text-decoration-color: #75818a; text-underline-offset: .22em; overflow-wrap: anywhere; }
-.jm-standalone a:hover { color: #fff; text-decoration-color: #fff; }
-.jm-standalone :focus-visible { outline: 2px solid #fff; outline-offset: 5px; border-radius: 2px; }
-.jm-standalone h1, .jm-standalone h2, .jm-standalone h3, .jm-standalone h4 {
-  margin: 0 0 1rem;
-  color: var(--jm-ink);
-  font-family: var(--jm-font);
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -.03em;
-  text-transform: none;
-}
-.jm-standalone h1 { font-size: clamp(3.25rem, 8vw, 6.8rem); line-height: .96; font-weight: 500; letter-spacing: -.055em; }
-.jm-standalone h2 { font-size: clamp(2.25rem, 5vw, 4.2rem); }
-.jm-standalone h3 { margin-top: 2rem; font-size: 1.38rem; }
-.jm-standalone p { margin: 0 0 1.25rem; }
-.jm-standalone strong { font-weight: 600; }
-.jm-standalone .jm-skip {
-  position: fixed; left: 1rem; top: .7rem; z-index: 100;
-  padding: .65rem 1rem; background: #fff; color: #1b1f22;
-  transform: translateY(-180%); font-weight: 600;
-}
-.jm-standalone .jm-skip:focus { transform: none; }
 .jm-standalone .jm-record-header {
-  position: sticky; top: 0; z-index: 20;
-  max-width: none; margin: 0; padding: 1rem max(1.25rem, calc((100vw - 1080px)/2));
-  align-items: center; background: rgba(27,31,34,.97); border-bottom: 1px solid var(--jm-line-soft);
-  backdrop-filter: blur(12px);
+  position: sticky; top: 0; z-index: 30;
+  min-height: var(--jm-header-height); max-width: none; margin: 0;
+  padding: 1rem max(var(--jm-gutter), calc((100% - var(--jm-max)) / 2));
+  align-items: center; background: #10191ff5;
+  border-bottom: 1px solid var(--jm-line-soft);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
 }
-.jm-standalone .jm-record-header .jm-brand { text-decoration: none; font-weight: 600; }
-.jm-standalone .jm-record-header .jm-brand span { margin-left: .45rem; color: var(--jm-muted); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; }
-.jm-standalone .jm-record-header nav { display: flex; flex-wrap: wrap; gap: .85rem 1.2rem; margin-left: auto; }
-.jm-standalone .jm-record-header nav a { color: var(--jm-muted); font-size: .78rem; text-decoration: none; }
-.jm-standalone .jm-record { max-width: 1080px; margin: 0 auto; padding: 0 2rem; }
+.jm-record-header nav {display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; align-items: center; margin-left: auto;}
+.jm-record-header nav a {font-size: .84rem; text-decoration: none; padding: .5rem 0; color: var(--jm-muted);}
+.jm-record-header nav a[aria-current='location'] {color: var(--jm-accent); text-decoration: underline;}
+.jm-standalone .jm-record, .jm-standalone .jm-record-footer {
+  width: min(calc(100% - 2 * var(--jm-gutter)), var(--jm-max));
+  max-width: none; margin-inline: auto; padding: 0;
+}
 .jm-standalone .jm-record-intro {
-  min-height: min(730px, 84vh); display: flex; flex-direction: column; justify-content: flex-end;
-  padding: clamp(5rem, 12vw, 9rem) 0 clamp(4rem, 8vw, 6rem); border-bottom: 1px solid var(--jm-line);
+  min-height: min(800px, 85svh); display: flex; flex-direction: column; justify-content: center;
+  padding: clamp(3rem, 6vw, 7rem) 0; border-bottom: 1px solid var(--jm-line);
 }
-.jm-standalone .jm-eyebrow, .jm-standalone .jm-kicker {
-  color: var(--jm-muted); font-size: .68rem; font-weight: 500; line-height: 1.65;
-  letter-spacing: .15em; text-transform: uppercase;
-}
-.jm-standalone .jm-record-intro .jm-eyebrow { margin-bottom: 1.3rem; }
-.jm-standalone .jm-record-deck { max-width: 62ch; margin-top: 1.7rem; color: var(--jm-accent); font-size: clamp(1.05rem, 2vw, 1.35rem); }
-.jm-standalone .jm-source-note, .jm-standalone .jm-meta { color: var(--jm-faint); font-size: .8rem; line-height: 1.65; }
-.jm-standalone .jm-quick-links, .jm-standalone .jm-link-cluster { display: flex; flex-wrap: wrap; gap: .65rem 1.2rem; margin: 1.4rem 0; }
-.jm-standalone .jm-quick-links a, .jm-standalone .jm-link-cluster a { font-size: .82rem; }
-.jm-standalone .jm-record-section { padding: clamp(3.8rem, 8vw, 6.5rem) 0; border-bottom: 1px solid var(--jm-line-soft); }
-.jm-standalone .jm-section-heading { display: grid; grid-template-columns: minmax(0,1.1fr) minmax(250px,.7fr); gap: 1rem 4rem; align-items: end; margin-bottom: 3rem; }
-.jm-standalone .jm-section-heading .jm-eyebrow { grid-column: 1 / -1; margin: 0; }
-.jm-standalone .jm-section-heading h2 { margin: 0; }
-.jm-standalone .jm-section-heading > p:last-child { margin: 0; color: var(--jm-muted); }
-.jm-standalone .jm-lead { max-width: 60ch; color: var(--jm-accent); font-size: 1.16rem; }
-.jm-standalone .jm-feature { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(260px,.85fr); gap: 2.4rem; align-items: center; padding: 2rem 0; border-top: 1px solid var(--jm-line-soft); }
-.jm-standalone .jm-feature-text { grid-template-columns: 1fr; }
-.jm-standalone .jm-feature h3 { margin-top: 0; }
-.jm-standalone .jm-feature p { color: var(--jm-muted); }
-.jm-standalone .jm-visual-placeholder { width: 100%; aspect-ratio: 8/5; border: 1px solid var(--jm-line-soft); border-radius: var(--jm-radius); background: rgba(255,255,255,.015); }
-.jm-standalone .jm-text-link { display: inline-block; padding: .4rem 0; font-size: .87rem; }
-.jm-standalone .jm-publications { list-style: none; padding: 0; counter-reset: publications; }
-.jm-standalone .jm-publications li { position: relative; padding: 1.8rem 0 1.8rem 2.5rem; border-top: 1px solid var(--jm-line-soft); counter-increment: publications; }
-.jm-standalone .jm-publications li::before { content: '0' counter(publications); position: absolute; left: 0; top: 1.8rem; color: var(--jm-faint); font: .7rem/1.8 'Courier New', monospace; }
-.jm-standalone .jm-publications h3 { margin-top: 0; font-size: 1.3rem; }
-.jm-standalone details { margin-top: 1rem; }
-.jm-standalone summary { min-height: 44px; padding: .5rem 0; cursor: pointer; color: var(--jm-muted); }
-.jm-standalone .jm-timeline > div { display: grid; grid-template-columns: 145px minmax(0,1fr); gap: 1.6rem; padding: 1rem 0; border-top: 1px solid var(--jm-line-soft); }
-.jm-standalone .jm-timeline dt { color: var(--jm-faint); font-size: .76rem; }
-.jm-standalone .jm-timeline dd { margin: 0; }
-.jm-standalone .jm-timeline dd span { display: block; margin-top: .3rem; color: var(--jm-muted); font-size: .84rem; }
-.jm-standalone .jm-entry { padding: 1.8rem 0; border-top: 1px solid var(--jm-line-soft); }
-.jm-standalone .jm-entry h3 { margin-top: 0; }
-.jm-standalone .jm-resource-list { list-style: none; padding: 0; }
-.jm-standalone .jm-resource-list li { padding: 0; border-top: 1px solid var(--jm-line-soft); }
-.jm-standalone .jm-resource-list a { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem 0; text-decoration: none; }
-.jm-standalone .jm-resource-list span { color: var(--jm-muted); font-size: .8rem; }
-.jm-standalone .jm-skills > div { display: grid; grid-template-columns: 180px 1fr; gap: 1.5rem; padding: .9rem 0; border-top: 1px solid var(--jm-line-soft); }
-.jm-standalone .jm-skills dt { font-weight: 600; }
-.jm-standalone .jm-skills dd { margin: 0; color: var(--jm-muted); }
-.jm-standalone .jm-actions { display: flex; flex-wrap: wrap; gap: .8rem 1.2rem; margin: 1.5rem 0 2.5rem; }
-.jm-standalone .jm-button { display: inline-flex; min-height: 46px; align-items: center; padding: .65rem 1rem; border: 1px solid var(--jm-line); border-radius: var(--jm-radius); text-decoration: none; }
-.jm-standalone .jm-contact-email { display: block; margin: 1.5rem 0; font-size: clamp(1.35rem,4vw,2.6rem); }
-.jm-standalone .jm-record-footer { max-width: 1080px; margin: 0 auto; padding: 2rem; color: var(--jm-muted); border-top: 0; }
-
-/* Fetched current-record markup is also used inside the route-based site. */
-.jm-redesign .jm-section-heading { margin-bottom: 2rem; }
-.jm-redesign .jm-section-heading h2 { margin-top: 0; }
-.jm-redesign .jm-section-heading > p:last-child { color: var(--jm-muted); max-width: var(--jm-reading); }
-.jm-redesign .jm-feature-copy { min-width: 0; }
-.jm-redesign .jm-subsection { margin-top: 2.5rem; }
+.jm-standalone .jm-record-intro h1 {font-size: clamp(3.5rem, 6.5vw, 8rem); max-width: 16ch; margin-bottom: 2rem;}
+.jm-record-deck {max-width: 62ch; color: var(--jm-accent); font-size: clamp(1.1rem, 1.4vw, 1.5rem);}
+.jm-quick-links {display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; margin-top: 1rem;}
+.jm-quick-links a {font-size: .88rem; padding: .5rem 0; min-height: 44px;}
+.jm-standalone .jm-record-section {padding: clamp(3rem, 5vw, 6rem) 0;}
+.jm-standalone .jm-section-heading {display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 1rem var(--jm-gap); align-items: end; margin-bottom: 3rem;}
+.jm-standalone .jm-section-heading .jm-eyebrow {grid-column: 1 / -1; margin: 0;}
+.jm-standalone .jm-section-heading h2 {font-size: clamp(2.25rem, 3.5vw, 4.5rem); margin: 0; max-width: 22ch;}
+.jm-standalone .jm-section-heading p:last-child {margin: 0;}
+.jm-standalone .jm-record-section p, .jm-standalone .jm-record-section dd {max-width: var(--jm-reading);}
+.jm-standalone .jm-feature-text {grid-template-columns: minmax(0,1fr);}
+.jm-standalone .jm-feature-text .jm-feature-copy {display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: .5rem var(--jm-gap);}
+.jm-standalone .jm-feature-copy .jm-kicker {grid-column: 1;}
+.jm-standalone .jm-feature-copy h3 {grid-column: 1; grid-row: 2;}
+.jm-standalone .jm-feature-copy > p:not(.jm-kicker) {grid-column: 2; grid-row: 1 / span 2;}
+.jm-standalone .jm-feature-copy > a {grid-column: 2;}
+.jm-standalone .jm-record-footer {padding-block: 2.5rem;}
+.jm-standalone .jm-contact-email {font-size: clamp(1.4rem, 4vw, 4rem);}
 
 @media (max-width: 760px) {
-  html.jm-standalone { font-size: 16px; }
-  .jm-standalone body { background-attachment: scroll; }
-  .jm-standalone .jm-record-header { position: relative; padding: 1rem 1.25rem; align-items: flex-start; }
-  .jm-standalone .jm-record-header nav { width: 100%; margin-left: 0; }
-  .jm-standalone .jm-record { padding: 0 1.25rem; }
-  .jm-standalone .jm-record-intro { min-height: 70vh; padding-top: 4.5rem; }
-  .jm-standalone .jm-section-heading { grid-template-columns: 1fr; gap: .8rem; }
-  .jm-standalone .jm-feature { grid-template-columns: 1fr; gap: 1.2rem; }
-  .jm-standalone .jm-visual-placeholder { max-width: 360px; }
-  .jm-standalone .jm-timeline > div, .jm-standalone .jm-skills > div { grid-template-columns: 1fr; gap: .35rem; }
-  .jm-standalone .jm-resource-list a { flex-direction: column; gap: .2rem; }
+  .jm-standalone .jm-reading-progress {top: 0;}
+  .jm-standalone body {background-attachment: scroll;}
+  .jm-standalone .jm-record-header {position: relative; align-items: flex-start;}
+  .jm-record-header nav {margin-left: 0; width: 100%; gap: .25rem 1.2rem;}
+  .jm-record-header nav a {min-height: 44px;}
+  .jm-standalone .jm-record-intro {min-height: 0; padding-block: 3.5rem;}
+  .jm-standalone .jm-record-intro h1 {font-size: clamp(3rem, 12vw, 4.5rem);}
+  .jm-standalone .jm-section-heading, .jm-standalone .jm-feature-text .jm-feature-copy {display: block;}
+  .jm-standalone .jm-section-heading h2 {margin: 1rem 0;}
 }
-
-@media (prefers-reduced-motion: reduce) {
-  html.jm-standalone { scroll-behavior: auto; }
-  .jm-standalone *, .jm-standalone *::before, .jm-standalone *::after { transition: none !important; animation: none !important; }
+@media (prefers-reduced-motion: reduce) {html.jm-standalone {scroll-behavior: auto;}}
+@media print {
+  .jm-standalone .jm-record-header, .jm-standalone .jm-quick-links {display: none;}
+  .jm-standalone .jm-record {width: 100%;}
+  .jm-standalone .jm-record-intro {min-height: 0;}
+  .jm-standalone .jm-section-heading, .jm-standalone .jm-feature-text .jm-feature-copy {display: block;}
 }

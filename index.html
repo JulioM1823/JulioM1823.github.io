@@ -1,13 +1,28 @@
 <!DOCTYPE HTML>
-<!— Dimension by HTML5 UP html5up.net | @ajlkn Free for personal and commercial use under the CCA 3.0 license
-	(html5up.net/license) —>
-	<html>
+<!-- Dimension by HTML5 UP html5up.net | @ajlkn Free for personal and commercial use under the CCA 3.0 license
+	(html5up.net/license) -->
+	<html lang="en">
 
 	<head>
-		<title>Dimension by HTML5 UP</title>
+        <script>
+          document.documentElement.classList.add('jm-loading');
+          // Failed scripts must never leave the original document hidden.
+          window.setTimeout(() => document.documentElement.classList.remove('jm-loading'), 12000);
+        </script>
+		<title>Julio M. Morales · Astronomy</title>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content="Julio M. Morales — astronomy Ph.D. candidate at New Mexico State University. Helioseismology, solar atmospheric waves, teaching, and scientific workflows." />
+        <meta name="theme-color" content="#11161b" />
+        <link rel="stylesheet" href="assets/css/main.css" />
+        <link rel="stylesheet" href="assets/css/redesign.css" />
+        <style>
+          /* Basic legacy presentation also works without JavaScript. */
+          html:not(.jm-redesign) #main img { display: block; max-width: 100%; height: auto; margin-inline: auto; }
+          html:not(.jm-redesign) #main .row { display: flex; flex-wrap: wrap; }
+          html:not(.jm-redesign) #main .column { box-sizing: border-box; width: 50%; padding: 5px; }
+          @media (max-width: 480px) { html:not(.jm-redesign) #main .column { width: 100%; } }
+        </style>
 		<noscript>
 			<link rel="stylesheet" href="assets/css/noscript.css" />
 		</noscript>
@@ -15,13 +30,13 @@
 
 	<body class="is-preload">
 
-		<!— Wrapper —>
+		<!-- Wrapper -->
 			<div id="wrapper">
 
-				<!— Header —>
+				<!-- Header -->
 					<header id="header">
 						<div class="image">
-							<span class="image main"><img src="images/profile_pic11.png" alt="" /></span>
+							<span class="image main"><img decoding="async" alt="Portrait of Julio M. Morales" width="320" height="320" src="images/profile_pic11.png" /></span>
 						</div>
 						<div class="content">
 							<div class="inner">
@@ -38,45 +53,33 @@
 								<li><a href="#Outreach">Outreach</a></li>
 
 
-
 							</ul>
 
 						</nav>
 					</header>
 
-					<!— Main —>
+					<!-- Main -->
 						<div id="main">
 
-							<!— Intro —>
+							<!-- Intro -->
 								<article id="About">
 									<h2 class="major">About Me</h2>
 
 
-									<center>
 										<h3>Julio M. Morales</h3>
-									</center>
+
 									<p></p>
 
-									<head>
-										<meta name="" content="width=device-width, initial-scale=1">
-										<style>
-											img {
-												display: block;
-												margin-left: auto;
-												margin-right: auto;
-											}
-										</style>
-									</head>
 
-									<img src="/images/about_pic.jpeg" style="object-fit:contain;
+									<img decoding="async" alt="Julio outdoors on a summer day" width="768" height="1024" src="/images/about_pic.jpeg" style="object-fit:contain;
 										   max-width:50%;
 										   ;
 										   border: solid 1px #CCC" />
-									<center>
+
 										<figcaption>
 											<p style="font-size: 14px"> Me on a warm summer day! </p>
 										</figcaption>
-									</center>
+
 									<p></p>
 									<p> My name is Julio (Manuel) Morales, welcome to my website! I'm a
 										first-generation, Puerto Rican, Ph.D. student, a proud member of the
@@ -92,11 +95,11 @@
 									</ul>
 
 
-									<img src="/images/coolstars.jpg" style="object-fit:contain;
+									<img decoding="async" alt="Julio attending Cool Stars 21" width="1440" height="1085" src="/images/coolstars.jpg" style="object-fit:contain;
 										   max-width:100%;
 										   ;
 										   border: solid 1px #CCC" />
-									<center>
+
 										<figcaption>
 											<p style="font-size: 14px"> Me at Cool Stars 21. </p>
 										</figcaption>
@@ -110,11 +113,11 @@
 										</ul>
 
 
-										<img src="/images/fam_reunion_big.jpg" style="object-fit:contain;
+										<img decoding="async" alt="Alicea family reunion in Chicago, 2004" width="960" height="720" src="/images/fam_reunion_big.jpg" style="object-fit:contain;
 										   max-width:100%;
 										   ;
 										   border: solid 1px #CCC" />
-										<center>
+
 											<figcaption>
 												<p style="font-size: 14px"> Alicea family reunion in Chicago Illinois,
 													2004. </p>
@@ -124,17 +127,15 @@
 
 								<article id="mylife">
 
-									<center>
+
 										<h4>My Family, Friends, and Values</h4>
-									</center>
 
 
-
-									<img src="/images/fam_reunion_big.jpg" style="object-fit:contain;
+									<img decoding="async" alt="Alicea family reunion in Chicago, 2004" width="960" height="720" src="/images/fam_reunion_big.jpg" style="object-fit:contain;
 									   max-width:100%;
 									   ;
 									   border: solid 1px #CCC" />
-									<center>
+
 										<figcaption>
 											<p style="font-size: 14px"> Alicea family reunion in Chicago Illinois, 2004.
 											</p>
@@ -151,11 +152,11 @@
 										<hr>
 
 
-										<img src="/images/evo.jpg" style="object-fit:contain;
+										<img decoding="async" alt="Julio with his mother and aunts at Evolution 2016" width="720" height="960" src="/images/evo.jpg" style="object-fit:contain;
 											   max-width:50%;
 											   ;
 											   border: solid 1px #CCC" />
-										<center>
+
 											<figcaption>
 												<p style="font-size: 14px"> My mom, aunts, and I at Evolution 2016 in
 													Las Vegas, Nevada. </p>
@@ -172,11 +173,11 @@
 
 											<hr>
 
-											<img src="/images/FRIENDS.jpg" style="object-fit:contain;
+											<img decoding="async" alt="Julio with friends from UMass Amherst" width="1792" height="1342" src="/images/FRIENDS.jpg" style="object-fit:contain;
 											   max-width:100%;
 											   ;
 											   border: solid 1px #CCC" />
-											<center>
+
 												<figcaption>
 													<p style="font-size: 14px"> My bestfriends and I. </p>
 												</figcaption>
@@ -187,11 +188,11 @@
 
 												<hr>
 
-												<img src="/images/papa_bartolo.jpg" style="object-fit:contain;
+												<img decoding="async" alt="Mama Maria and Papa Bartolo, Julio’s great-great-grandparents" width="720" height="530" src="/images/papa_bartolo.jpg" style="object-fit:contain;
 											   max-width:100%;
 											   ;
 											   border: solid 1px #CCC" />
-												<center>
+
 													<figcaption>
 														<p style="font-size: 14px"> My great-great-grandparents. Mama
 															Maria (left) and Papa Bartolo (right). </p>
@@ -237,78 +238,40 @@
 													<hr>
 
 
-
-
-
-
-
-
-
-
 								</article>
 
 
 								<article id="academicjourney">
 
-									<center>
+
 										<h4>My Academic Journey</h4>
-									</center>
 
-
-
-									<head>
-										<style>
-											* {
-												box-sizing: border-box;
-											}
-
-											.column {
-												float: left;
-												width: 50%;
-												padding: 13px;
-											}
-
-											/* Clearfix (clear floats) */
-											.row::after {
-												content: "";
-												clear: both;
-												display: table;
-											}
-										</style>
-									</head>
-
-									<body>
 
 										<div class="row">
 											<div class="column">
 												<figure>
-													<img src="/images/family.jpg" alt="Snow" style="max-width:100%">
-													<center>
+													<img decoding="async" alt="Julio as a child with his siblings" width="689" height="689" src="/images/family.jpg" style="max-width:100%">
+
 														<figcaption>
 															<p style="font-size: 14px"> 6 year old me with my siblings
 															</p>
 														</figcaption>
-													</center>
+
 												</figure>
 											</div>
 											<div class="column">
 												<figure>
-													<img src="/images/size_comparisons.png" alt="Mountains"
+													<img decoding="async" alt="Comparison of the sizes of various stars" width="718" height="718" src="/images/size_comparisons.png"
 														style="max-width:100%">
-													<center>
+
 														<figcaption>
 															<p style="font-size: 14px"> <strong>Figure 1: </strong> Size
 																comparisons of various stars </p>
 														</figcaption>
-													</center>
+
 												</figure>
 											</div>
 										</div>
-
-
-
-
-
 
 
 										<p> Like many in the field, I was inspired to pursue Astronomy at an early age.
@@ -325,29 +288,18 @@
 											Astronomy documentary populated its pixels.
 										<p></p>
 
-										<head>
-											<meta name="" content="width=device-width, initial-scale=1">
-											<style>
-												img {
-													display: block;
-													margin-left: auto;
-													margin-right: auto;
-												}
-											</style>
-										</head>
 
-										<img src="/images/me_at_umass.jpg" style="object-fit:contain;
+										<img decoding="async" alt="Julio visiting the UMass Amherst campus after admission" width="720" height="1280" src="/images/me_at_umass.jpg" style="object-fit:contain;
 										   max-width:70%;
 
 										   border: solid 1px #CCC" />
-										<center>
+
 											<figcaption>
 												<p style="font-size: 14px"> Me at the UMass Amherst campus tour after
 													being accepted</p>
 											</figcaption>
-										</center>
-										<p></p>
 
+										<p></p>
 
 
 										<p> I spent months watching every piece of Astronomy media I could find, and it
@@ -363,27 +315,17 @@
 
 										<p></p>
 
-										<head>
-											<meta name="" content="width=device-width, initial-scale=1">
-											<style>
-												img {
-													display: block;
-													margin-left: auto;
-													margin-right: auto;
-												}
-											</style>
-										</head>
 
-										<img src="/images/grad_pic.jpg" style="object-fit:contain;
+										<img decoding="async" alt="Julio at the UMass Amherst commencement in 2022" width="1536" height="2048" src="/images/grad_pic.jpg" style="object-fit:contain;
 								 max-width:70%;
 
 								 border: solid 1px #CCC" />
-										<center>
+
 											<figcaption>
 												<p style="font-size: 14px"> Me at the UMass Amherst 2022 commencement
 													ceremony. </p>
 											</figcaption>
-										</center>
+
 										<p></p>
 
 										<p> Four years after that, and I finished my Bachelors of Science in Astronomy
@@ -398,10 +340,9 @@
 										<hr>
 
 
-
 								</article>
 
-								<!— Work —>
+								<!-- Work -->
 									<article id="Research">
 										<h2 class="major">Research</h2>
 
@@ -410,20 +351,10 @@
 													Regions</a></li>
 										</ul>
 
-										<head>
-											<meta name="" content="width=device-width, initial-scale=1">
-											<style>
-												img {
-													display: block;
-													margin-left: auto;
-													margin-right: auto;
-												}
-											</style>
-										</head>
 
-										<img src="/images/thesun.jpg" style="object-fit:contain;
+										<img decoding="async" alt="Solar image accompanying the solar-flow research overview" width="1200" height="675" src="/images/thesun.jpg" style="object-fit:contain;
 										   max-width:70%;
-	  
+
 										   border: solid 3px #CCC" />
 										My research utilizes the powerful technique of time-distance helioseismology to
 										create 3-dimensional velocity fields of the solar interior. This work is part of
@@ -435,20 +366,10 @@
 											</li>
 										</ul>
 
-										<head>
-											<meta name="" content="width=device-width, initial-scale=1">
-											<style>
-												img {
-													display: block;
-													margin-left: auto;
-													margin-right: auto;
-												}
-											</style>
-										</head>
 
-										<img src="/images/accretion.jpg" style="object-fit:contain;
+										<img decoding="async" alt="Illustration accompanying the young-star accretion overview" width="1000" height="563" src="/images/accretion.jpg" style="object-fit:contain;
 										   max-width:70%;
-	  
+
 										   border: solid 3px #CCC" />
 										My work on pre-main-sequence stars characterizes the Hα emission of accreting
 										T-Tauri stars in the Giant Accreting Protoplanet Survey (GAPlanetS), and acts as
@@ -515,10 +436,6 @@
 									</article>
 
 
-
-
-
-
 									<article id="plasmaflows">
 										<p>Stay tuned for results!</p>
 
@@ -527,22 +444,11 @@
 
 									<article id="PMS">
 
-										<center>
+
 											<h3>Undergraduate Research Assistant (2021-2022) </h3>
-										</center>
+
 
 										<p></p>
-
-										<head>
-											<meta name="" content="width=device-width, initial-scale=1">
-											<style>
-												img {
-													display: block;
-													margin-left: auto;
-													margin-right: auto;
-												}
-											</style>
-										</head>
 
 
 										<style>
@@ -554,25 +460,14 @@
 												width: 100%;
 											}
 										</style>
-										<center>
+
 											<h4>Accretion in T-Tauri Stars </h4>
-										</center>
 
-										<head>
-											<meta name="" content="width=device-width, initial-scale=1">
-											<style>
-												img {
-													display: block;
-													margin-left: auto;
-													margin-right: auto;
-												}
-											</style>
-										</head>
 
-										<img src="/images/accretion.jpg.png" style="object-fit:contain;
+										<img decoding="async" alt="Magnetospheric accretion column, shock and photospheric hotspot" width="995" height="380" src="/images/accretion.jpg.png" style="object-fit:contain;
 										 max-width:100%;
 										 border: solid 1px #CCC" />
-										<center>
+
 											<figcaption>
 												<p style="font-size: 14px"><strong> Figure 2: </strong> The
 													magnetosphere of the star
@@ -584,10 +479,9 @@
 														href="https://ui.adsabs.harvard.edu/abs/2016ARA%26A..54..135H/abstract">Hartmann
 														et al. (2016)</a> </p>
 											</figcaption>
-										</center>
+
 
 										<p></p>
-
 
 
 										<p> These are young, low-mass stars in a phase of formation characterized by
@@ -601,27 +495,17 @@
 												2</strong>). </p>
 
 										<hr>
-										<center>
+
 											<h4>Protoplanetary Disk Chemistry </h4>
-										</center>
+
 										<p></p>
 
-										<head>
-											<meta name="" content="width=device-width, initial-scale=1">
-											<style>
-												img {
-													display: block;
-													margin-left: auto;
-													margin-right: auto;
-												}
-											</style>
-										</head>
 
-										<img src="/images/chemistry.jpg.png" style="object-fit:contain;
+										<img decoding="async" alt="Diagram connecting accretion radiation to protoplanetary disk chemistry" width="1151" height="452" src="/images/chemistry.jpg.png" style="object-fit:contain;
 										 max-width:100%;
 										 border: solid 1px #CCC" />
 
-										<center>
+
 											<figcaption>
 												<p style="font-size: 14px"><strong> Figure 3: </strong> The accretion
 													process provides the primary source of UV photons
@@ -632,7 +516,7 @@
 														href="https://www.researchgate.net/publication/311106398_The_Gas_Disk_Evolution_and_Chemistry">Rab
 														et al. (2016)</a> </p>
 											</figcaption>
-										</center>
+
 
 										<p></p>
 
@@ -655,28 +539,18 @@
 												width: 100%;
 											}
 										</style>
-										<center>
+
 											<h4>Accretion Variability </h4>
-										</center>
+
 
 										<p></p>
 
-										<head>
-											<meta name="" content="width=device-width, initial-scale=1">
-											<style>
-												img {
-													display: block;
-													margin-left: auto;
-													margin-right: auto;
-												}
-											</style>
-										</head>
 
-										<img src="/images/light-curve example.png" style="object-fit:contain;
+										<img decoding="async" alt="Example stellar light curve: magnitude versus time" width="790" height="640" src="/images/light-curve example.png" style="object-fit:contain;
 										 max-width:100%;
 
 										 border: solid 1px #CCC" />
-										<center>
+
 											<figcaption>
 												<p style="font-size: 14px"><strong> Figure 4: </strong> A light-curve
 													taken of
@@ -687,10 +561,9 @@
 														href="https://ui.adsabs.harvard.edu/abs/2016ARA%26A..54..135H/abstract">Hartmann
 														et al. (2016)</a> </p>
 											</figcaption>
-										</center>
+
 
 										<p></p>
-
 
 
 										<p> Photometric variability is a defining characteristic of T-Tauri stars (see
@@ -699,28 +572,18 @@
 
 										<hr>
 
-										<center>
+
 											<h4> Transitional Disks </h4>
-										</center>
+
 
 										<p></p>
 
-										<head>
-											<meta name="" content="width=device-width, initial-scale=1">
-											<style>
-												img {
-													display: block;
-													margin-left: auto;
-													margin-right: auto;
-												}
-											</style>
-										</head>
 
-										<img src="/images/trans_disk.png" style="object-fit:contain;
+										<img decoding="async" alt="HD 142527 disk cavity with a 50 AU scale bar" width="839" height="891" src="/images/trans_disk.png" style="object-fit:contain;
 											 max-width:75%;
 											 border: solid 1px #CCC" />
 
-										<center>
+
 											<figcaption>
 												<p style="font-size: 14px"><strong> Figure 5: </strong> The HD 142527
 													system with it's central cavity imaged.
@@ -732,7 +595,7 @@
 														href="https://arxiv.org/abs/2203.09991"> Benisty et al. (2022)
 													</a> </p>
 											</figcaption>
-										</center>
+
 
 										<p></p>
 
@@ -755,36 +618,26 @@
 										</p>
 
 										<hr>
-										<center>
+
 											<h4>Second-to-Minute Variability </h4>
-										</center>
+
 
 										<p></p>
 
-										<head>
-											<meta name="" content="width=device-width, initial-scale=1">
-											<style>
-												img {
-													display: block;
-													margin-left: auto;
-													margin-right: auto;
-												}
-											</style>
-										</head>
 
-										<img src="/images/Light-Curve for SAO206462 12Apr14 GHOST.jpg" style="object-fit:contain;
+										<img decoding="async" alt="SAO 206462 Hα-to-continuum ratio light curve on April 12, 2014" width="2880" height="720" src="/images/Light-Curve for SAO206462 12Apr14 GHOST.jpg" style="object-fit:contain;
 											 max-width:100%;
 
 											 border: solid 1px #CCC" />
 
-										<center>
+
 											<figcaption>
 												<p style="font-size: 14px"><strong> Figure 8: </strong> A light-curve
 													for the SAO 206462 object on April 12, 2014. We can see that there
 													is little variation in the
 													Hα/Cont ratio with time. </p>
 											</figcaption>
-										</center>
+
 
 										<p>
 											I find that none of the datasets show signifcant variability on the
@@ -806,36 +659,26 @@
 
 										<hr>
 
-										<center>
+
 											<h4> Day-to-Day Variability </h4>
-										</center>
+
 
 										<p></p>
 
-										<head>
-											<meta name="" content="width=device-width, initial-scale=1">
-											<style>
-												img {
-													display: block;
-													margin-left: auto;
-													margin-right: auto;
-												}
-											</style>
-										</head>
 
-										<img src="/images/multi_epoch_PDS70.jpg" style="object-fit:contain;
+										<img decoding="async" alt="PDS 70 light curves comparing May 2 and May 3, 2018" width="8640" height="2160" src="/images/multi_epoch_PDS70.jpg" style="object-fit:contain;
 										 max-width:100%;
 
 										 border: solid 1px #CCC" />
 
-										<center>
+
 											<figcaption>
 												<p style="font-size: 14px"><strong> Figure 9: </strong> Two light-curves
 													for the PDS 70 system on May 2nd, 2018 (left) and May 3rd, 2018
 													(right). There is a signficant increase in the Hα/Cont ratio
 													from one day to the next. </p>
 											</figcaption>
-										</center>
+
 
 										<p> Several datasets for which data was acquired for consecutive days for the
 											same object show signficant variaiblity in their Hα/Cont ratios (see
@@ -848,29 +691,19 @@
 
 										<hr>
 
-										<center>
+
 											<h4> Year-to-Year Variability </h4>
-										</center>
+
 
 										<p></p>
 
-										<head>
-											<meta name="" content="width=device-width, initial-scale=1">
-											<style>
-												img {
-													display: block;
-													margin-left: auto;
-													margin-right: auto;
-												}
-											</style>
-										</head>
 
-										<img src="/images/multi_epoch_TWHya.jpg" style="object-fit:contain;
+										<img decoding="async" alt="TW Hya light curves labeled 2014 and 2018 in the original caption" width="8640" height="2160" src="/images/multi_epoch_TWHya.jpg" style="object-fit:contain;
 											  max-width:100%;
 
 											  border: solid 1px #CCC" />
 
-										<center>
+
 											<figcaption>
 												<p style="font-size: 14px"><strong> Figure 10: </strong> Two
 													light-curves for the TW Hya system in 2014 (left) and 2018 (right).
@@ -878,7 +711,6 @@
 													which is consistent with large scale changes in mass-density of the
 													inner-disk. </p>
 											</figcaption>
-										</center>
 
 
 										<p>
@@ -892,17 +724,16 @@
 
 										<hr>
 
-										<center>
+
 											<h4> Weak-Lined T-Tauri Stars </h4>
-										</center>
 
 
-										<img src="/images/wtts_ratios.jpg" style="object-fit:contain;
+										<img decoding="async" alt="Hα-to-continuum ratios from stellar models, weak-lined T-Tauri templates and GAPlanetS data" width="2048" height="2038" src="/images/wtts_ratios.jpg" style="object-fit:contain;
 											max-width:100%;
 
 											border: solid 1px #CCC" />
 
-										<center>
+
 											<figcaption>
 												<p style="font-size: 14px"> The black curve and gray dashed line
 													represent the Hα/Cont ratio calculated from the Castelli & Kurucz
@@ -911,7 +742,7 @@
 													various colored stars represent the median ratios measured from the
 													GAPlanetS data. <strong>Morales et al. (2023, in progress)</strong>
 											</figcaption>
-										</center>
+
 
 										Some of the datasets in GAPlanetS showed peculiar Hα/Cont ratios whose values
 										were less than unity. Due to simplifying assumptions, this was not expected to
@@ -947,34 +778,21 @@
 									</article>
 
 
-
-									<!— About —>
+									<!-- About -->
 										<article id="Teaching">
 											<h2 class="major">Teaching</h2>
 											<p></p>
 
-											<head>
-												<meta name="" content="width=device-width, initial-scale=1">
-												<style>
-													img {
-														display: block;
-														margin-left: auto;
-														margin-right: auto;
-													}
-												</style>
-											</head>
 
-											<img src="/images/upward_bound_pic.jpg" style="object-fit:contain;
+											<img decoding="async" alt="Upward Bound colleagues and students at Anna Maria College" width="1080" height="1080" src="/images/upward_bound_pic.jpg" style="object-fit:contain;
 										 max-width:100%;
 										 border: solid 1px #CCC" />
 
-											<center>
+
 												<figcaption>
 													<p style="font-size: 14px">Coworkers, students, and I at Anna Maria
 														College for the Upward Bound program.</p>
 												</figcaption>
-											</center>
-
 
 
 											<p></p>
@@ -1018,36 +836,24 @@
 
 										</article>
 
-										<!— About —>
+										<!-- About -->
 											<article id="Outreach">
 												<h2 class="major">Outreach</h2>
 
-												<center>
+
 													<h3>Explore the Solar System: The Amazing Science
 														& History of the Heavens</h3>
-												</center>
 
-												<head>
-													<meta name="" content="width=device-width, initial-scale=1">
-													<style>
-														img {
-															display: block;
-															margin-left: auto;
-															margin-right: auto;
-														}
-													</style>
-												</head>
 
-												<img src="/images/poster_real.png" style="object-fit:contain;
+												<img decoding="async" alt="Poster for Explore the Solar System in Northampton" width="553" height="413" src="/images/poster_real.png" style="object-fit:contain;
 										 max-width:100%;
 										 border: solid 1px #CCC" />
 
-												<center>
+
 													<figcaption>
 														<p style="font-size: 14px"> Historic Northampton Lawn, 46 Bridge
 															St., Northampton MA, 01060.</p>
 													</figcaption>
-												</center>
 
 
 												<p></p>
@@ -1066,44 +872,20 @@
 												<hr>
 
 
-												<center>
 													<h4>Electrocuting a Pickle: Emission Spectra</h4>
-												</center>
 
-												<head>
-													<meta name="" content="width=device-width, initial-scale=1">
-													<style>
-														img {
-															display: block;
-															margin-left: auto;
-															margin-right: auto;
-														}
-													</style>
-												</head>
 
-												<img src="/images/pickle2.png" style="object-fit:contain;
+												<img decoding="async" alt="Emission-spectrum demonstration at the 2021 outreach event" width="554" height="412" src="/images/pickle2.png" style="object-fit:contain;
 											   max-width:100%;
 
 											   border: solid 1px #CCC" />
 
 
-
-												<head>
-													<meta name="" content="width=device-width, initial-scale=1">
-													<style>
-														img {
-															display: block;
-															margin-left: auto;
-															margin-right: auto;
-														}
-													</style>
-												</head>
-
-												<img src="/images/sodium_emission.jpg" style="object-fit:contain;
+												<img decoding="async" alt="Sodium emission spectrum" width="886" height="178" src="/images/sodium_emission.jpg" style="object-fit:contain;
 		   max-width:99.5%;
 		   border: solid 1px #CCC" />
 
-												<center>
+
 													<figcaption>
 														<p style="font-size: 14px"> <strong>Figure 11: </strong>
 															Completing a circuit with
@@ -1117,7 +899,7 @@
 															it typically has an orange or yellow color.
 														</p>
 													</figcaption>
-												</center>
+
 
 												<p></p>
 
@@ -1132,69 +914,33 @@
 													cardboard spectrograph. </strong> </p>
 
 												<hr>
-												<center>
+
 													<h4>Fluid Differentiation: Planet Formation </h4>
-												</center>
 
-												<head>
-													<meta name="" content="width=device-width, initial-scale=1">
-													<style>
-														img {
-															display: block;
-															margin-left: auto;
-															margin-right: auto;
-														}
-													</style>
-												</head>
 
-												<img src="/images/fluid.png" style="object-fit:contain;
+												<img decoding="async" alt="Fluid-density demonstration at the 2021 outreach event" width="554" height="415" src="/images/fluid.png" style="object-fit:contain;
 											   max-width:100%;
 
 											   border: solid 1px #CCC" />
 
 
-
-												<head>
-													<style>
-														* {
-															box-sizing: border-box;
-														}
-
-														.column {
-															float: left;
-															width: 50%;
-															padding: 0px;
-														}
-
-														/* Clearfix (clear floats) */
-														.row::after {
-															content: "";
-															clear: both;
-															display: table;
-														}
-													</style>
-												</head>
-
-												<body>
-
 													<div class="row">
 														<div class="column">
 															<figure>
-																<img src="/images/seven-layer-density-column-10.jpg"
-																	alt="Snow" style="max-width:100%">
-																<figcaption> <a href=""></a> </figcaption>
+																<img decoding="async" alt="Liquids separated into layers by density" width="599" height="599" src="/images/seven-layer-density-column-10.jpg" style="max-width:100%">
+
 															</figure>
 														</div>
 														<div class="column">
 															<figure>
-																<img src="/images/planetary_layers.jpg" alt="Mountains"
+																<img decoding="async" alt="Diagram of planetary interior layers" width="640" height="640" src="/images/planetary_layers.jpg"
 																	style="max-width:100%">
-																<figcaption> <a href=""></a> </figcaption>
+
 															</figure>
 														</div>
 													</div>
 
-													<center>
+
 														<figcaption>
 															<p style="font-size: 14px"> <strong>Figure 12: </strong>
 																Planets form from the
@@ -1209,7 +955,6 @@
 																densities in a beaker.
 															</p>
 														</figcaption>
-													</center>
 
 
 													<p></p>
@@ -1220,28 +965,17 @@
 														in a beaker with liquids of varying density such as oil, rubbing
 														alcohol, and dish soap. </strong> </p>
 													<hr>
-													<center>
+
 														<h4>Scale of the Solar System: Run Faster Than the Speed of
 															Light </h4>
-													</center>
 
-													<head>
-														<meta name="" content="width=device-width, initial-scale=1">
-														<style>
-															img {
-																display: block;
-																margin-left: auto;
-																margin-right: auto;
-															}
-														</style>
-													</head>
 
-													<img src="/images/scale1.png" style="object-fit:contain;
+													<img decoding="async" alt="Scale model of distances in the Solar System" width="553" height="739" src="/images/scale1.png" style="object-fit:contain;
 												   max-width:80%;
 
 												   border: solid 1px #CCC" />
 
-													<center>
+
 														<figcaption>
 															<p style="font-size: 14px"> <strong>Figure 13: </strong>
 																Even the smallest distances in the Solar System are
@@ -1252,7 +986,7 @@
 																20 steps away. Earth would be almost 70!
 															</p>
 														</figcaption>
-													</center>
+
 
 													<p></p>
 
@@ -1270,46 +1004,21 @@
 													<p></p>
 
 
-													<center>
 														<h4> Solar Telescope: Sunspots </h4>
-													</center>
 
-													<head>
-														<meta name="" content="width=device-width, initial-scale=1">
-														<style>
-															img {
-																display: block;
-																margin-left: auto;
-																margin-right: auto;
-															}
-														</style>
-													</head>
 
-													<img src="/images/solar.png" style="object-fit:contain;
+													<img decoding="async" alt="Solar observing at the 2021 outreach event" width="554" height="410" src="/images/solar.png" style="object-fit:contain;
 											   max-width:100%;
 
 											   border: solid 1px #CCC" />
 
 
-
-
-													<head>
-														<meta name="" content="width=device-width, initial-scale=1">
-														<style>
-															img {
-																display: block;
-																margin-left: auto;
-																margin-right: auto;
-															}
-														</style>
-													</head>
-
-													<img src="/images/sunspots.jpg" style="object-fit:contain;
+													<img decoding="async" alt="Sunspots on the solar surface" width="474" height="428" src="/images/sunspots.jpg" style="object-fit:contain;
 		   max-width:50%;
 
 		   border: solid 1px #CCC" />
 
-													<center>
+
 														<figcaption>
 															<p style="font-size: 14px"> <strong>Figure 14: </strong>
 																Points on the surface of the Sun where the magnetic and
@@ -1320,7 +1029,7 @@
 																that they are significantly cooler than the surrounding
 																gas. </p>
 														</figcaption>
-													</center>
+
 
 													<p></p>
 
@@ -1334,31 +1043,20 @@
 													<p></p>
 													<hr>
 
-													<center>
+
 														<h4> The Follette Lab </h4>
-													</center>
 
-													<head>
-														<meta name="" content="width=device-width, initial-scale=1">
-														<style>
-															img {
-																display: block;
-																margin-left: auto;
-																margin-right: auto;
-															}
-														</style>
-													</head>
 
-													<img src="/images/lab_crew.jpg_small" style="object-fit:contain;
+													<img decoding="async" alt="Follette Lab members who helped run the outreach event" width="680" height="510" src="/images/lab_crew.jpg_small" style="object-fit:contain;
 											max-width:100%;
 											border: solid 1px #CCC" />
-													<center>
+
 														<figcaption>
 															<p style="font-size: 14px">(From left to right) Ry Bleckel,
 																Dane Mansfield, Alyssa Cordero,
 																Julio Morales, Alex DelFranco, and Catherine Sarosi </p>
 														</figcaption>
-													</center>
+
 
 													<p></p>
 													<p> I couldn't have run this event without the help of my fellow
@@ -1371,11 +1069,10 @@
 
 
 											</article>
-											<!— Contact —>
+											<!-- Contact -->
 												<article id="DEI">
 													<h2 class="major">D.E.I</h2>
 													<p></p>
-
 
 
 													<ul class="actions">
@@ -1384,14 +1081,14 @@
 													</ul>
 
 
-													<img src="/images/flag.jpg" style="object-fit:contain;
+													<img decoding="async" alt="Progress Pride Flag" width="1029" height="629" src="/images/flag.jpg" style="object-fit:contain;
 										max-width:50%;
 										border: solid 1px #CCC" />
-													<center>
+
 														<figcaption>
 															<p style="font-size: 14px">The Progress Pride Flag </p>
 														</figcaption>
-													</center>
+
 													<p></p>
 
 
@@ -1408,22 +1105,21 @@
 													<p></p>
 
 
-
 													<ul class="actions">
 														<li><a href="https://prescientist.org/penpal-program/"
 																class="button">Letters to a Pre-Scientist</a></li>
 													</ul>
 
 
-													<img src="/images/LPS.jpg" style="object-fit:contain;
+													<img decoding="async" alt="Letters to a Pre-Scientist logo" width="462" height="148" src="/images/LPS.jpg" style="object-fit:contain;
 		  max-width:100%;
 		  border: solid 1px #CCC" />
-													<center>
+
 														<figcaption>
 															<p style="font-size: 14px">Letters to a pre-scientist logo.
 															</p>
 														</figcaption>
-													</center>
+
 
 													As a consequence of existing in a white, cis-heteropatriarchy,
 													racial representation in STEM decreases dramatically with career
@@ -1444,15 +1140,15 @@
 													</ul>
 
 
-													<img src="/images/hiddenfigures.jpg" style="object-fit:contain;
+													<img decoding="async" alt="Dorothy Vaughn, Katherine Johnson, and Mary Jackson" width="770" height="293" src="/images/hiddenfigures.jpg" style="object-fit:contain;
 										max-width:100%;
 										border: solid 1px #CCC" />
-													<center>
+
 														<figcaption>
 															<p style="font-size: 14px">From left to right: Dorothy
 																Vaughn, Katherine Johnson, and Mary Jackson. </p>
 														</figcaption>
-													</center>
+
 													<p></p>
 
 													In addition to teaching, while working at Upward Bound, I designed
@@ -1466,61 +1162,34 @@
 													<p></p>
 
 
-
 												</article>
 
 												<article id="hiddenfigures">
-													<center>
+
 														<h4> Hidden Figures Workshop </h4>
-													</center>
 
-
-
-
-													<head>
-														<style>
-															* {
-																box-sizing: border-box;
-															}
-
-															.column {
-																float: left;
-																width: 50%;
-																padding: 5px;
-															}
-
-															/* Clearfix (clear floats) */
-															.row::after {
-																content: "";
-																clear: both;
-																display: table;
-															}
-														</style>
-													</head>
-
-													<body>
 
 														<div class="row">
 															<div class="column">
 																<figure>
-																	<img src="/images/reva.jpg" alt="Snow"
+																	<img decoding="async" alt="Reva Kay Williams" width="280" height="280" src="/images/reva.jpg"
 																		style="max-width:100%">
-																	<center>
+
 																		<figcaption> <a
 																				href="https://www.revakaywilliams.com/more-about-me">Reva
 																				Kay Williams</a> </figcaption>
-																	</center>
+
 																</figure>
 															</div>
 															<div class="column">
 																<figure>
-																	<img src="/images/alice.jpg" alt="Mountains"
+																	<img decoding="async" alt="Alice Ball" width="1123" height="1121" src="/images/alice.jpg"
 																		style="max-width:100%">
-																	<center>
+
 																		<figcaption> <a
 																				href="https://www.biography.com/scientist/alice-ball">Alice
 																				Ball</a> </figcaption>
-																	</center>
+
 																</figure>
 															</div>
 														</div>
@@ -1528,32 +1197,27 @@
 														<div class="row">
 															<div class="column">
 																<figure>
-																	<img src="/images/ramon.jpg" alt="Snow"
+																	<img decoding="async" alt="Ramón Emeterio Betances" width="480" height="352" src="/images/ramon.jpg"
 																		style="max-width:100%">
-																	<center>
+
 																		<figcaption> <a
 																				href="https://www.valorycambio.org/ramon-e-betances">Ramón
 																				Emeterio Betances</a> </figcaption>
-																	</center>
+
 																</figure>
 															</div>
 															<div class="column">
 																<figure>
-																	<img src="/images/ibrahim.jpeg" alt="Mountains"
+																	<img decoding="async" alt="Ibrahim Cissé" width="750" height="552" src="/images/ibrahim.jpeg"
 																		style="max-width:100%">
-																	<center>
+
 																		<figcaption> <a
 																				href="https://www.macfound.org/fellows/class-of-2021/ibrahim-cisse">Ibrahim
 																				Cissé</a> </figcaption>
-																	</center>
+
 																</figure>
 															</div>
 														</div>
-
-													</body>
-
-
-
 
 
 													<p></p>
@@ -1591,7 +1255,7 @@
 													</ul>
 												</article>
 
-												<!— Elements —>
+												<!-- Elements -->
 													<article id="elements">
 														<h2 class="major">Elements</h2>
 
@@ -1876,7 +1540,7 @@
 
 						</div>
 
-						<!— Footer —>
+						<!-- Footer -->
 							<footer id="footer">
 
 								<ul class="icons">
@@ -1884,7 +1548,7 @@
 												class="label">Twitter</span></a></li>
 									<li><a href="http://github.com/JulioM1823" class="icon brands fa-github"><span
 												class="label">Github</span></a></li>
-									<li><a href="mailto:jmmorale@nmsu.edu" class="icon solid fa-envelope"><span
+									<li><a href="mailto:jmmorales@nmsu.edu" class="icon solid fa-envelope"><span
 												class="label">Email</span></a></li>
 
 
@@ -1894,24 +1558,23 @@
 									2023)</p>
 
 									<p>Download my Notion Page Templates here: <a href="https://juliomorales.notion.site/Home-page-template-b46bd7e4c8454ec0a915b3bb034737fd?pvs=4">Home Page</a>, <a href="https://juliomorales.notion.site/Calendar-template-9c73ebac385245c3a5843fc7363bd07c?pvs=4">Calendar</a>, <a href="https://juliomorales.notion.site/Project-Template-df5f49b1db98405ba31083f106871029?pvs=4">Projects</a>,  <a href="https://juliomorales.notion.site/Research-Diary-Template-4a848a97e9554d1c804be42bfbafec41?pvs=4">Research Diary</a>, and  <a href="https://juliomorales.notion.site/Reference-Database-Template-c927c804014c44d4b9419dd56d5fff03?pvs=4">References</a></p>
-								</p>
 
 								<p class="copyright">&copy; Julio Morales, 2023.</p>
 
 
-								</ul>
 							</footer>
 
 			</div>
 
-			<!— BG —>
+			<!-- BG -->
 				<div id="bg"></div>
 
-				<!— Scripts —>
+				<!-- Scripts -->
 					<script src="assets/js/jquery.min.js"></script>
 					<script src="assets/js/browser.min.js"></script>
 					<script src="assets/js/breakpoints.min.js"></script>
 					<script src="assets/js/util.js"></script>
+					<script src="assets/js/scroll-polish.js" defer></script>
 					<script src="assets/js/main.js"></script>
 
 	</body>

@@ -91,6 +91,7 @@
     meta.content = content;
   };
   const exposeOriginal = () => {
+    document.documentElement.classList.remove('jm-loading');
     document.body.classList.remove('is-preload', 'is-article-visible', 'is-switching');
     main.style.display = 'block';
     main.hidden = false; header.hidden = false; footer.hidden = false;
@@ -108,20 +109,54 @@
     }
   };
   const loadCSS = () => new Promise((resolve, reject) => {
-    const link = document.createElement('link'); link.rel = 'stylesheet';
-    link.href = new URL('assets/css/redesign.css', root).href;
-    const timer = setTimeout(() => { link.remove(); reject(new Error('Stylesheet timed out')); }, 10000);
-    link.onload = () => { clearTimeout(timer); resolve(); };
-    link.onerror = () => { clearTimeout(timer); reject(new Error('Stylesheet unavailable')); };
-    document.head.append(link);
+    const href = new URL('assets/css/redesign.css', root).href;
+    const existing = [...document.querySelectorAll('link[rel="stylesheet"]')].find(link => link.href === href);
+    if (existing?.sheet) { resolve(); return; }
+    const link = existing || document.createElement('link'); link.rel = 'stylesheet'; link.href = href;
+    const timer = setTimeout(() => { if (!existing) link.remove(); reject(new Error('Stylesheet timed out')); }, 10000);
+    link.addEventListener('load', () => { clearTimeout(timer); resolve(); }, {once: true});
+    link.addEventListener('error', () => { clearTimeout(timer); reject(new Error('Stylesheet unavailable')); }, {once: true});
+    if (!existing) document.head.append(link);
   });
+  // Adapt the standalone source locally; other network requests retain native fetch semantics.
+  function adaptAcademicRecord(page) {
+    const routes = {
+      research: ['Research-current', 'Research'], publications: ['Publications'],
+      teaching: ['Teaching-current', 'Teaching'], service: ['DEI-current', 'DEI'],
+      outreach: ['Outreach-current', 'Outreach'], software: ['Software'],
+      experience: ['CV'], contact: ['Contact']
+    };
+    Object.entries(routes).forEach(([id, [route, augment]]) => {
+      const section = page.getElementById(id);
+      if (!section) return;
+      section.id = route;
+      if (augment) section.dataset.augment = augment;
+    });
+    page.querySelectorAll('a[href^="#"]').forEach(link => {
+      const route = routes[link.getAttribute('href').slice(1)];
+      if (route) link.setAttribute('href', `#${route[0]}`);
+    });
+    if (!page.getElementById('gravitywaves')) {
+      page.querySelector('main')?.append(fragment(`
+        <article id="gravitywaves" data-title="Atmospheric gravity waves" class="jm-record-section">
+          <p class="jm-eyebrow">Graduate research / Solar atmosphere</p>
+          <h2>Atmospheric gravity waves</h2>
+          <p class="jm-lead">Computational diagnostics of waves in the lower solar atmosphere.</p>
+          <p>My Ph.D. research at New Mexico State University includes helioseismology and solar atmospheric gravity waves, with an emphasis on computational analysis of solar oscillation and atmospheric-wave diagnostics. Alongside that research, I develop reproducible workflows for analysis, visualization, documentation, and version control.</p>
+          <section class="jm-callout"><h3>Related publication</h3><p>Vesa, O., Morales, J. M., Jackiewicz, J., Vigeesh, G., &amp; Reardon, K. (2025). <em>Atmospheric Gravity Waves Modulated by the Magnetic Field Configuration.</em> <em>ApJ</em>, 992, 201.</p><a class="jm-text-link" href="https://doi.org/10.3847/1538-4357/ae0a55">Read the publication →</a></section>
+          <p><a href="#Publications">All publications &amp; presentations →</a></p>
+        </article>`));
+    }
+    return page;
+  }
+
   const loadRecord = async () => {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 10000);
     try {
-      const response = await fetch(new URL('professional.html', root), {signal: controller.signal, credentials: 'same-origin'});
+      const response = await fetch(new URL('professional.html', root), {signal: controller.signal, credentials: 'same-origin', cache: 'no-cache'});
       if (!response.ok) throw new Error(`Academic record: HTTP ${response.status}`);
-      const page = new DOMParser().parseFromString(await response.text(), 'text/html');
+      const page = adaptAcademicRecord(new DOMParser().parseFromString(await response.text(), 'text/html'));
       if (!page.querySelector('#CV') || !page.querySelector('#Publications')) throw new Error('Academic record is incomplete');
       return page;
     } finally { clearTimeout(timer); }
@@ -153,6 +188,11 @@
   async function initialize() {
     const recordPromise = loadRecord().catch(error => { console.warn(error.message); return null; });
     await loadCSS();
+    // A failed stylesheet can still expose a CSSStyleSheet object. Confirm the
+    // imported visual system actually applied before replacing the legacy view.
+    if (!getComputedStyle(document.documentElement).getPropertyValue('--jm-max').trim()) {
+      throw new Error('The shared website styles could not load');
+    }
     const record = await recordPromise;
     document.documentElement.classList.add('jm-redesign');
     document.documentElement.lang = 'en';
@@ -205,10 +245,16 @@
     const byId = new Map(articles.map(article => [article.id, article]));
     articles.forEach(article => {
       const content = make('div', 'jm-page-content'); content.append(...article.childNodes);
-      // Only the imported duplicate title is removed; original headings remain in history.
+      // Standalone records nest the title in a section header. Move its eyebrow
+      // into the page header and retain the introductory prose without a second title.
       const firstCurrent = content.querySelector('.jm-current-content') || content;
-      const importedTitle = [...firstCurrent.children].find(node => node.matches('h2'));
-      const eyebrow = [...firstCurrent.children].find(node => node.matches('.jm-eyebrow'));
+      const importedHeader = firstCurrent.querySelector(':scope > .jm-section-heading');
+      const importedTitle = importedHeader?.querySelector('h2') || [...firstCurrent.children].find(node => node.matches('h2'));
+      const eyebrow = importedHeader?.querySelector('.jm-eyebrow') || [...firstCurrent.children].find(node => node.matches('.jm-eyebrow'));
+      const legacy = content.querySelector('.jm-legacy-content');
+      const legacyTitle = legacy && [...legacy.children].find(node => node.matches('h2,h3'));
+      const redundantTitle = legacyTitle && (legacyTitle.classList.contains('major') || ['mylife', 'academicjourney', 'hiddenfigures'].includes(article.id));
+      if (redundantTitle) legacyTitle.remove();
       const pageHeader = make('header', 'jm-page-header');
       const breadcrumb = make('nav', 'jm-breadcrumb'); breadcrumb.setAttribute('aria-label', 'Breadcrumb');
       const home = make('a', '', 'Home'); home.href = '#';
@@ -219,16 +265,37 @@
       const title = make('h1', 'jm-page-title', labels[article.id] || article.dataset.title || article.id);
       title.tabIndex = -1; title.id = `jm-title-${article.id}`;
       pageHeader.append(title); article.append(pageHeader, content);
-      let previousLevel = 1;
-      content.querySelectorAll('h2,h3,h4,h5,h6').forEach(heading => {
-        const level = Math.min(Number(heading.tagName.slice(1)), previousLevel + 1);
-        if (level !== Number(heading.tagName.slice(1))) {
-          const replacement = make(`h${level}`);
-          [...heading.attributes].forEach(attr => replacement.setAttribute(attr.name, attr.value));
-          replacement.append(...heading.childNodes); heading.replaceWith(replacement);
-        }
-        previousLevel = level;
+      // These original h3s are page sections once the record h2 becomes the h1.
+      content.querySelectorAll('h3,h4,h5,h6').forEach(heading => {
+        const level = Math.max(2, Number(heading.tagName.slice(1)) - 1);
+        const replacement = make(`h${level}`);
+        [...heading.attributes].forEach(attr => replacement.setAttribute(attr.name, attr.value));
+        replacement.append(...heading.childNodes); heading.replaceWith(replacement);
       });
+      const headings = [...content.querySelectorAll('h2')].filter(heading =>
+        heading.textContent.trim() && !heading.closest('details, .jm-publications, .jm-timeline, .jm-record-list, #elements')
+      );
+      if (headings.length > 1) {
+        const rail = make('aside', 'jm-page-rail');
+        const toc = make('nav', 'jm-page-toc'); toc.setAttribute('aria-label', 'On this page');
+        toc.append(make('p', 'jm-eyebrow', 'On this page'));
+        const list = make('ol');
+        headings.forEach((heading, index) => {
+          if (!heading.id) {
+            const slug = heading.textContent.trim().toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 64);
+            heading.id = `jm-section-${article.id}-${slug || index + 1}`;
+            const collision = document.getElementById(heading.id);
+            if (collision && collision !== heading) heading.id += `-${index + 1}`;
+          }
+          heading.tabIndex = -1;
+          const item = make('li');
+          const link = make('a', '', heading.textContent.trim());
+          link.href = `#${heading.id}`; link.dataset.jmSection = heading.id;
+          item.append(link); list.append(item);
+        });
+        toc.append(list); rail.append(toc); content.before(rail);
+        article.classList.add('jm-has-toc');
+      }
       article.setAttribute('aria-labelledby', title.id); article.hidden = true;
     });
 
@@ -249,7 +316,8 @@
       const link = make('a', '', 'Open the standalone academic record'); link.href = new URL('professional.html', root).href;
       warning.append(link); header.prepend(warning);
       header.querySelectorAll('a[href="#CV"],a[href="#Software"],a[href="#Publications"]').forEach(link => {
-        link.href = new URL(`professional.html${link.getAttribute('href')}`, root).href;
+        const anchors = {'#CV': '#experience', '#Software': '#software', '#Publications': '#publications'};
+        link.href = new URL(`professional.html${anchors[link.getAttribute('href')]}`, root).href;
       });
     }
 
@@ -268,6 +336,7 @@
     const primary = make('nav', 'jm-primary-nav'); primary.setAttribute('aria-label', 'Primary navigation');
     [['Research','Research'],['Publications','Publications'],['Teaching','Teaching'],['DEI','Community'],['About','About'],['CV','CV']].filter(([id]) => byId.has(id)).forEach(([id, label]) => { const link = make('a', '', label); link.href = `#${id}`; primary.append(link); });
     const menu = make('button', 'jm-menu-button', 'Menu'); menu.type = 'button'; menu.setAttribute('aria-expanded', 'false'); menu.setAttribute('aria-controls', 'jm-menu');
+    menu.setAttribute('aria-label', 'Open site menu');
     const menuSymbol = make('span', '', '+'); menuSymbol.setAttribute('aria-hidden','true'); menu.append(menuSymbol);
     const drawer = make('nav', 'jm-drawer'); drawer.id = 'jm-menu'; drawer.hidden = true; drawer.setAttribute('aria-label', 'All sections');
     const drawerInner = make('div','jm-drawer-inner');
@@ -277,8 +346,20 @@
     drawer.append(drawerInner); topbarInner.append(brand, primary, menu); topbar.append(topbarInner, drawer);
     const skip = make('a', 'jm-skip', 'Skip to main content'); skip.href = '#header';
     document.body.prepend(skip, topbar);
-    const closeMenu = (focus = false) => { drawer.hidden = true; menu.setAttribute('aria-expanded', 'false'); menuSymbol.textContent = '+'; if (focus) menu.focus(); };
-    menu.addEventListener('click', () => { const open = drawer.hidden; drawer.hidden = !open; menu.setAttribute('aria-expanded', String(open)); menuSymbol.textContent = open ? '−' : '+'; });
+    const closeMenu = (focus = false) => {
+      drawer.hidden = true; menu.setAttribute('aria-expanded', 'false');
+      menu.setAttribute('aria-label', 'Open site menu'); menuSymbol.textContent = '+';
+      if (focus) menu.focus({preventScroll: true});
+    };
+    const openMenu = () => {
+      drawer.hidden = false; menu.setAttribute('aria-expanded', 'true');
+      menu.setAttribute('aria-label', 'Close site menu'); menuSymbol.textContent = '−';
+    };
+    menu.addEventListener('click', () => { if (drawer.hidden) openMenu(); else closeMenu(); });
+    menu.addEventListener('keydown', event => {
+      if (event.key !== 'ArrowDown') return;
+      event.preventDefault(); openMenu(); drawer.querySelector('a')?.focus();
+    });
     document.addEventListener('keydown', event => { if (event.key === 'Escape' && !drawer.hidden) { closeMenu(true); event.preventDefault(); } });
     document.addEventListener('click', event => { if (!drawer.hidden && !topbar.contains(event.target)) closeMenu(); });
     document.addEventListener('focusin', event => { if (!drawer.hidden && !topbar.contains(event.target)) closeMenu(); });
@@ -286,21 +367,35 @@
     const oldFooter = make('div'); oldFooter.append(...footer.childNodes);
     oldFooter.querySelectorAll('a[href="mailto:jmmorale@nmsu.edu"]').forEach(link => { link.href = 'mailto:jmmorales@nmsu.edu'; });
     const archive = make('details', 'jm-legacy-footer'); archive.append(make('summary', '', 'Original site resources & archived CV'), oldFooter);
-    footer.append(fragment('<div class="jm-footer-top"><span>Julio M. Morales · Astronomy</span><div class="jm-footer-links"><a href="mailto:jmmorales@nmsu.edu">Email</a><a href="https://github.com/JulioM1823">GitHub</a><a href="https://www.linkedin.com/in/julio-morales-6642a3236/">LinkedIn</a><a href="professional.html#CV">Academic record</a><a href="docs/Morales_CV.pdf">Archived CV · Jan 2023</a></div></div><p class="jm-footer-credit">Based on <a href="https://html5up.net/dimension">Dimension by HTML5 UP</a> · <a href="https://html5up.net/license">CCA 3.0</a> · <a href="#elements">Original theme reference</a></p>'));
+    footer.append(fragment('<div class="jm-footer-top"><span>Julio M. Morales · Astronomy</span><div class="jm-footer-links"><a href="mailto:jmmorales@nmsu.edu">Email</a><a href="https://github.com/JulioM1823">GitHub</a><a href="https://www.linkedin.com/in/julio-morales-6642a3236/">LinkedIn</a><a href="professional.html#experience">Academic record</a><a href="docs/Morales_CV.pdf">Archived CV · Jan 2023</a></div></div><p class="jm-footer-credit">Based on <a href="https://html5up.net/dimension">Dimension by HTML5 UP</a> · <a href="https://html5up.net/license">CCA 3.0</a> · <a href="#elements">Original theme reference</a></p>'));
     footer.append(archive);
     const announce = make('p','jm-announce'); announce.setAttribute('role','status'); announce.setAttribute('aria-live','polite'); document.body.append(announce);
     const notFound = make('article'); notFound.id = 'jm-not-found'; notFound.hidden = true;
     notFound.append(fragment('<header class="jm-page-header"><h1 class="jm-page-title" tabindex="-1">Section not found</h1></header><p>This address does not match a section of the website. Use the navigation to explore, or <a href="#">return to the homepage</a>.</p>'));
     main.append(notFound);
-    const scrollPositions = new Map(); let lastURL = ''; let activeId = '';
-    const readHash = () => { try { return decodeURIComponent(location.hash.slice(1)); } catch (_) { return ''; } };
-    const saveScroll = () => { if (lastURL) scrollPositions.set(lastURL, {x: window.scrollX, y: window.scrollY}); };
-    function render({focus = true, restore = false} = {}) {
+    const scrollPositions = new Map();
+    let lastURL = ''; let activeId = ''; let activeEntry = ''; let activePage = null;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const readHash = () => { try { return decodeURIComponent(location.hash.slice(1)); } catch (_) { return location.hash.slice(1); } };
+    const newEntry = () => `jm-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    const entryState = () => {
+      if (!history.state?.jmEntry) history.replaceState({...history.state, jmEntry: newEntry()}, '', location.href);
+      return history.state.jmEntry;
+    };
+    const saveScroll = (persist = false) => {
+      if (!activeEntry || lastURL !== location.href) return;
+      const position = {x: window.scrollX, y: window.scrollY};
+      scrollPositions.set(activeEntry, position);
+      if (persist) history.replaceState({...history.state, jmPosition: position}, '', location.href);
+    };
+    function render({focus = true, restore = false, smooth = false} = {}) {
       const hash = readHash();
       const target = hash ? document.getElementById(hash) : null;
       const article = target && (target.matches('article') ? target : target.closest('article'));
       const isHome = !hash || hash === 'header';
       const next = isHome ? null : (article && main.contains(article) ? article : notFound);
+      const page = next || header;
+      const changed = activePage !== page;
       articles.forEach(item => { item.hidden = item !== next; }); notFound.hidden = next !== notFound;
       header.hidden = !isHome; layout.hidden = isHome;
       header.setAttribute('role', isHome ? 'main' : 'region'); main.setAttribute('role', isHome ? 'region' : 'main');
@@ -311,35 +406,51 @@
         if (link.getAttribute('href') === `#${activeId}`) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current');
       });
       closeMenu();
-      const heading = isHome ? header.querySelector('h1') : next.querySelector('h1');
-      if (focus && heading) heading.focus({preventScroll: true});
-      const stored = restore && scrollPositions.get(location.href);
-      if (stored) window.scrollTo(stored.x, stored.y);
-      else if (target && next && target !== next && !target.matches('h1')) target.scrollIntoView({block:'start', behavior:'instant'});
-      else window.scrollTo(0, 0);
-      if (focus) announce.textContent = isHome ? 'Homepage' : (labels[activeId] || 'Section not found');
+      const isSection = target && next && target !== next && !target.matches('h1');
+      const focusTarget = isSection ? target : page.querySelector('h1');
+      if (focus && focusTarget) {
+        if (!focusTarget.hasAttribute('tabindex')) focusTarget.tabIndex = -1;
+        focusTarget.focus({preventScroll: true});
+      }
+      activeEntry = entryState();
+      const stored = restore && (scrollPositions.get(activeEntry) || history.state.jmPosition);
+      if (stored) window.scrollTo({left: stored.x, top: stored.y, behavior: 'instant'});
+      else if (isSection) target.scrollIntoView({block: 'start', behavior: smooth && !changed && !reducedMotion.matches ? 'smooth' : 'instant'});
+      else window.scrollTo({left: 0, top: 0, behavior: 'instant'});
+      if (focus && changed) announce.textContent = isHome ? 'Homepage' : (labels[activeId] || 'Section not found');
       lastURL = location.href;
+      activePage = page;
+      saveScroll();
+      document.dispatchEvent(new CustomEvent('jm:routechange', {detail: {page, changed}}));
     }
     document.addEventListener('click', event => {
       const link = event.target.closest && event.target.closest('a[href]');
       if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.target || link.hasAttribute('download')) return;
-      const url = new URL(link.getAttribute('href'), location.href);
-      const samePage = url.origin === location.origin && (url.pathname === location.pathname || (['/', '/index.html'].includes(url.pathname) && ['/', '/index.html'].includes(location.pathname)));
+      let url;
+      try { url = new URL(link.getAttribute('href'), location.href); } catch (_) { return; }
+      const normalizePath = pathname => pathname.replace(/\/index\.html$/, '/');
+      const samePage = url.origin === location.origin && url.search === location.search && normalizePath(url.pathname) === normalizePath(location.pathname);
       if (!samePage || !link.getAttribute('href').includes('#')) return;
       if (link === skip) {
         event.preventDefault(); const target = header.hidden ? main : header;
         target.focus({preventScroll: true}); target.scrollIntoView({block:'start', behavior:'instant'}); return;
       }
-      event.preventDefault(); saveScroll();
-      if (url.href !== location.href) history.pushState(null, '', url);
-      render();
+      event.preventDefault(); saveScroll(true);
+      if (url.href !== location.href) history.pushState({jmEntry: newEntry()}, '', url);
+      render({smooth: true});
     });
-    const onHistory = () => { if (location.href === lastURL) return; saveScroll(); render({restore:true}); };
+    const onHistory = () => {
+      if (location.href === lastURL && history.state?.jmEntry === activeEntry) return;
+      render({restore: true});
+    };
+    window.addEventListener('scroll', () => saveScroll(), {passive: true});
+    window.addEventListener('pagehide', () => saveScroll(true));
     window.addEventListener('popstate', onHistory); window.addEventListener('hashchange', onHistory);
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     main.querySelectorAll('#elements form').forEach(form => form.addEventListener('submit', event => { event.preventDefault(); announce.textContent = 'This is an original theme demonstration, not a contact form. Please use the email link to contact Julio.'; }));
-    render({focus:false});
+    document.documentElement.classList.remove('jm-loading');
     document.documentElement.dataset.jmReady = 'true';
+    render({focus: false, restore: true});
   }
   initialize().catch(error => { console.error('Website enhancement unavailable:', error); exposeOriginal(); });
 })();

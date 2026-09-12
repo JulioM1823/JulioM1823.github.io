@@ -7,6 +7,7 @@
   <meta name="theme-color" content="#11161b">
   <title>Academic Record · Julio M. Morales</title>
   <link rel="stylesheet" href="assets/css/redesign.css">
+  <script src="assets/js/scroll-polish.js" defer></script>
 </head>
 <body>
   <a class="jm-skip" href="#academic-record">Skip to academic record</a>
@@ -48,28 +49,22 @@
         <p>I study the Sun through its oscillations and atmospheric waves, while continuing a research thread in young-star accretion that began during my undergraduate work.</p>
       </header>
 
-      <section class="jm-feature">
+      <section class="jm-feature jm-feature-text">
         <div class="jm-feature-copy">
           <p class="jm-kicker">01 · Solar interior</p>
           <h3>Helioseismology &amp; solar flows</h3>
           <p>At New Mexico State University, I work with Prof. Jason Jackiewicz on helioseismology and solar atmospheric gravity waves. My research includes computational analysis of solar oscillations and time-distance helioseismology applied to three-dimensional velocity fields and solar meridional flow.</p>
           <a class="jm-text-link" href="index.html#plasmaflows">Explore the original solar-flow project page →</a>
         </div>
-        <!-- IMAGE PLACEHOLDER: a user-supplied meridional-flow or time-distance diagnostic.
-             Recommended 1200 × 750 px. Do not substitute fabricated scientific imagery. -->
-        <div class="jm-visual-placeholder" data-visual="solar-flows" aria-hidden="true"></div>
       </section>
 
-      <section class="jm-feature">
+      <section class="jm-feature jm-feature-text">
         <div class="jm-feature-copy">
           <p class="jm-kicker">02 · Solar atmosphere</p>
           <h3>Atmospheric gravity waves</h3>
           <p>My graduate research includes atmospheric-wave diagnostics in the lower solar atmosphere. I co-authored <em>Atmospheric Gravity Waves Modulated by the Magnetic Field Configuration</em>, published in <em>The Astrophysical Journal</em> in 2025.</p>
           <a class="jm-text-link" href="https://doi.org/10.3847/1538-4357/ae0a55">Read the 2025 paper →</a>
         </div>
-        <!-- IMAGE PLACEHOLDER: an approved atmospheric-wave diagnostic or published figure.
-             Recommended 1200 × 750 px with caption and attribution when supplied. -->
-        <div class="jm-visual-placeholder" data-visual="gravity-waves" aria-hidden="true"></div>
       </section>
 
       <section class="jm-feature jm-feature-text">
@@ -90,6 +85,8 @@
       </header>
       <p class="jm-source-note">Publication labels below follow the May 2026 CV. A preprint citation here is not a claim that no later journal version exists.</p>
 
+      <section aria-labelledby="papers-title">
+        <h3 id="papers-title">Papers &amp; manuscripts</h3>
       <ol class="jm-publications">
         <li>
           <p class="jm-kicker">2025 · Journal article</p>
@@ -126,8 +123,9 @@
           <p class="jm-meta">In preparation; not presented here as a published article.</p>
         </li>
       </ol>
+      </section>
 
-      <h3>Conferences &amp; presentations</h3>
+      <h3 id="conferences-title">Conferences &amp; presentations</h3>
       <dl class="jm-timeline">
         <div><dt>Oct 2024</dt><dd><strong>Waves and Instabilities in the Solar Atmosphere</strong><span>Monte Porzio Catone, Italy · Presented</span></dd></div>
         <div><dt>Oct 2023</dt><dd><strong>SACNAS Diversity in STEM Conference</strong><span>Phoenix, AZ · Attended</span></dd></div>
@@ -192,16 +190,13 @@
         <p>Research software, reproducible analysis, and practical tools for scientific work.</p>
       </header>
 
-      <section class="jm-feature">
+      <section class="jm-feature jm-feature-text">
         <div class="jm-feature-copy">
           <p class="jm-kicker">Research workflow development</p>
           <h3>AstroStack</h3>
           <p>I develop AstroStack, a research workflow platform for scientific project organization and automation. My computational work also includes applying language models to workflow automation, code generation and debugging, scientific visualization, documentation, and version-controlled development.</p>
           <a class="jm-text-link" href="https://github.com/JulioM1823/AstroStack">AstroStack on GitHub →</a>
         </div>
-        <!-- IMAGE PLACEHOLDER: a real AstroStack screenshot.
-             Recommended 1440 × 900 px. Add accurate alt text when supplied. -->
-        <div class="jm-visual-placeholder" data-visual="astrostack" aria-hidden="true"></div>
       </section>
 
       <h3>Tools for Scientist Workflows</h3>
@@ -231,48 +226,60 @@
       <header class="jm-section-heading">
         <p class="jm-eyebrow">Curriculum vitae / professional record</p>
         <h2>Education &amp; experience</h2>
-        <p>A concise web translation of the May 2026 CV rather than a PDF pasted into a browser.</p>
+        <p>Education, research appointments, technical expertise, and honors from my May 2026 CV.</p>
       </header>
       <p class="jm-source-note">The existing PDF is retained as the January 2023 archive identified by the original website. It is not presented as the current CV.</p>
       <div class="jm-actions"><a class="jm-button" href="docs/Morales_CV.pdf">Archived CV PDF · Jan 2023 ↗</a></div>
 
-      <h3>Education</h3>
-      <dl class="jm-timeline">
-        <div><dt>Expected 2027</dt><dd><strong>Ph.D. in Astronomy</strong><span>New Mexico State University · Las Cruces, NM · Advisor: Prof. Jason Jackiewicz</span></dd></div>
-        <div><dt>May 2025</dt><dd><strong>M.S. in Astronomy</strong><span>New Mexico State University · College of Arts and Sciences · Las Cruces, NM</span></dd></div>
-        <div><dt>May 2022</dt><dd><strong>B.S. in Physics and Astronomy</strong><span>University of Massachusetts Amherst · College of Natural Sciences · Amherst, MA</span></dd></div>
-      </dl>
+      <div class="jm-cv-sections">
+        <section id="cv-education" class="jm-content-section" aria-labelledby="cv-education-title">
+          <h3 id="cv-education-title">Education</h3>
+          <dl class="jm-timeline">
+            <div><dt>Expected 2027</dt><dd><strong>Ph.D. in Astronomy</strong><span>New Mexico State University · Las Cruces, NM · Advisor: Prof. Jason Jackiewicz</span></dd></div>
+            <div><dt>May 2025</dt><dd><strong>M.S. in Astronomy</strong><span>New Mexico State University · College of Arts and Sciences · Las Cruces, NM</span></dd></div>
+            <div><dt>May 2022</dt><dd><strong>B.S. in Physics and Astronomy</strong><span>University of Massachusetts Amherst · College of Natural Sciences · Amherst, MA</span></dd></div>
+          </dl>
+        </section>
 
-      <h3>Research experience</h3>
-      <dl class="jm-timeline jm-timeline-long">
-        <div><dt>Aug 2022–present</dt><dd><strong>Ph.D. Candidate &amp; Graduate Research Assistant</strong><span>New Mexico State University · Las Cruces, NM · Advisor: Prof. Jason Jackiewicz</span><p>Research in helioseismology and solar atmospheric gravity waves, including computational solar oscillation and atmospheric-wave diagnostics; reproducible data analysis, visualization, documentation, and version control; and peer-reviewed work on magnetic-field modulation of atmospheric gravity waves.</p></dd></div>
-        <div><dt>Jul–Sep 2022</dt><dd><strong>Post-Baccalaureate Researcher</strong><span>Amherst College · Amherst, MA · Advisor: Prof. Katherine B. Follette</span><p>Continued second-to-minute Hα variability analysis in transitional disk host-stars and advanced thesis-derived accretion-variability research toward manuscript development within GAPlanetS.</p></dd></div>
-        <div><dt>Sep 2021–May 2022</dt><dd><strong>Senior Thesis Researcher</strong><span>University of Massachusetts Amherst · Amherst, MA · Advisor: Prof. Katherine B. Follette</span><p><em>Accretion Variability in Transitional Disk Host-Stars: Second-to-Minute Timescale Hα Variability in the Giant Accreting Protoplanet Survey.</em> Investigated Hα as a tracer of accretion variability and presented results at departmental, regional, and national astronomy meetings.</p></dd></div>
-        <div><dt>Jul–Sep 2021</dt><dd><strong>Five College Astronomy Department Summer Researcher</strong><span>Amherst College · Amherst, MA · Advisors: Prof. Katherine B. Follette and Dr. Connor Robinson</span><p>Contributed to GAPlanetS research on accreting protoplanets and disk-host star variability and presented at the Amherst College Summer Research Poster Session and Five College Astronomy Department Research Presentations.</p></dd></div>
-      </dl>
+        <section id="cv-research-experience" class="jm-content-section" aria-labelledby="cv-research-experience-title">
+          <h3 id="cv-research-experience-title">Research experience</h3>
+          <dl class="jm-timeline jm-timeline-long">
+            <div><dt>Aug 2022–present</dt><dd><strong>Ph.D. Candidate &amp; Graduate Research Assistant</strong><span>New Mexico State University · Las Cruces, NM · Advisor: Prof. Jason Jackiewicz</span><p>Research in helioseismology and solar atmospheric gravity waves, including computational solar oscillation and atmospheric-wave diagnostics; reproducible data analysis, visualization, documentation, and version control; and peer-reviewed work on magnetic-field modulation of atmospheric gravity waves.</p></dd></div>
+            <div><dt>Jul–Sep 2022</dt><dd><strong>Post-Baccalaureate Researcher</strong><span>Amherst College · Amherst, MA · Advisor: Prof. Katherine B. Follette</span><p>Continued second-to-minute Hα variability analysis in transitional disk host-stars and advanced thesis-derived accretion-variability research toward manuscript development within GAPlanetS.</p></dd></div>
+            <div><dt>Sep 2021–May 2022</dt><dd><strong>Senior Thesis Researcher</strong><span>University of Massachusetts Amherst · Amherst, MA · Advisor: Prof. Katherine B. Follette</span><p><em>Accretion Variability in Transitional Disk Host-Stars: Second-to-Minute Timescale Hα Variability in the Giant Accreting Protoplanet Survey.</em> Investigated Hα as a tracer of accretion variability and presented results at departmental, regional, and national astronomy meetings.</p></dd></div>
+            <div><dt>Jul–Sep 2021</dt><dd><strong>Five College Astronomy Department Summer Researcher</strong><span>Amherst College · Amherst, MA · Advisors: Prof. Katherine B. Follette and Dr. Connor Robinson</span><p>Contributed to GAPlanetS research on accreting protoplanets and disk-host star variability and presented at the Amherst College Summer Research Poster Session and Five College Astronomy Department Research Presentations.</p></dd></div>
+          </dl>
+        </section>
 
-      <h3>Technical &amp; observational skills</h3>
-      <dl class="jm-skills">
-        <div><dt>Programming</dt><dd>Python; MATLAB; JavaScript; Bash; Zsh; Git/GitHub; LaTeX; HTML.</dd></div>
-        <div><dt>Scientific computing</dt><dd>Solar and stellar data analysis; scientific visualization; reproducible research workflows; documentation and version control.</dd></div>
-        <div><dt>AI workflows</dt><dd>Applied language models for research workflow automation, code generation and debugging, scientific data visualization, documentation, and version-controlled development.</dd></div>
-        <div><dt>Software development</dt><dd>Developer of <a href="https://github.com/JulioM1823/AstroStack">AstroStack</a>, a research workflow platform for scientific project organization and automation.</dd></div>
-        <div><dt>Certified observer</dt><dd>Tortugas Mountain Observatory; Apache Point Observatory.</dd></div>
-        <div><dt>Observing experience</dt><dd>Southern Astrophysical Research (SOAR) Telescope, Cerro Pachón, Chile; Amherst College Observatory, Amherst, MA.</dd></div>
-      </dl>
+        <section id="cv-skills" class="jm-content-section" aria-labelledby="cv-skills-title">
+          <h3 id="cv-skills-title">Technical &amp; observational skills</h3>
+          <dl class="jm-skills">
+            <div><dt>Programming</dt><dd>Python; MATLAB; JavaScript; Bash; Zsh; Git/GitHub; LaTeX; HTML.</dd></div>
+            <div><dt>Scientific computing</dt><dd>Solar and stellar data analysis; scientific visualization; reproducible research workflows; documentation and version control.</dd></div>
+            <div><dt>AI workflows</dt><dd>Applied language models for research workflow automation, code generation and debugging, scientific data visualization, documentation, and version-controlled development.</dd></div>
+            <div><dt>Software development</dt><dd>Developer of <a href="https://github.com/JulioM1823/AstroStack">AstroStack</a>, a research workflow platform for scientific project organization and automation.</dd></div>
+            <div><dt>Certified observer</dt><dd>Tortugas Mountain Observatory; Apache Point Observatory.</dd></div>
+            <div><dt>Observing experience</dt><dd>Southern Astrophysical Research (SOAR) Telescope, Cerro Pachón, Chile; Amherst College Observatory, Amherst, MA.</dd></div>
+          </dl>
+        </section>
 
-      <h3>Awards &amp; honors</h3>
-      <dl class="jm-timeline">
-        <div><dt>May 2023</dt><dd>New Mexico State University Diversity Award Scholarship.</dd></div>
-        <div><dt>2022</dt><dd>AAS Chambliss Astronomy Achievement Award Competition Medalist.</dd></div>
-        <div><dt>2022</dt><dd>Webber Voyager Graduate Fellowship, $7,500/year.</dd></div>
-        <div><dt>2022</dt><dd>SACNAS Travel Scholarship.</dd></div>
-        <div><dt>2021–2022</dt><dd>UMass Amherst Dean’s List Honors.</dd></div>
-        <div><dt>2017</dt><dd>John and Abigail Adams Scholarship, $1,400/year.</dd></div>
-      </dl>
+        <section id="cv-awards" class="jm-content-section" aria-labelledby="cv-awards-title">
+          <h3 id="cv-awards-title">Awards &amp; honors</h3>
+          <dl class="jm-timeline">
+            <div><dt>May 2023</dt><dd>New Mexico State University Diversity Award Scholarship.</dd></div>
+            <div><dt>2022</dt><dd>AAS Chambliss Astronomy Achievement Award Competition Medalist.</dd></div>
+            <div><dt>2022</dt><dd>Webber Voyager Graduate Fellowship, $7,500/year.</dd></div>
+            <div><dt>2022</dt><dd>SACNAS Travel Scholarship.</dd></div>
+            <div><dt>2021–2022</dt><dd>UMass Amherst Dean’s List Honors.</dd></div>
+            <div><dt>2017</dt><dd>John and Abigail Adams Scholarship, $1,400/year.</dd></div>
+          </dl>
+        </section>
 
-      <h3>Languages</h3>
-      <p>English, native fluency · Spanish, native proficiency · Arabic, beginner.</p>
+        <section id="cv-languages" class="jm-content-section" aria-labelledby="cv-languages-title">
+          <h3 id="cv-languages-title">Languages</h3>
+          <p>English, native fluency · Spanish, native proficiency · Arabic, beginner.</p>
+        </section>
+      </div>
     </article>
 
     <article id="contact" class="jm-record-section jm-contact-section">
