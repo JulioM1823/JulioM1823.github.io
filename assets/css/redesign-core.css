@@ -47,8 +47,11 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 :is(.jm-redesign, .jm-standalone) #bg::after {transform: none; filter: none; transition: none; background-position: 65% center;}
 .jm-topbar {position: sticky; top: 0; z-index: 30; background: rgba(16,25,31,.96); border-bottom: 1px solid var(--jm-line-soft); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);}
 .jm-topbar-inner {width: min(calc(100% - 2 * var(--jm-gutter)),var(--jm-max)); min-height: var(--jm-header-height); margin: auto; display: flex; align-items: center; gap: 1.65rem;}
-:is(.jm-redesign, .jm-standalone) .jm-brand {min-width: 0; text-decoration: none; font-weight: 600; font-size: 1.08rem; letter-spacing: -.025em; line-height: 1.3;}
-.jm-brand span {display: block; font-weight: 400; font-size: .6rem; line-height: 1.45; letter-spacing: .09em; text-transform: uppercase; color: var(--jm-muted); margin-top: .3rem;}
+:is(.jm-redesign, .jm-standalone) .jm-brand {min-width: 0; display: flex; align-items: center; gap: .8rem; text-decoration: none; font-weight: 600; font-size: 1.08rem; letter-spacing: -.025em; line-height: 1.3;}
+.jm-brand-portrait {width: 52px; height: 52px; flex: 0 0 52px; object-fit: cover; object-position: center; border: 1px solid #b7d8de6b; border-radius: 50%; padding: 2px; background: #13232b;}
+.jm-brand-copy, .jm-brand-name, .jm-brand-tagline {display: block;}
+.jm-brand-copy {min-width: 0;}
+.jm-brand-tagline {font-weight: 400; font-size: .6rem; line-height: 1.45; letter-spacing: .09em; text-transform: uppercase; color: var(--jm-muted); margin-top: .3rem;}
 .jm-primary-nav {display: flex; align-items: center; gap: clamp(1.2rem, 2vw, 2.7rem); margin-left: auto;}
 :is(.jm-redesign, .jm-standalone) .jm-primary-nav a {font-size: .86rem; text-decoration: none; color: var(--jm-muted); padding: .7rem 0; position: relative;}
 :is(.jm-redesign, .jm-standalone) .jm-primary-nav a[aria-current='page'] {color: #fff;}
@@ -99,7 +102,17 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 .jm-feature-text {grid-template-columns: 1fr;}
 :is(.jm-redesign, .jm-standalone) .jm-feature :is(h2,h3) {margin-top: 0;}
 .jm-feature p {font-size: .95rem; color: var(--jm-muted);}
+:is(.jm-redesign, .jm-standalone) .jm-feature-title-link {color: inherit; text-decoration: none;}
+:is(.jm-redesign, .jm-standalone) .jm-feature-title-link:hover {color: var(--jm-accent); text-decoration: underline;}
 .jm-visual-placeholder {aspect-ratio: 8/5; width: 100%; max-height: 260px; background: rgba(255,255,255,.015); border: 1px solid var(--jm-line-soft); border-radius: var(--jm-radius);}
+.jm-placeholder-grid {display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; margin: .5rem 0 1rem;}
+.jm-media-placeholder, .jm-video-placeholder {display: grid; place-items: center; width: 100%; aspect-ratio: 8/5; border: 1px dashed #627e89; border-radius: var(--jm-radius); background: linear-gradient(135deg,#1a2932,#122029); color: var(--jm-faint); text-align: center;}
+.jm-media-placeholder span, .jm-video-placeholder span {font-size: .68rem; line-height: 1.5; letter-spacing: .13em; text-transform: uppercase;}
+.jm-detail-media {display: grid; gap: 1rem; max-width: 1080px; margin: 0 0 2.5rem;}
+.jm-detail-media .jm-media-placeholder {aspect-ratio: 16/9;}
+.jm-video-placeholder {aspect-ratio: 16/9; position: relative;}
+.jm-video-placeholder::before {content: '▶'; display: block; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-75%); color: var(--jm-accent); font-size: 1.4rem;}
+.jm-video-placeholder span {padding-top: 2.8rem;}
 .jm-source-note, .jm-meta {font-size: .79rem; line-height: 1.65; color: var(--jm-faint);}
 .jm-source-note {max-width: 79ch;}
 .jm-meta {margin-bottom: 0 !important;}
@@ -148,12 +161,8 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 :is(.jm-redesign, .jm-standalone) #footer {width: 100%; max-width: none; opacity: 1; transform: none; margin: 0; padding: 2.5rem 0; text-align: left; font-size: .78rem; color: var(--jm-muted);}
 .jm-footer-top {display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; border-top: 1px solid var(--jm-line); padding-top: 1.7rem;}
 .jm-footer-links {display: flex; gap: 1.2rem; flex-wrap: wrap;}
-.jm-footer-credit {font-size: .67rem; color: var(--jm-faint); margin-top: 1.4rem !important;}
 :is(.jm-redesign, .jm-standalone) details {margin-top: 1.2rem;}
 :is(.jm-redesign, .jm-standalone) summary {cursor: pointer; min-height: 44px; padding: .55rem 0; color: var(--jm-muted);}
-.jm-legacy-footer > div {padding: 1rem; margin: .5rem 0; border: 1px solid var(--jm-line-soft); max-width: 850px;}
-.jm-legacy-footer p {font-size: .78rem;}
-:is(.jm-redesign, .jm-standalone) .jm-legacy-footer .copyright {font-size: .7rem; letter-spacing: 0; text-transform: none;}
 .jm-announce {position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;}
 .jm-load-warning {padding: 1rem; border: 1px solid var(--jm-line); margin: 1rem 0; font-size: .85rem;}
 .jm-record-header, .jm-record-footer {max-width: 1080px; margin: 0 auto; padding: 2rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; font-size: .8rem;}
@@ -204,7 +213,7 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
   :is(.jm-redesign, .jm-standalone) .jm-page-toc a {padding: .35rem 0; min-height: 34px;}
   .jm-page-toc .jm-eyebrow {margin-bottom: .5rem;}
 }
-@media (max-width: 980px) {
+@media (max-width: 1120px) {
   .jm-primary-nav {display: none;}
   .jm-menu-button {margin-left: auto;}
   .jm-page-layout {grid-template-columns: minmax(0,1fr); padding-top: 2.5rem;}
@@ -215,7 +224,8 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
   :root {--jm-header-height: 76px; --jm-gap: 1.5rem;}
   html:is(.jm-redesign, .jm-standalone) {font-size: 16px;}
   :is(.jm-redesign, .jm-standalone) .jm-brand {font-size: 1rem; flex: 1 1 auto;}
-  .jm-brand span {font-size: .55rem; letter-spacing: .07em;}
+  .jm-brand-portrait {width: 44px; height: 44px; flex-basis: 44px;}
+  .jm-brand-tagline {font-size: .55rem; letter-spacing: .07em;}
   .jm-drawer-inner {grid-template-columns: minmax(0,1fr); gap: 1.5rem; padding-block: 1.5rem;}
   .jm-drawer-group a {min-height: 44px;}
   .jm-actions {gap: .8rem 1.1rem;}
@@ -223,6 +233,7 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
   .jm-page-header {padding-bottom: 1.8rem; margin-bottom: 2rem;}
   .jm-page-title {font-size: clamp(2.35rem, 9vw, 3.5rem) !important;}
   .jm-feature {grid-template-columns: minmax(0,1fr); gap: 1rem;}
+  .jm-placeholder-grid {grid-template-columns: minmax(0,1fr);}
   .jm-timeline > div, .jm-skills > div {grid-template-columns: minmax(0,1fr); gap: .4rem;}
   .jm-timeline dd p {font-size: .94rem;}
   .jm-resource-list a {align-items: start; flex-direction: column; gap: .25rem;}
@@ -242,7 +253,7 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 }
 @media print {
   :is(.jm-redesign, .jm-standalone) body {background: white; color: black;}
-  :is(.jm-redesign, .jm-standalone) #bg, .jm-topbar, .jm-sidebar, .jm-page-rail, .jm-reading-progress, .jm-skip, .jm-legacy-footer, .jm-visual-placeholder {display: none !important;}
+  :is(.jm-redesign, .jm-standalone) #bg, .jm-topbar, .jm-sidebar, .jm-page-rail, .jm-reading-progress, .jm-skip, .jm-visual-placeholder {display: none !important;}
   :is(.jm-redesign, .jm-standalone) #wrapper {width: 100%;} .jm-page-layout {display: block; padding: 0;} :is(.jm-redesign, .jm-standalone) :is(#main article.jm-has-toc, #header article.jm-home-about.jm-has-toc), .jm-cv-sections {display: block;}
   :is(.jm-redesign, .jm-standalone) a, :is(.jm-redesign, .jm-standalone) h1, :is(.jm-redesign, .jm-standalone) h2, :is(.jm-redesign, .jm-standalone) h3, :is(.jm-redesign, .jm-standalone) h4, :is(.jm-redesign, .jm-standalone) p, :is(.jm-redesign, .jm-standalone) dt, :is(.jm-redesign, .jm-standalone) dd, :is(.jm-redesign, .jm-standalone) span {color: black !important;}
   :is(.jm-redesign, .jm-standalone) #main article[hidden], :is(.jm-redesign, .jm-standalone) #header[hidden], :is(.jm-redesign, .jm-standalone) .jm-page-layout[hidden] {display: none !important;}

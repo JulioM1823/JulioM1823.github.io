@@ -18,22 +18,21 @@
     About: 'About me', mylife: 'Family, friends & values',
     academicjourney: 'My academic journey', Research: 'Research',
     PMS: 'Accretion in young stars',
-    Teaching: 'Teaching & mentorship', Outreach: 'Outreach',
+    Teaching: 'Teaching & mentorship',
     elements: 'Original theme reference', gravitywaves: 'Atmospheric gravity waves',
     Software: 'Software & research workflows',
     CV: 'Education & experience', Contact: 'Contact'
   };
   const groups = [
     ['Research', ['Research', 'gravitywaves', 'PMS', 'Software']],
-    ['Teaching & outreach', ['Teaching', 'Outreach']],
+    ['Teaching', ['Teaching']],
     ['Education & experience', ['CV']],
     ['More about Julio', ['academicjourney', 'mylife', 'Contact']]
   ];
   const historical = {
-    Teaching: ['Earlier course history', 'The earlier teaching narrative and individual course listings are retained below, including the Leominster High School experience. The UMass date discrepancy is noted above.'],
-    Outreach: ['Explore the Solar System · 2021', 'The full account of this public event, its demonstrations, photographs, and acknowledgments is retained below.']
+    Teaching: ['Courses taught or tutored', 'A complete course list from my teaching and tutoring experience appears below.']
   };
-  const smallImages = new Set(['about_pic.jpeg', 'evo.jpg', 'me_at_umass.jpg', 'grad_pic.jpg', 'sunspots.jpg']);
+  const smallImages = new Set(['about_pic.jpeg', 'evo.jpg', 'me_at_umass.jpg', 'grad_pic.jpg']);
   const alts = {
     'about_pic.jpeg': 'Julio outdoors on a summer day',
     'fam_reunion_big.jpg': 'Alicea family reunion in Chicago, 2004',
@@ -45,17 +44,6 @@
     'size_comparisons.png': 'Comparison of the sizes of various stars',
     'me_at_umass.jpg': 'Julio visiting the UMass Amherst campus after admission',
     'grad_pic.jpg': 'Julio at the UMass Amherst commencement in 2022',
-    'upward_bound_pic.jpg': 'Upward Bound colleagues and students at Anna Maria College',
-    'pickle2.png': 'Emission-spectrum demonstration at the 2021 outreach event',
-    'sodium_emission.jpg': 'Sodium emission spectrum',
-    'seven-layer-density-column-10.jpg': 'Liquids separated into layers by density',
-    'planetary_layers.jpg': 'Diagram of planetary interior layers',
-    'fluid.png': 'Fluid-density demonstration at the 2021 outreach event',
-    'solar.png': 'Solar observing at the 2021 outreach event',
-    'sunspots.jpg': 'Sunspots on the solar surface',
-    'lab_crew.jpg_small': 'Follette Lab members who helped run the outreach event',
-    'poster_real.png': 'Poster for Explore the Solar System in Northampton',
-    'scale1.png': 'Scale model of distances in the Solar System',
     'accretion.jpg.png': 'Magnetospheric accretion column, shock and photospheric hotspot',
     'chemistry.jpg.png': 'Diagram connecting accretion radiation to protoplanetary disk chemistry',
     'light-curve example.png': 'Example stellar light curve: magnitude versus time',
@@ -114,7 +102,7 @@
     const routes = {
       research: ['Research-current', 'Research'],
       teaching: ['Teaching-current', 'Teaching'],
-      outreach: ['Outreach-current', 'Outreach'], software: ['Software'],
+      software: ['Software'],
       experience: ['CV'], contact: ['Contact']
     };
     Object.entries(routes).forEach(([id, [route, augment]]) => {
@@ -132,6 +120,10 @@
         <article id="gravitywaves" data-title="Atmospheric gravity waves" class="jm-record-section">
           <p class="jm-eyebrow">Graduate research / Solar atmosphere</p>
           <h2>Atmospheric gravity waves</h2>
+          <div class="jm-detail-media">
+            <div class="jm-media-placeholder" role="img" aria-label="Atmospheric gravity waves image placeholder"><span>Image placeholder</span></div>
+            <div class="jm-video-placeholder" role="img" aria-label="Atmospheric gravity waves embedded video placeholder"><span>Embedded video placeholder</span></div>
+          </div>
           <p class="jm-lead">Computational diagnostics of waves in the lower solar atmosphere.</p>
           <p>My Ph.D. research at New Mexico State University includes helioseismology and solar atmospheric gravity waves, with an emphasis on computational analysis of solar oscillation and atmospheric-wave diagnostics. Alongside that research, I develop reproducible workflows for analysis, visualization, documentation, and version control.</p>
           <section class="jm-callout"><h3>Related publication</h3><p>Vesa, O., Morales, J. M., Jackiewicz, J., Vigeesh, G., &amp; Reardon, K. (2025). <em>Atmospheric Gravity Waves Modulated by the Magnetic Field Configuration.</em> <em>ApJ</em>, 992, 201.</p><a class="jm-text-link" href="https://doi.org/10.3847/1538-4357/ae0a55">Read the publication →</a></section>
@@ -167,7 +159,7 @@
       if (!image.alt || ['Snow', 'Mountains'].includes(image.alt)) {
         const figure = image.closest('figure');
         const caption = figure && figure.querySelector('figcaption');
-        image.alt = alts[filename] || (caption && caption.textContent.trim()) || `Research or outreach figure: ${filename.replace(/[_-]/g, ' ').replace(/\.[^.]+$/, '')}`;
+        image.alt = alts[filename] || (caption && caption.textContent.trim()) || `Research figure: ${filename.replace(/[_-]/g, ' ').replace(/\.[^.]+$/, '')}`;
       }
       image.loading = 'lazy'; image.decoding = 'async';
       if (smallImages.has(filename)) image.classList.add('jm-small-image');
@@ -207,10 +199,9 @@
         if (existing) {
           const content = make('div', 'jm-current-content'); content.id = imported.id;
           content.append(...imported.childNodes);
-          content.append(make('p', 'jm-source-note', 'Professional details and dates marked “present” follow the May 2026 CV.'));
           const retainedHistory = historical[existing.id];
           if (retainedHistory) {
-            const intro = make('section', 'jm-legacy-intro');
+            const intro = make('section', existing.id === 'Teaching' ? 'jm-content-section' : 'jm-legacy-intro');
             const [title, note] = retainedHistory;
             intro.append(make('h2', '', title), make('p', 'jm-source-note', note));
             existing.prepend(content, intro);
@@ -322,9 +313,13 @@
     layout.append(sidebar, main); main.setAttribute('role', 'main'); main.tabIndex = -1;
     const topbar = make('div', 'jm-topbar');
     const topbarInner = make('div', 'jm-topbar-inner');
-    const brand = make('a', 'jm-brand', 'Julio M. Morales'); brand.href = '#'; brand.append(make('span', '', 'Astronomer | Educator | Workflow Designer'));
+    const brand = make('a', 'jm-brand'); brand.href = '#'; brand.setAttribute('aria-label', 'Julio M. Morales home');
+    const brandPortrait = make('img', 'jm-brand-portrait'); brandPortrait.src = new URL('images/profile_pic11.png', root).href; brandPortrait.alt = '';
+    const brandCopy = make('span', 'jm-brand-copy');
+    brandCopy.append(make('strong', 'jm-brand-name', 'Julio M. Morales'), make('span', 'jm-brand-tagline', 'Astronomer | Educator | Workflow Designer'));
+    brand.append(brandPortrait, brandCopy);
     const primary = make('nav', 'jm-primary-nav'); primary.setAttribute('aria-label', 'Primary navigation');
-    [['Research','Research'],['Teaching','Teaching'],['Outreach','Outreach'],['CV','Education & experience']].filter(([id]) => byId.has(id)).forEach(([id, label]) => { const link = make('a', '', label); link.href = `#${id}`; primary.append(link); });
+    [['Research','Research'],['Teaching','Teaching'],['CV','Education & experience'],['Software','Software and research workflows']].filter(([id]) => byId.has(id)).forEach(([id, label]) => { const link = make('a', '', label); link.href = `#${id}`; primary.append(link); });
     const menu = make('button', 'jm-menu-button', 'Menu'); menu.type = 'button'; menu.setAttribute('aria-expanded', 'false'); menu.setAttribute('aria-controls', 'jm-menu');
     menu.setAttribute('aria-label', 'Open site menu');
     const menuSymbol = make('span', '', '+'); menuSymbol.setAttribute('aria-hidden','true'); menu.append(menuSymbol);
@@ -354,11 +349,8 @@
     document.addEventListener('click', event => { if (!drawer.hidden && !topbar.contains(event.target)) closeMenu(); });
     document.addEventListener('focusin', event => { if (!drawer.hidden && !topbar.contains(event.target)) closeMenu(); });
 
-    const oldFooter = make('div'); oldFooter.append(...footer.childNodes);
-    oldFooter.querySelectorAll('a[href="mailto:jmmorale@nmsu.edu"]').forEach(link => { link.href = 'mailto:jmmorales@nmsu.edu'; });
-    const archive = make('details', 'jm-legacy-footer'); archive.append(make('summary', '', 'Original site resources & archived CV'), oldFooter);
-    footer.append(fragment('<div class="jm-footer-top"><span>Julio M. Morales · Astronomy</span><div class="jm-footer-links"><a href="mailto:jmmorales@nmsu.edu">Email</a><a href="https://github.com/JulioM1823">GitHub</a><a href="https://www.linkedin.com/in/julio-morales-6642a3236/">LinkedIn</a><a href="professional.html#experience">Academic record</a><a href="docs/Morales_CV.pdf">Archived CV · Jan 2023</a></div></div><p class="jm-footer-credit">Based on <a href="https://html5up.net/dimension">Dimension by HTML5 UP</a> · <a href="https://html5up.net/license">CCA 3.0</a> · <a href="#elements">Original theme reference</a></p>'));
-    footer.append(archive);
+    footer.replaceChildren();
+    footer.append(fragment('<div class="jm-footer-top"><span>Julio M. Morales · Astronomy</span><div class="jm-footer-links"><a href="mailto:jmmorales@nmsu.edu">Email</a><a href="https://github.com/JulioM1823">GitHub</a><a href="https://www.linkedin.com/in/julio-morales-6642a3236/">LinkedIn</a><a href="docs/Morales_CV.pdf" download>Download CV</a></div></div>'));
     const announce = make('p','jm-announce'); announce.setAttribute('role','status'); announce.setAttribute('aria-live','polite'); document.body.append(announce);
     const notFound = make('article'); notFound.id = 'jm-not-found'; notFound.hidden = true;
     notFound.append(fragment('<header class="jm-page-header"><h1 class="jm-page-title" tabindex="-1">Section not found</h1></header><p>This address does not match a section of the website. Use the navigation to explore, or <a href="#">return to the homepage</a>.</p>'));
