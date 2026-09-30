@@ -1,7 +1,7 @@
 /*
  * Dimension by HTML5 UP — html5up.net | @ajlkn | CCA 3.0.
  * Progressive academic-site refinement for Julio M. Morales.
- * The original index.html, hash addresses, narratives and media stay intact.
+ * The routed experience combines the personal site with the current academic record.
  * Current professional content has one editable source: professional.html.
  */
 (() => {
@@ -17,27 +17,24 @@
   const labels = {
     About: 'About me', mylife: 'Family, friends & values',
     academicjourney: 'My academic journey', Research: 'Research',
-    plasmaflows: 'Helioseismology & solar flows', PMS: 'Accretion in young stars',
+    PMS: 'Accretion in young stars',
     Teaching: 'Teaching & mentorship', Outreach: 'Outreach',
-    DEI: 'Equity, service & leadership', hiddenfigures: 'Hidden Figures Workshop',
     elements: 'Original theme reference', gravitywaves: 'Atmospheric gravity waves',
-    Publications: 'Publications & presentations', Software: 'Software & research workflows',
+    Software: 'Software & research workflows',
     CV: 'Education & experience', Contact: 'Contact'
   };
   const groups = [
-    ['Research', ['Research', 'gravitywaves', 'plasmaflows', 'PMS', 'Publications', 'Software']],
-    ['Teaching & community', ['Teaching', 'DEI', 'Outreach', 'hiddenfigures']],
-    ['About Julio', ['About', 'academicjourney', 'mylife', 'CV', 'Contact']]
+    ['Research', ['Research', 'gravitywaves', 'PMS', 'Software']],
+    ['Teaching & outreach', ['Teaching', 'Outreach']],
+    ['Education & experience', ['CV']],
+    ['More about Julio', ['academicjourney', 'mylife', 'Contact']]
   ];
   const historical = {
-    Research: ['Earlier research & full-author records', 'The original project descriptions, complete author lists, and presentation links are retained below. Draft dates and older publication labels belong to the earlier website; the Publications page follows the May 2026 CV.'],
     Teaching: ['Earlier course history', 'The earlier teaching narrative and individual course listings are retained below, including the Leominster High School experience. The UMass date discrepancy is noted above.'],
-    DEI: ['Personal perspective & community work', 'My earlier writing about inclusion, representation, and the origins of these initiatives remains below. The dated service record above distinguishes past coordinating roles from current work.'],
     Outreach: ['Explore the Solar System · 2021', 'The full account of this public event, its demonstrations, photographs, and acknowledgments is retained below.']
   };
-  const smallImages = new Set(['about_pic.jpeg', 'evo.jpg', 'me_at_umass.jpg', 'grad_pic.jpg', 'flag.jpg', 'sunspots.jpg']);
+  const smallImages = new Set(['about_pic.jpeg', 'evo.jpg', 'me_at_umass.jpg', 'grad_pic.jpg', 'sunspots.jpg']);
   const alts = {
-    'profile_pic11.png': 'Portrait of Julio M. Morales',
     'about_pic.jpeg': 'Julio outdoors on a summer day',
     'fam_reunion_big.jpg': 'Alicea family reunion in Chicago, 2004',
     'coolstars.jpg': 'Julio attending Cool Stars 21',
@@ -48,13 +45,7 @@
     'size_comparisons.png': 'Comparison of the sizes of various stars',
     'me_at_umass.jpg': 'Julio visiting the UMass Amherst campus after admission',
     'grad_pic.jpg': 'Julio at the UMass Amherst commencement in 2022',
-    'thesun.jpg': 'Solar image accompanying the solar-flow research overview',
-    'accretion.jpg': 'Illustration accompanying the young-star accretion overview',
-    'reva.jpg': 'Reva Kay Williams', 'alice.jpg': 'Alice Ball',
-    'ramon.jpg': 'Ramón Emeterio Betances', 'ibrahim.jpeg': 'Ibrahim Cissé',
     'upward_bound_pic.jpg': 'Upward Bound colleagues and students at Anna Maria College',
-    'hiddenfigures.jpg': 'Dorothy Vaughn, Katherine Johnson, and Mary Jackson',
-    'LPS.jpg': 'Letters to a Pre-Scientist logo', 'flag.jpg': 'Progress Pride Flag',
     'pickle2.png': 'Emission-spectrum demonstration at the 2021 outreach event',
     'sodium_emission.jpg': 'Sodium emission spectrum',
     'seven-layer-density-column-10.jpg': 'Liquids separated into layers by density',
@@ -121,8 +112,8 @@
   // Adapt the standalone source locally; other network requests retain native fetch semantics.
   function adaptAcademicRecord(page) {
     const routes = {
-      research: ['Research-current', 'Research'], publications: ['Publications'],
-      teaching: ['Teaching-current', 'Teaching'], service: ['DEI-current', 'DEI'],
+      research: ['Research-current', 'Research'],
+      teaching: ['Teaching-current', 'Teaching'],
       outreach: ['Outreach-current', 'Outreach'], software: ['Software'],
       experience: ['CV'], contact: ['Contact']
     };
@@ -144,7 +135,6 @@
           <p class="jm-lead">Computational diagnostics of waves in the lower solar atmosphere.</p>
           <p>My Ph.D. research at New Mexico State University includes helioseismology and solar atmospheric gravity waves, with an emphasis on computational analysis of solar oscillation and atmospheric-wave diagnostics. Alongside that research, I develop reproducible workflows for analysis, visualization, documentation, and version control.</p>
           <section class="jm-callout"><h3>Related publication</h3><p>Vesa, O., Morales, J. M., Jackiewicz, J., Vigeesh, G., &amp; Reardon, K. (2025). <em>Atmospheric Gravity Waves Modulated by the Magnetic Field Configuration.</em> <em>ApJ</em>, 992, 201.</p><a class="jm-text-link" href="https://doi.org/10.3847/1538-4357/ae0a55">Read the publication →</a></section>
-          <p><a href="#Publications">All publications &amp; presentations →</a></p>
         </article>`));
     }
     return page;
@@ -157,7 +147,7 @@
       const response = await fetch(new URL('professional.html', root), {signal: controller.signal, credentials: 'same-origin', cache: 'no-cache'});
       if (!response.ok) throw new Error(`Academic record: HTTP ${response.status}`);
       const page = adaptAcademicRecord(new DOMParser().parseFromString(await response.text(), 'text/html'));
-      if (!page.querySelector('#CV') || !page.querySelector('#Publications')) throw new Error('Academic record is incomplete');
+      if (!page.querySelector('#CV') || !page.querySelector('#Research-current')) throw new Error('Academic record is incomplete');
       return page;
     } finally { clearTimeout(timer); }
   };
@@ -215,33 +205,32 @@
         });
         const existing = imported.dataset.augment && originalArticles.find(item => item.id === imported.dataset.augment);
         if (existing) {
-          const intro = make('section', 'jm-legacy-intro');
-          const [title, note] = historical[existing.id];
-          intro.append(make('h2', '', title), make('p', 'jm-source-note', note));
           const content = make('div', 'jm-current-content'); content.id = imported.id;
           content.append(...imported.childNodes);
           content.append(make('p', 'jm-source-note', 'Professional details and dates marked “present” follow the May 2026 CV.'));
-          existing.prepend(content, intro);
+          const retainedHistory = historical[existing.id];
+          if (retainedHistory) {
+            const intro = make('section', 'jm-legacy-intro');
+            const [title, note] = retainedHistory;
+            intro.append(make('h2', '', title), make('p', 'jm-source-note', note));
+            existing.prepend(content, intro);
+          } else {
+            existing.replaceChildren(content);
+          }
         } else main.append(imported);
       });
     }
 
-    const solar = main.querySelector('#plasmaflows');
-    if (solar) {
-      const addition = make('div', 'jm-current-content');
-      addition.append(fragment('<p class="jm-lead">Investigating the solar interior through time-distance helioseismology.</p><p>My website describes work on three-dimensional solar velocity fields, plasma flows around active regions, and the solar meridional flow. My May 2026 CV identifies helioseismology and solar atmospheric gravity waves as my graduate research areas with Prof. Jason Jackiewicz at New Mexico State University.</p><p class="jm-source-note">The original solar-flow detail page did not contain results. No measurements or new results have been invented here.</p>'));
-      solar.prepend(addition);
-    }
     const pms = main.querySelector('#PMS');
     if (pms) {
       const note = make('div', 'jm-current-content');
       note.append(fragment('<p class="jm-lead">Accretion variability in transitional disk host-stars.</p><p class="jm-source-note">The detailed account below preserves my earlier 2021–2022 research and its original figure references. The May 2026 CV lists the associated Morales, Balmer &amp; Follette manuscript as in preparation. One original TW Hya passage says “three years,” while its figure caption compares 2014 and 2018; that interval remains unconfirmed.</p>'));
       pms.prepend(note);
     }
-    const about = main.querySelector('#About');
-    if (about) about.prepend(fragment('<p class="jm-lead">I’m Julio, an astronomy Ph.D. candidate at New Mexico State University.</p><p>My work spans helioseismology, solar atmospheric gravity waves, and reproducible scientific computing. I completed my M.S. in Astronomy at NMSU in May 2025 and my B.S. in Physics and Astronomy at UMass Amherst in May 2022.</p>'));
+    const aboutIntro = main.querySelector('#About');
+    if (aboutIntro) aboutIntro.prepend(fragment('<p class="jm-lead">I’m Julio, an astronomy Ph.D. candidate at New Mexico State University.</p><p>My work spans helioseismology, solar atmospheric gravity waves, and reproducible scientific computing. I completed my M.S. in Astronomy at NMSU in May 2025 and my B.S. in Physics and Astronomy at UMass Amherst in May 2022.</p>'));
 
-    const articles = [...main.children].filter(node => node.matches('article[id]'));
+    let articles = [...main.children].filter(node => node.matches('article[id]'));
     const byId = new Map(articles.map(article => [article.id, article]));
     articles.forEach(article => {
       const content = make('div', 'jm-page-content'); content.append(...article.childNodes);
@@ -253,7 +242,7 @@
       const eyebrow = importedHeader?.querySelector('.jm-eyebrow') || [...firstCurrent.children].find(node => node.matches('.jm-eyebrow'));
       const legacy = content.querySelector('.jm-legacy-content');
       const legacyTitle = legacy && [...legacy.children].find(node => node.matches('h2,h3'));
-      const redundantTitle = legacyTitle && (legacyTitle.classList.contains('major') || ['mylife', 'academicjourney', 'hiddenfigures'].includes(article.id));
+      const redundantTitle = legacyTitle && (legacyTitle.classList.contains('major') || ['mylife', 'academicjourney'].includes(article.id));
       if (redundantTitle) legacyTitle.remove();
       const pageHeader = make('header', 'jm-page-header');
       const breadcrumb = make('nav', 'jm-breadcrumb'); breadcrumb.setAttribute('aria-label', 'Breadcrumb');
@@ -273,7 +262,7 @@
         replacement.append(...heading.childNodes); heading.replaceWith(replacement);
       });
       const headings = [...content.querySelectorAll('h2')].filter(heading =>
-        heading.textContent.trim() && !heading.closest('details, .jm-publications, .jm-timeline, .jm-record-list, #elements')
+        heading.textContent.trim() && !heading.closest('details, .jm-timeline, .jm-record-list, #elements')
       );
       if (headings.length > 1) {
         const rail = make('aside', 'jm-page-rail');
@@ -299,24 +288,25 @@
       article.setAttribute('aria-labelledby', title.id); article.hidden = true;
     });
 
-    const profile = header.querySelector('img');
-    // The original homepage contains only the name, role, portrait and navigation.
-    // Its complete substantive identity is restated; its existing portrait is reused.
+    // The former About route is now the homepage. Move the original article rather
+    // than copying it so the personal narrative and media have one visible home.
+    const homeAbout = byId.get('About');
     header.replaceChildren();
     header.setAttribute('role', 'main'); header.tabIndex = -1;
-    header.append(fragment('<div class="jm-hero"><div><p class="jm-eyebrow">Astronomy · New Mexico State University</p><h1 tabindex="-1">Julio M.<br>Morales</h1><p class="jm-hero-role">Ph.D. candidate. Researcher. Educator.</p><p class="jm-hero-summary">I study the Sun through its oscillations and atmospheric waves—and build tools, mentorship, and learning experiences that support the work of science.</p><div class="jm-actions"><a class="jm-button jm-button-solid" href="#Research">Explore my research <span aria-hidden="true">↗</span></a><a class="jm-text-link" href="#CV">Education &amp; experience →</a></div></div></div><div class="jm-home-strip"><span>Helioseismology &amp; solar atmospheric waves</span><span>Las Cruces, New Mexico</span><span>Ph.D. expected 2027</span></div><section class="jm-home-section"><div><p class="jm-eyebrow">Explore</p><h2>The science.<br>The people.<br>The process.</h2></div><div class="jm-home-rows"><a class="jm-home-row" href="#Research"><span class="jm-number" aria-hidden="true">01</span><div><h3>Research &amp; publications</h3><p>Solar flows, atmospheric gravity waves, and earlier work on accretion in young stars.</p></div><span class="jm-arrow" aria-hidden="true">↗</span></a><a class="jm-home-row" href="#Teaching"><span class="jm-number" aria-hidden="true">02</span><div><h3>Teaching &amp; mentorship</h3><p>From astronomy laboratories and asteroid observations to one-on-one instruction and research readiness.</p></div><span class="jm-arrow" aria-hidden="true">↗</span></a><a class="jm-home-row" href="#DEI"><span class="jm-number" aria-hidden="true">03</span><div><h3>Equity &amp; community</h3><p>Departmental service, inclusive mentorship, and sharing astronomy beyond the classroom.</p></div><span class="jm-arrow" aria-hidden="true">↗</span></a><a class="jm-home-row" href="#Software"><span class="jm-number" aria-hidden="true">04</span><div><h3>Tools for research</h3><p>AstroStack, scientific workflow writing, and the Notion templates from my original website.</p></div><span class="jm-arrow" aria-hidden="true">↗</span></a></div></section><section class="jm-home-section"><div><p class="jm-eyebrow">Featured publication</p><h2>Waves in a<br>magnetic Sun.</h2></div><div><p class="jm-home-publication"><a href="https://doi.org/10.3847/1538-4357/ae0a55">Atmospheric Gravity Waves Modulated by the Magnetic Field Configuration</a></p><p class="jm-meta">Vesa, Morales, Jackiewicz, Vigeesh &amp; Reardon · The Astrophysical Journal · 2025</p><a class="jm-text-link" href="#Publications">All publications &amp; presentations →</a><p class="jm-home-note">Professional record aligned with the May 2026 CV.</p></div></section>'));
-    if (profile) {
-      profile.alt = alts['profile_pic11.png']; profile.loading = 'eager'; profile.decoding = 'async';
-      const portrait = make('figure', 'jm-portrait');
-      portrait.append(profile, make('figcaption', '', 'Curiosity. Community. Discovery.'));
-      header.querySelector('.jm-hero').append(portrait);
+    if (homeAbout) {
+      const title = homeAbout.querySelector('.jm-page-title');
+      homeAbout.id = 'jm-home-about'; homeAbout.classList.add('jm-home-about'); homeAbout.hidden = false;
+      homeAbout.querySelector('.jm-breadcrumb')?.remove();
+      if (title) { title.id = 'jm-title-home'; homeAbout.setAttribute('aria-labelledby', title.id); }
+      header.append(homeAbout); byId.delete('About');
+      articles = articles.filter(article => article !== homeAbout);
     }
     if (!record) {
       const warning = make('p', 'jm-load-warning', 'The academic-record sections could not load. Original pages remain available. ');
       const link = make('a', '', 'Open the standalone academic record'); link.href = new URL('professional.html', root).href;
       warning.append(link); header.prepend(warning);
-      header.querySelectorAll('a[href="#CV"],a[href="#Software"],a[href="#Publications"]').forEach(link => {
-        const anchors = {'#CV': '#experience', '#Software': '#software', '#Publications': '#publications'};
+      header.querySelectorAll('a[href="#CV"],a[href="#Software"]').forEach(link => {
+        const anchors = {'#CV': '#experience', '#Software': '#software'};
         link.href = new URL(`professional.html${anchors[link.getAttribute('href')]}`, root).href;
       });
     }
@@ -332,9 +322,9 @@
     layout.append(sidebar, main); main.setAttribute('role', 'main'); main.tabIndex = -1;
     const topbar = make('div', 'jm-topbar');
     const topbarInner = make('div', 'jm-topbar-inner');
-    const brand = make('a', 'jm-brand', 'Julio M. Morales'); brand.href = '#'; brand.append(make('span', '', 'Astronomy'));
+    const brand = make('a', 'jm-brand', 'Julio M. Morales'); brand.href = '#'; brand.append(make('span', '', 'Astronomer | Educator | Workflow Designer'));
     const primary = make('nav', 'jm-primary-nav'); primary.setAttribute('aria-label', 'Primary navigation');
-    [['Research','Research'],['Publications','Publications'],['Teaching','Teaching'],['DEI','Community'],['About','About'],['CV','CV']].filter(([id]) => byId.has(id)).forEach(([id, label]) => { const link = make('a', '', label); link.href = `#${id}`; primary.append(link); });
+    [['Research','Research'],['Teaching','Teaching'],['Outreach','Outreach'],['CV','Education & experience']].filter(([id]) => byId.has(id)).forEach(([id, label]) => { const link = make('a', '', label); link.href = `#${id}`; primary.append(link); });
     const menu = make('button', 'jm-menu-button', 'Menu'); menu.type = 'button'; menu.setAttribute('aria-expanded', 'false'); menu.setAttribute('aria-controls', 'jm-menu');
     menu.setAttribute('aria-label', 'Open site menu');
     const menuSymbol = make('span', '', '+'); menuSymbol.setAttribute('aria-hidden','true'); menu.append(menuSymbol);
@@ -392,7 +382,8 @@
       const hash = readHash();
       const target = hash ? document.getElementById(hash) : null;
       const article = target && (target.matches('article') ? target : target.closest('article'));
-      const isHome = !hash || hash === 'header';
+      const homeSection = Boolean(target && homeAbout?.contains(target));
+      const isHome = !hash || hash === 'header' || homeSection;
       const next = isHome ? null : (article && main.contains(article) ? article : notFound);
       const page = next || header;
       const changed = activePage !== page;
@@ -406,7 +397,7 @@
         if (link.getAttribute('href') === `#${activeId}`) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current');
       });
       closeMenu();
-      const isSection = target && next && target !== next && !target.matches('h1');
+      const isSection = target && !target.matches('h1') && (homeSection || (next && target !== next));
       const focusTarget = isSection ? target : page.querySelector('h1');
       if (focus && focusTarget) {
         if (!focusTarget.hasAttribute('tabindex')) focusTarget.tabIndex = -1;

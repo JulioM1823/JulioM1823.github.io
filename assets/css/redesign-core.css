@@ -47,8 +47,8 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 :is(.jm-redesign, .jm-standalone) #bg::after {transform: none; filter: none; transition: none; background-position: 65% center;}
 .jm-topbar {position: sticky; top: 0; z-index: 30; background: rgba(16,25,31,.96); border-bottom: 1px solid var(--jm-line-soft); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);}
 .jm-topbar-inner {width: min(calc(100% - 2 * var(--jm-gutter)),var(--jm-max)); min-height: var(--jm-header-height); margin: auto; display: flex; align-items: center; gap: 1.65rem;}
-:is(.jm-redesign, .jm-standalone) .jm-brand {text-decoration: none; font-weight: 600; font-size: 1.08rem; letter-spacing: -.025em; line-height: 1.3; white-space: nowrap;}
-.jm-brand span {display: block; font-weight: 400; font-size: .65rem; letter-spacing: .15em; text-transform: uppercase; color: var(--jm-muted); margin-top: .3rem;}
+:is(.jm-redesign, .jm-standalone) .jm-brand {min-width: 0; text-decoration: none; font-weight: 600; font-size: 1.08rem; letter-spacing: -.025em; line-height: 1.3;}
+.jm-brand span {display: block; font-weight: 400; font-size: .6rem; line-height: 1.45; letter-spacing: .09em; text-transform: uppercase; color: var(--jm-muted); margin-top: .3rem;}
 .jm-primary-nav {display: flex; align-items: center; gap: clamp(1.2rem, 2vw, 2.7rem); margin-left: auto;}
 :is(.jm-redesign, .jm-standalone) .jm-primary-nav a {font-size: .86rem; text-decoration: none; color: var(--jm-muted); padding: .7rem 0; position: relative;}
 :is(.jm-redesign, .jm-standalone) .jm-primary-nav a[aria-current='page'] {color: #fff;}
@@ -64,39 +64,15 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 :is(.jm-redesign, .jm-standalone) #header {display: block; width: 100%; padding: 0; margin: 0; border: 0; max-width: none; text-align: left; opacity: 1; transform: none; transition: none;}
 :is(.jm-redesign, .jm-standalone) #header::before, :is(.jm-redesign, .jm-standalone) #header::after, :is(.jm-redesign, .jm-standalone) #header > *::before {display: none;}
 :is(.jm-redesign, .jm-standalone) #header > * {margin-top: 0; position: static;}
-.jm-hero {display: grid; grid-template-columns: minmax(0,1.4fr) minmax(260px,1fr); gap: var(--jm-gap); align-items: center; min-height: min(780px, calc(100svh - 155px)); padding: clamp(3rem, 6vw, 7.5rem) 0; position: relative;}
 :is(.jm-redesign, .jm-standalone) .jm-eyebrow {font-size: .69rem; text-transform: uppercase; letter-spacing: .18em; color: var(--jm-accent); line-height: 1.65; margin-bottom: 1.4rem; font-weight: 500;}
-:is(.jm-redesign, .jm-standalone) .jm-hero h1 {font-size: clamp(4.2rem, 7.4vw, 10rem); line-height: .98; margin: 0 0 1.65rem; letter-spacing: -.055em;}
-.jm-hero-role {color: var(--jm-ink); font-size: clamp(1.05rem, 1.4vw, 1.4rem); margin-bottom: .8rem !important;}
-.jm-hero-summary {font-size: clamp(1rem, 1.15vw, 1.2rem); line-height: 1.8; color: var(--jm-muted); max-width: 48ch;}
 .jm-actions {display: flex; flex-wrap: wrap; gap: .9rem 1.6rem; align-items: center; margin: 1.7rem 0;}
 :is(.jm-redesign, .jm-standalone) .jm-button {display: inline-flex; gap: 1.2rem; align-items: center; justify-content: center; min-height: 48px; padding: .7rem 1.05rem; border: 1px solid #627e89; border-radius: var(--jm-radius); font-size: .85rem; font-weight: 500; text-decoration: none; line-height: 1.5;}
 :is(.jm-redesign, .jm-standalone) .jm-button-solid {background: var(--jm-accent); color: #10232a; border-color: var(--jm-accent);}
 :is(.jm-redesign, .jm-standalone) .jm-button:hover {background: #31393f; color: #fff;}
 :is(.jm-redesign, .jm-standalone) .jm-button-solid:hover {background: #fff; color: #1b1f22;}
 :is(.jm-redesign, .jm-standalone) .jm-text-link {display: inline-block; font-size: .87rem; text-decoration: underline; text-decoration-thickness: 1px; padding: .45rem 0;}
-.jm-portrait {margin: 0; max-width: 520px; justify-self: center; width: min(100%, 30vw); position: relative;}
-:is(.jm-redesign, .jm-standalone) .jm-portrait img {width: 100%; height: auto; aspect-ratio: 1/1; object-fit: contain; display: block; margin: 0; border: 1px solid #b7d8de5c; border-radius: 50%; padding: .7rem; background: #13232b66; box-shadow: 0 0 0 1.1rem #bddce405, 0 0 0 1.15rem #bddce411;}
-.jm-portrait figcaption {font-size: .72rem; color: var(--jm-muted); text-align: center; margin-top: 1.25rem; letter-spacing: .06em;}
-.jm-home-strip {display: flex; position: relative; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding: 1.25rem 0; border-top: 1px solid var(--jm-line); border-bottom: 1px solid var(--jm-line); color: var(--jm-muted); font-size: .74rem;}
-.jm-home-section {padding: clamp(3rem, 5vw, 6rem) 0; display: grid; grid-template-columns: minmax(220px, .75fr) minmax(0, 2fr); gap: var(--jm-gap); border-bottom: 1px solid var(--jm-line-soft);}
-.jm-home-section h2 {font-size: clamp(2rem, 2.5vw, 3.6rem); margin-top: 0;}
-.jm-home-section .jm-eyebrow {margin-bottom: .7rem;}
-.jm-home-rows {min-width: 0;}
-.jm-home-row {padding: 1.75rem .6rem; border-top: 1px solid var(--jm-line-soft); display: grid; grid-template-columns: 2rem 1fr 2rem; gap: 1.2rem; text-decoration: none !important; align-items: start;}
-.jm-home-row:first-child {border-top: 1px solid var(--jm-line-soft);}
-.jm-home-row:last-child {border-bottom: 1px solid var(--jm-line-soft);}
-.jm-home-row .jm-number {font: .72rem/1.8 'Courier New',monospace; color: var(--jm-faint); padding-top: .2rem;}
-.jm-home-row h3 {font-size: clamp(1.2rem, 1.45vw, 1.75rem); margin: 0 0 .45rem;}
-.jm-home-row p {font-size: .92rem; color: var(--jm-muted); line-height: 1.65; margin: 0; max-width: 57ch;}
-.jm-arrow {text-align: right; font-size: 1.3rem;}
-.jm-home-row:hover {background: #b5dadd07;}
-.jm-home-row:hover h3 {color: var(--jm-accent);}
-.jm-home-row .jm-arrow {transition: transform .2s ease, color .2s ease;}
-.jm-home-row:hover .jm-arrow {transform: translate(3px,-3px); color: var(--jm-accent);}
-.jm-home-publication {font-size: clamp(1.35rem, 2vw, 2.1rem); max-width: 44ch; line-height: 1.5;}
-.jm-home-publication a {text-decoration-thickness: 1px;}
-.jm-home-note {font-size: .76rem; color: var(--jm-faint); margin-top: 1.2rem;}
+.jm-home-about {display: block; width: 100%; padding: clamp(2.75rem, 5vw, 5.5rem) 0 5rem;}
+.jm-home-about .jm-page-content {padding-bottom: 1rem;}
 :is(.jm-redesign, .jm-standalone) #main {display: block; padding: 0; margin: 0; width: 100%; max-width: none; min-width: 0;}
 .jm-page-layout {display: grid; grid-template-columns: var(--jm-sidebar) minmax(0,1fr); gap: var(--jm-gap); padding: clamp(2.25rem, 4vw, 5rem) 0 5rem; min-height: calc(100svh - var(--jm-header-height));}
 .jm-sidebar {position: sticky; top: calc(var(--jm-header-height) + 2rem); align-self: start; max-height: calc(100dvh - var(--jm-header-height) - 3.5rem); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--jm-line) transparent; font-size: .82rem; padding: 0 1rem 1rem 0; border-right: 1px solid var(--jm-line-soft);}
@@ -132,11 +108,6 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 .jm-entry p:last-child {margin-bottom: 0;}
 .jm-callout {padding: clamp(1.25rem, 2.3vw, 2.5rem); background: #1e303b88; border: 1px solid var(--jm-line); border-radius: var(--jm-radius); margin: 2rem 0;}
 :is(.jm-redesign, .jm-standalone) .jm-callout :is(h2,h3) {margin-top: 0;}
-:is(.jm-redesign, .jm-standalone) .jm-publications {list-style: none; padding: 0; counter-reset: publications;}
-.jm-publications li {padding: 1.8rem 0 1.8rem 2.5rem; position: relative; border-top: 1px solid var(--jm-line-soft); counter-increment: publications;}
-.jm-publications li::before {content: '0' counter(publications); position: absolute; top: 1.8rem; left: 0; font: .7rem/1.8 'Courier New',monospace; color: var(--jm-faint);}
-:is(.jm-redesign, .jm-standalone) .jm-publications :is(h2,h3,h4) {margin-top: 0; font-size: 1.3rem; line-height: 1.4; max-width: 54ch;}
-.jm-publications p {font-size: .88rem; margin-bottom: .5rem;}
 .jm-timeline {margin: 1.5rem 0 2.5rem;}
 .jm-timeline > div {display: grid; grid-template-columns: clamp(140px, 12vw, 215px) minmax(0,1fr); gap: clamp(1rem, 2vw, 3rem); padding: 1.5rem 0; border-top: 1px solid var(--jm-line-soft);}
 .jm-timeline dt {font-size: .8rem; font-variant-numeric: tabular-nums; color: var(--jm-faint); padding-top: .14rem; font-weight: 400;}
@@ -195,7 +166,7 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 .jm-record .jm-record-section > h2 {margin-top: 0;}
 
 /* Section navigation occupies available space without widening paragraphs. */
-:is(.jm-redesign, .jm-standalone) #main article.jm-has-toc {display: grid; grid-template-columns: minmax(0,1fr) clamp(175px,12vw,235px); column-gap: var(--jm-gap); align-items: start;}
+:is(.jm-redesign, .jm-standalone) :is(#main article.jm-has-toc, #header article.jm-home-about.jm-has-toc) {display: grid; grid-template-columns: minmax(0,1fr) clamp(175px,12vw,235px); column-gap: var(--jm-gap); align-items: start;}
 .jm-page-rail {grid-column: 2; grid-row: 2; position: sticky; top: calc(var(--jm-header-height) + 2rem); max-height: calc(100dvh - var(--jm-header-height) - 4rem); overflow-y: auto; scrollbar-width: thin; padding-left: 1.25rem; border-left: 1px solid var(--jm-line-soft);}
 .jm-page-content {grid-column: 1; grid-row: 2;}
 .jm-page-toc .jm-eyebrow {font-size: .64rem; margin: 0 0 .85rem;}
@@ -218,10 +189,6 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 .jm-page-content > .jm-section-heading:empty {display: none;}
 
 @media (min-width: 1800px) {
-  .jm-publications {display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); column-gap: var(--jm-gap);}
-  .jm-home-rows {display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); column-gap: 3rem;}
-  .jm-home-row:last-child {border-bottom: 0;}
-  .jm-home-row {padding-block: 2rem;}
   .jm-cv-sections {grid-template-columns: repeat(2,minmax(0,1fr)); gap: 3.5rem var(--jm-gap); align-items: start;}
   .jm-cv-sections .jm-content-section:nth-child(2) {grid-column: 2; grid-row: 1 / span 2;}
   .jm-cv-sections .jm-timeline > div, .jm-cv-sections .jm-skills > div {grid-template-columns: minmax(105px,.3fr) minmax(0,1fr); gap: 1.5rem;}
@@ -230,7 +197,7 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
   :root {--jm-gap: 2rem; --jm-sidebar: 205px;}
   .jm-primary-nav {gap: 1.1rem;}
   .jm-topbar-inner {gap: 1.25rem;}
-  :is(.jm-redesign, .jm-standalone) #main article.jm-has-toc {grid-template-columns: minmax(0,1fr);}
+  :is(.jm-redesign, .jm-standalone) :is(#main article.jm-has-toc, #header article.jm-home-about.jm-has-toc) {grid-template-columns: minmax(0,1fr);}
   .jm-page-rail {grid-column: 1; grid-row: 2; position: static; max-height: none; padding: 0 0 1.5rem; margin-bottom: 2rem; border: 0; border-bottom: 1px solid var(--jm-line-soft);}
   .jm-has-toc .jm-page-content {grid-row: 3;}
   :is(.jm-redesign, .jm-standalone) .jm-page-toc ol {display: flex; flex-wrap: wrap; gap: .25rem 1.25rem;}
@@ -242,30 +209,17 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
   .jm-menu-button {margin-left: auto;}
   .jm-page-layout {grid-template-columns: minmax(0,1fr); padding-top: 2.5rem;}
   .jm-sidebar {display: none;}
-  .jm-hero {grid-template-columns: minmax(0,1.3fr) minmax(200px,.8fr); min-height: 600px;}
-  .jm-portrait {width: 100%;}
-  .jm-home-section {grid-template-columns: minmax(170px,.65fr) minmax(0,1.5fr);}
 }
 @media (max-width: 620px) {
   :is(.jm-redesign, .jm-standalone) form > .fields {grid-template-columns: minmax(0,1fr);}
   :root {--jm-header-height: 76px; --jm-gap: 1.5rem;}
   html:is(.jm-redesign, .jm-standalone) {font-size: 16px;}
-  :is(.jm-redesign, .jm-standalone) .jm-brand {font-size: 1rem;}
+  :is(.jm-redesign, .jm-standalone) .jm-brand {font-size: 1rem; flex: 1 1 auto;}
+  .jm-brand span {font-size: .55rem; letter-spacing: .07em;}
   .jm-drawer-inner {grid-template-columns: minmax(0,1fr); gap: 1.5rem; padding-block: 1.5rem;}
   .jm-drawer-group a {min-height: 44px;}
-  .jm-hero {grid-template-columns: minmax(0,1fr); gap: 2.5rem; min-height: 0; padding: 3rem 0 2rem;}
-  :is(.jm-redesign, .jm-standalone) .jm-hero h1 {font-size: clamp(3.6rem,15vw,5.7rem);}
-  .jm-portrait {width: 180px; justify-self: start; margin: 1rem 0 .5rem;}
-  .jm-portrait figcaption {text-align: left; font-size: .7rem; margin-top: 1rem;}
-  .jm-hero .jm-eyebrow {max-width: 34ch;}
-  .jm-hero-role {font-size: 1rem;}
-  .jm-hero-summary {font-size: 1rem;}
   .jm-actions {gap: .8rem 1.1rem;}
-  .jm-home-strip {font-size: .74rem; gap: .6rem; flex-direction: column;}
-  .jm-home-section {grid-template-columns: minmax(0,1fr); gap: 1.8rem; padding: 2.75rem 0;}
-  .jm-home-row {grid-template-columns: 1.4rem minmax(0,1fr) 1rem; gap: .75rem; padding-inline: 0;}
-  .jm-home-row h3 {font-size: 1.2rem;}
-  .jm-home-row p {font-size: .94rem;}
+  .jm-home-about {padding-block: 2.5rem 3.5rem;}
   .jm-page-header {padding-bottom: 1.8rem; margin-bottom: 2rem;}
   .jm-page-title {font-size: clamp(2.35rem, 9vw, 3.5rem) !important;}
   .jm-feature {grid-template-columns: minmax(0,1fr); gap: 1rem;}
@@ -275,7 +229,6 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
   .jm-resource-list span {text-align: left;}
   :is(.jm-redesign, .jm-standalone) .jm-legacy-content .row {grid-template-columns: minmax(0,1fr);}
   .jm-legacy-content .actions a {width: 100%;}
-  .jm-publications li {padding-left: 2rem;}
   .jm-callout {padding: 1.25rem;}
   :is(.jm-redesign, .jm-standalone) .jm-page-toc a {min-height: 44px; display: flex; align-items: center;}
   .jm-record, .jm-record-header, .jm-record-footer {padding: 1.25rem;}
@@ -290,9 +243,9 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 @media print {
   :is(.jm-redesign, .jm-standalone) body {background: white; color: black;}
   :is(.jm-redesign, .jm-standalone) #bg, .jm-topbar, .jm-sidebar, .jm-page-rail, .jm-reading-progress, .jm-skip, .jm-legacy-footer, .jm-visual-placeholder {display: none !important;}
-  :is(.jm-redesign, .jm-standalone) #wrapper {width: 100%;} .jm-page-layout {display: block; padding: 0;} :is(.jm-redesign, .jm-standalone) #main article.jm-has-toc, .jm-cv-sections {display: block;}
+  :is(.jm-redesign, .jm-standalone) #wrapper {width: 100%;} .jm-page-layout {display: block; padding: 0;} :is(.jm-redesign, .jm-standalone) :is(#main article.jm-has-toc, #header article.jm-home-about.jm-has-toc), .jm-cv-sections {display: block;}
   :is(.jm-redesign, .jm-standalone) a, :is(.jm-redesign, .jm-standalone) h1, :is(.jm-redesign, .jm-standalone) h2, :is(.jm-redesign, .jm-standalone) h3, :is(.jm-redesign, .jm-standalone) h4, :is(.jm-redesign, .jm-standalone) p, :is(.jm-redesign, .jm-standalone) dt, :is(.jm-redesign, .jm-standalone) dd, :is(.jm-redesign, .jm-standalone) span {color: black !important;}
   :is(.jm-redesign, .jm-standalone) #main article[hidden], :is(.jm-redesign, .jm-standalone) #header[hidden], :is(.jm-redesign, .jm-standalone) .jm-page-layout[hidden] {display: none !important;}
-  :is(.jm-redesign, .jm-standalone) .jm-entry, :is(.jm-redesign, .jm-standalone) .jm-publications li, .jm-timeline > div {break-inside: avoid;}
+  :is(.jm-redesign, .jm-standalone) .jm-entry, .jm-timeline > div {break-inside: avoid;}
   :is(.jm-redesign, .jm-standalone) .jm-page-title {font-size: 30pt !important;} .jm-record-section {break-before: auto;}
 }

@@ -72,8 +72,8 @@
   function watchReveals() {
     revealObserver?.disconnect();
     if (!scope || reducedMotion.matches || !('IntersectionObserver' in window) || !Element.prototype.animate) return;
-    const selector = '.jm-content-section, .jm-feature, .jm-callout, .jm-publications > li, .jm-home-row, .jm-home-section, .jm-legacy-content > figure, .jm-legacy-content > .row';
-    const candidates = [...scope.querySelectorAll(selector)].filter(target => !(target.matches('.jm-home-section') && target.querySelector('.jm-home-row')));
+    const selector = '.jm-content-section, .jm-feature, .jm-callout, .jm-legacy-content > figure, .jm-legacy-content > .row';
+    const candidates = [...scope.querySelectorAll(selector)];
     const targets = candidates.filter(target => !candidates.some(other => other !== target && other.contains(target)));
     revealObserver = new IntersectionObserver(changes => {
       changes.forEach(change => {
