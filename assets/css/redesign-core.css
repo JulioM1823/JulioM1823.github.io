@@ -120,6 +120,7 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 .jm-detail-media .jm-placeholder-figure {width: 100%;}
 .jm-embedded-media {min-width: 0; width: 100%; margin: 0;}
 .jm-embedded-media figcaption {margin-top: .5rem; color: var(--jm-muted); font-size: .82rem; line-height: 1.55;}
+.jm-video-gallery {display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,24rem),1fr)); gap: 1.25rem; margin: 1.25rem 0;}
 .jm-interactive-frame {display: block; width: 100%; height: 1150px; border: 1px solid var(--jm-line-soft); border-radius: var(--jm-radius); background: #0b0d10;}
 .jm-video-player {display: block; width: 100%; max-height: 720px; aspect-ratio: 16/9; border-radius: var(--jm-radius); background: #000; object-fit: contain;}
 .jm-accretion-video {margin: 1.5rem 0 2rem;}
