@@ -21,13 +21,17 @@
     Teaching: 'Teaching & Mentorship',
     elements: 'Original theme reference', gravitywaves: 'Atmospheric gravity waves',
     Software: 'Software & Workflows', AstroStack: 'AstroStack',
+    Materials: 'Materials', 'templates-title': 'Notion Templates',
+    'software-apple-shortcuts': 'Apple Shortcuts', 'software-other-products': 'Other Products',
     CV: 'CV / Professional Record', Contact: 'Contact'
   };
-  const groups = [
-    ['About Me', ['home', 'academicjourney', 'mylife', 'Contact']],
-    ['Research', ['Research', 'gravitywaves', 'PMS', 'Software', 'AstroStack']],
-    ['Teaching', ['Teaching']],
-    ['CV / Professional Record', ['CV']]
+  // One source of truth for the primary tabs, sidebar, and Menu columns.
+  const navigation = [
+    {label: 'About Me', route: 'home', children: ['home', 'academicjourney', 'mylife', 'Contact']},
+    {label: 'Research', route: 'Research', children: ['Research', 'gravitywaves', 'PMS']},
+    {label: 'Teaching & Mentorship', route: 'Teaching', children: ['Teaching', 'Materials']},
+    {label: 'CV / Professional Record', route: 'CV', children: ['CV']},
+    {label: 'Software & Workflows', route: 'Software', children: ['Software', 'AstroStack', 'templates-title', 'software-apple-shortcuts', 'software-other-products']}
   ];
   const historical = {
     Teaching: ['Courses taught or tutored', 'A complete course list from my teaching and tutoring experience appears below.']
@@ -115,6 +119,38 @@
     page.querySelectorAll('a[href^="#"]').forEach(link => {
       const route = routes[link.getAttribute('href').slice(1)];
       if (route) link.setAttribute('href', `#${route[0]}`);
+    });
+    // Each teaching entry uses the same replaceable two-image component.
+    page.querySelectorAll('#Teaching-current .jm-entry').forEach(entry => {
+      const title = entry.querySelector('h3');
+      if (!title || entry.querySelector('.jm-teaching-media')) return;
+      const pair = make('div', 'jm-teaching-media');
+      pair.setAttribute('aria-label', `Image placeholders for ${title.textContent.trim()}`);
+      for (let index = 1; index <= 2; index += 1) {
+        const image = make('div', 'jm-media-placeholder');
+        image.setAttribute('role', 'img');
+        image.setAttribute('aria-label', `Placeholder image ${index} for ${title.textContent.trim()}`);
+        image.append(make('span', '', `Image ${index} coming soon`));
+        pair.append(image);
+      }
+      title.after(pair);
+    });
+    // Placeholder cards stay inert until a real, verified iCloud share URL is
+    // supplied. Published cards become full-card links without duplicate markup.
+    page.querySelectorAll('.jm-shortcut-card[data-icloud-url]').forEach(card => {
+      const value = card.dataset.icloudUrl.trim();
+      if (!value) return;
+      let url;
+      try { url = new URL(value); } catch (_) { return; }
+      if (url.protocol !== 'https:' || !['www.icloud.com', 'icloud.com'].includes(url.hostname) ||
+          !url.pathname.startsWith('/shortcuts/')) return;
+      const link = make('a', 'jm-shortcut-card');
+      link.href = url.href;
+      link.setAttribute('aria-label', `Download ${card.querySelector('h4')?.textContent.trim() || 'shortcut'} from iCloud`);
+      link.append(...card.childNodes);
+      const status = link.querySelector('.jm-shortcut-status');
+      if (status) status.textContent = 'Download from iCloud →';
+      card.replaceWith(link);
     });
     if (!page.getElementById('gravitywaves')) {
       page.querySelector('main')?.append(fragment(`
@@ -230,6 +266,49 @@
       else wrapper.classList.add('jm-centered-prose');
     }
     wrapper.querySelectorAll('a[href="mailto:jmmorale@nmsu.edu"]').forEach(link => { link.href = 'mailto:jmmorales@nmsu.edu'; });
+    const page = wrapper.parentElement.id;
+    if (page === 'mylife' || page === 'academicjourney') {
+      // Preserve every photograph and paragraph, but group each visual with
+      // the prose it introduces. The same component adapts to both narratives.
+      const sequence = make('div', 'jm-story-sequence');
+      const intro = make('div', 'jm-story-intro');
+      let beat = null;
+      let copy = null;
+      [...wrapper.childNodes].forEach(node => {
+        if (node.nodeType === Node.ELEMENT_NODE && node.matches('hr')) { node.remove(); return; }
+        const visual = node.nodeType === Node.ELEMENT_NODE &&
+          (node.matches('figure') || node.matches('.row') && node.querySelector('figure'));
+        if (visual) {
+          beat = make('section', 'jm-story-beat');
+          const media = make('div', 'jm-story-media');
+          copy = make('div', 'jm-story-copy');
+          media.append(node); beat.append(media, copy); sequence.append(beat);
+          if (media.querySelectorAll('figure').length > 1) beat.classList.add('jm-story-beat-wide');
+        } else if (beat) copy.append(node);
+        else intro.append(node);
+      });
+      wrapper.append(intro, sequence);
+      if (!intro.textContent.trim()) intro.remove();
+    } else if (page === 'PMS') {
+      // Keep the research text and figures in their original order, with
+      // section rhythm supplied by a shared chapter component.
+      const chapters = make('div', 'jm-research-chapters');
+      const intro = make('div', 'jm-story-intro');
+      let chapter = null;
+      [...wrapper.childNodes].forEach(node => {
+        if (node.nodeType === Node.ELEMENT_NODE && node.matches('hr')) { node.remove(); return; }
+        if (!chapter && node.nodeType === Node.TEXT_NODE && !node.textContent.trim()) { node.remove(); return; }
+        if (!chapter && node.nodeType === Node.ELEMENT_NODE && node.matches('h3') &&
+            node.textContent.includes('Undergraduate Research Assistant')) { intro.append(node); return; }
+        if (node.nodeType === Node.ELEMENT_NODE && node.matches('h3')) {
+          chapter = make('section', 'jm-research-chapter'); chapters.append(chapter);
+        }
+        if (!chapter) { chapter = make('section', 'jm-research-chapter'); chapters.append(chapter); }
+        chapter.append(node);
+      });
+      if (intro.textContent.trim()) wrapper.append(intro);
+      wrapper.append(chapters);
+    }
   }
 
   async function initialize() {
@@ -374,15 +453,15 @@
     main.before(layout);
     const sidebar = make('nav', 'jm-sidebar'); sidebar.setAttribute('aria-label', 'Explore the website');
     sidebar.append(make('p', 'jm-eyebrow', 'Explore the website'));
-    const available = id => id === 'home' ? Boolean(homeAbout) : byId.has(id);
+    const available = id => id === 'home' ? Boolean(homeAbout) : Boolean(document.getElementById(id));
     const sectionLink = id => {
-      const link = make('a', '', id === 'home' ? labels.About : labels[id]);
+      const link = make('a', '', id === 'home' ? labels.About : labels[id] || id);
       link.href = id === 'home' ? '#' : `#${id}`;
       return link;
     };
-    groups.forEach(([group, ids], index) => {
-      if (index) sidebar.append(make('p', 'jm-eyebrow jm-sidebar-divider', group));
-      ids.filter(available).forEach(id => sidebar.append(sectionLink(id)));
+    navigation.forEach(({label, children}, index) => {
+      if (index) sidebar.append(make('p', 'jm-eyebrow jm-sidebar-divider', label));
+      children.filter(available).forEach(id => sidebar.append(sectionLink(id)));
     });
     layout.append(sidebar, main); main.setAttribute('role', 'main'); main.tabIndex = -1;
     const topbar = make('div', 'jm-topbar');
@@ -393,20 +472,18 @@
     brandCopy.append(make('strong', 'jm-brand-name', 'Julio M. Morales'), make('span', 'jm-brand-tagline', 'Astronomer | Educator | Workflow Designer'));
     brand.append(brandPortrait, brandCopy);
     const primary = make('nav', 'jm-primary-nav'); primary.setAttribute('aria-label', 'Primary navigation');
-    [['Research','Research'],['Teaching',labels.Teaching],['CV',labels.CV],['Software',labels.Software]].filter(([id]) => byId.has(id)).forEach(([id, label]) => { const link = make('a', '', label); link.href = `#${id}`; primary.append(link); });
+    navigation.filter(({route}) => available(route)).forEach(({route}) => primary.append(sectionLink(route)));
     const menu = make('button', 'jm-menu-button', 'Menu'); menu.type = 'button'; menu.setAttribute('aria-expanded', 'false'); menu.setAttribute('aria-controls', 'jm-menu');
     menu.setAttribute('aria-label', 'Open site menu');
     const menuSymbol = make('span', '', '+'); menuSymbol.setAttribute('aria-hidden','true'); menu.append(menuSymbol);
     const drawer = make('nav', 'jm-drawer'); drawer.id = 'jm-menu'; drawer.hidden = true; drawer.setAttribute('aria-label', 'All sections');
     const drawerInner = make('div','jm-drawer-inner');
-    [[groups[0]], [groups[1]], [groups[2], groups[3]]].forEach(columnGroups => {
+    navigation.filter(({route}) => available(route)).forEach(({label, children}) => {
       const column = make('div', 'jm-drawer-column');
-      columnGroups.forEach(([label, ids]) => {
-        const group = make('div', 'jm-drawer-group'); group.append(make('p','',label));
-        ids.filter(available).forEach(id => group.append(sectionLink(id)));
-        column.append(group);
-      });
-      drawerInner.append(column);
+      const group = make('div', 'jm-drawer-group');
+      group.append(make('p', '', label));
+      children.filter(available).forEach(id => group.append(sectionLink(id)));
+      column.append(group); drawerInner.append(column);
     });
     drawer.append(drawerInner); topbarInner.append(brand, primary, menu); topbar.append(topbarInner, drawer);
     const skip = make('a', 'jm-skip', 'Skip to main content'); skip.href = '#header';
