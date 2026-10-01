@@ -6,7 +6,7 @@ html.jm-standalone {background: var(--jm-bg); scroll-behavior: smooth;}
   background: radial-gradient(ellipse at 74% 18%, #5c91a324, transparent 42%),
     radial-gradient(ellipse at 20% 80%, #4b718b17, transparent 44%),
     linear-gradient(90deg, #10191ff5, #10191ffe 55%, #10191fbb),
-    url("../../images/bg.jpg") 65% center / cover fixed;
+    url("../../images/solar-waves.svg") 65% center / cover fixed;
 }
 .jm-standalone .jm-record-header {
   position: sticky; top: 0; z-index: 30;
@@ -23,19 +23,19 @@ html.jm-standalone {background: var(--jm-bg); scroll-behavior: smooth;}
   max-width: none; margin-inline: auto; padding: 0;
 }
 .jm-standalone .jm-record-intro {
-  min-height: min(800px, 85svh); display: flex; flex-direction: column; justify-content: center;
-  padding: clamp(3rem, 6vw, 7rem) 0;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: clamp(2.5rem, 4vw, 4rem) 0;
 }
 .jm-standalone .jm-record-intro h1 {font-size: clamp(3.5rem, 6.5vw, 8rem); max-width: 16ch; margin-bottom: 2rem;}
 .jm-record-deck {max-width: 62ch; color: var(--jm-accent); font-size: clamp(1.1rem, 1.4vw, 1.5rem);}
 .jm-quick-links {display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; margin-top: 1rem;}
 .jm-quick-links a {font-size: .88rem; padding: .5rem 0; min-height: 44px;}
 .jm-standalone .jm-record-section {padding: clamp(3rem, 5vw, 6rem) 0;}
-.jm-standalone .jm-section-heading {display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 1rem var(--jm-gap); align-items: end; margin-bottom: 3rem;}
-.jm-standalone .jm-section-heading .jm-eyebrow {grid-column: 1 / -1; margin: 0;}
-.jm-standalone .jm-section-heading h2 {font-size: clamp(2.25rem, 3.5vw, 4.5rem); margin: 0; max-width: 22ch;}
+.jm-standalone .jm-section-heading {display: block; margin-bottom: 1.75rem;}
+.jm-standalone .jm-section-heading .jm-eyebrow {margin: 0 0 .7rem;}
+.jm-standalone .jm-section-heading h2 {font-size: clamp(2.25rem, 3.5vw, 4.5rem); margin: 0 0 .8rem;}
 .jm-standalone .jm-section-heading p:last-child {margin: 0;}
-.jm-standalone .jm-record-section p, .jm-standalone .jm-record-section dd {max-width: var(--jm-reading);}
+.jm-standalone .jm-record-section p, .jm-standalone .jm-record-section dd {max-width: none;}
 .jm-standalone .jm-feature-text {grid-template-columns: minmax(0,1fr);}
 .jm-standalone .jm-feature-text:not(.jm-research-feature) .jm-feature-copy {display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: .5rem var(--jm-gap);}
 .jm-standalone .jm-feature-text:not(.jm-research-feature) .jm-feature-copy .jm-kicker {grid-column: 1;}

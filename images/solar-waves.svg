@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Abstract solar atmospheric waves">
+  <defs>
+    <radialGradient id="corona" cx="78%" cy="46%" r="54%">
+      <stop offset="0" stop-color="#7f8f85" stop-opacity=".3"/>
+      <stop offset=".35" stop-color="#4e7980" stop-opacity=".17"/>
+      <stop offset=".7" stop-color="#233f50" stop-opacity=".08"/>
+      <stop offset="1" stop-color="#0e1920" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="wave" x1="0" y1="0" x2="1" y2=".2">
+      <stop offset="0" stop-color="#51959a" stop-opacity="0"/>
+      <stop offset=".4" stop-color="#75a7a3" stop-opacity=".19"/>
+      <stop offset=".8" stop-color="#b4ae83" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#d7b979" stop-opacity=".08"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0e1920"/>
+      <stop offset=".55" stop-color="#14242c"/>
+      <stop offset="1" stop-color="#1a2628"/>
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#edge)"/>
+  <rect width="1920" height="1080" fill="url(#corona)"/>
+  <g fill="none" stroke="url(#wave)" stroke-width="2">
+    <path d="M300 690 C570 620 710 760 970 673 S1390 425 1920 520"/>
+    <path d="M260 712 C565 622 740 806 1020 704 S1430 450 1920 545"/>
+    <path d="M220 733 C550 627 766 852 1070 735 S1480 476 1920 568"/>
+    <path d="M180 756 C542 642 788 896 1120 764 S1524 508 1920 596"/>
+    <path d="M145 778 C532 657 810 936 1170 793 S1565 535 1920 624"/>
+    <path d="M110 801 C514 673 837 977 1220 824 S1613 564 1920 654"/>
+    <path d="M75 825 C500 690 860 1018 1270 853 S1660 592 1920 684"/>
+  </g>
+  <g fill="none" stroke="#9cbeb2" stroke-opacity=".055" stroke-width="1">
+    <path d="M420 168 C670 108 822 272 1080 210 S1560 118 1920 222"/>
+    <path d="M388 188 C662 122 835 307 1116 236 S1600 139 1920 250"/>
+    <path d="M352 209 C652 139 852 338 1155 264 S1634 165 1920 281"/>
+    <path d="M315 231 C640 153 870 369 1195 292 S1668 193 1920 314"/>
+  </g>
+  <circle cx="1510" cy="450" r="295" fill="none" stroke="#c2b994" stroke-opacity=".075" stroke-width="1.5"/>
+  <circle cx="1510" cy="450" r="350" fill="none" stroke="#8aa9a6" stroke-opacity=".04" stroke-width="1"/>
+  <g fill="#d1ded8" opacity=".19">
+    <circle cx="1060" cy="135" r="1.6"/><circle cx="1340" cy="275" r="1"/>
+    <circle cx="1778" cy="190" r="1.5"/><circle cx="1815" cy="375" r="1"/>
+    <circle cx="1275" cy="575" r="1.2"/><circle cx="1695" cy="785" r="1.4"/>
+  </g>
+</svg>

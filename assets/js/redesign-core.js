@@ -15,7 +15,7 @@
   if (!main || !header || !footer) return;
 
   const labels = {
-    About: 'About me', mylife: 'Personal Life',
+    About: 'About Me', mylife: 'Personal Life',
     academicjourney: 'Professional Journey', Research: 'Research',
     PMS: 'Accretion in young stars',
     Teaching: 'Teaching & Mentorship',
@@ -24,10 +24,10 @@
     CV: 'CV / Professional Record', Contact: 'Contact'
   };
   const groups = [
+    ['About Me', ['home', 'academicjourney', 'mylife', 'Contact']],
     ['Research', ['Research', 'gravitywaves', 'PMS', 'Software']],
     ['Teaching', ['Teaching']],
-    ['CV / Professional Record', ['CV']],
-    ['More about Julio', ['academicjourney', 'mylife', 'Contact']]
+    ['CV / Professional Record', ['CV']]
   ];
   const historical = {
     Teaching: ['Courses taught or tutored', 'A complete course list from my teaching and tutoring experience appears below.']
@@ -183,9 +183,9 @@
       figure.style.setProperty('--jm-figure-width', `${Math.min(width || imageLimit, heightLimit, imageLimit)}px`);
       figure.classList.add('jm-captioned-figure');
     });
-    if (['academicjourney', 'mylife'].includes(wrapper.parentElement.id)) {
+    if (['academicjourney', 'mylife', 'PMS'].includes(wrapper.parentElement.id)) {
       // Older prose includes bare text nodes between media. Turn each run into
-      // a paragraph so the shared reading measure applies to all body text.
+      // a paragraph so shared body styles apply consistently.
       let run = [];
       const flush = () => {
         if (!run.length) return;
@@ -201,7 +201,8 @@
         else flush();
       });
       flush();
-      wrapper.classList.add('jm-centered-prose');
+      if (wrapper.parentElement.id === 'PMS') wrapper.classList.add('jm-indented-prose');
+      else wrapper.classList.add('jm-centered-prose');
     }
     wrapper.querySelectorAll('a[href="mailto:jmmorale@nmsu.edu"]').forEach(link => { link.href = 'mailto:jmmorales@nmsu.edu'; });
   }
@@ -286,13 +287,14 @@
       pageHeader.append(title); article.append(pageHeader, content);
       // These original h3s are page sections once the record h2 becomes the h1.
       content.querySelectorAll('h3,h4,h5,h6').forEach(heading => {
+        if (heading.closest('.jm-course-group')) return;
         const level = Math.max(2, Number(heading.tagName.slice(1)) - 1);
         const replacement = make(`h${level}`);
         [...heading.attributes].forEach(attr => replacement.setAttribute(attr.name, attr.value));
         replacement.append(...heading.childNodes); heading.replaceWith(replacement);
       });
       const headings = [...content.querySelectorAll('h2')].filter(heading =>
-        heading.textContent.trim() && !heading.closest('details, .jm-timeline, .jm-record-list, #elements')
+        heading.textContent.trim() && !heading.closest('details, .jm-timeline, .jm-record-list, .jm-course-group, #elements')
       );
       if (headings.length > 1) {
         const rail = make('aside', 'jm-page-rail');
@@ -349,9 +351,15 @@
     main.before(layout);
     const sidebar = make('nav', 'jm-sidebar'); sidebar.setAttribute('aria-label', 'Explore the website');
     sidebar.append(make('p', 'jm-eyebrow', 'Explore the website'));
+    const available = id => id === 'home' ? Boolean(homeAbout) : byId.has(id);
+    const sectionLink = id => {
+      const link = make('a', '', id === 'home' ? labels.About : labels[id]);
+      link.href = id === 'home' ? '#' : `#${id}`;
+      return link;
+    };
     groups.forEach(([group, ids], index) => {
       if (index) sidebar.append(make('p', 'jm-eyebrow jm-sidebar-divider', group));
-      ids.filter(id => byId.has(id)).forEach(id => { const link = make('a', '', labels[id]); link.href = `#${id}`; sidebar.append(link); });
+      ids.filter(available).forEach(id => sidebar.append(sectionLink(id)));
     });
     layout.append(sidebar, main); main.setAttribute('role', 'main'); main.tabIndex = -1;
     const topbar = make('div', 'jm-topbar');
@@ -368,8 +376,14 @@
     const menuSymbol = make('span', '', '+'); menuSymbol.setAttribute('aria-hidden','true'); menu.append(menuSymbol);
     const drawer = make('nav', 'jm-drawer'); drawer.id = 'jm-menu'; drawer.hidden = true; drawer.setAttribute('aria-label', 'All sections');
     const drawerInner = make('div','jm-drawer-inner');
-    groups.forEach(([label, ids]) => { const group = make('div', 'jm-drawer-group'); group.append(make('p','',label));
-      ids.filter(id => byId.has(id)).forEach(id => { const link = make('a','', labels[id]); link.href = `#${id}`; group.append(link); }); drawerInner.append(group);
+    [[groups[0]], [groups[1]], [groups[2], groups[3]]].forEach(columnGroups => {
+      const column = make('div', 'jm-drawer-column');
+      columnGroups.forEach(([label, ids]) => {
+        const group = make('div', 'jm-drawer-group'); group.append(make('p','',label));
+        ids.filter(available).forEach(id => group.append(sectionLink(id)));
+        column.append(group);
+      });
+      drawerInner.append(column);
     });
     drawer.append(drawerInner); topbarInner.append(brand, primary, menu); topbar.append(topbarInner, drawer);
     const skip = make('a', 'jm-skip', 'Skip to main content'); skip.href = '#header';
