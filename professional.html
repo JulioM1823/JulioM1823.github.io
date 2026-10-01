@@ -7,6 +7,13 @@
   <meta name="theme-color" content="#11161b">
   <title>Academic Record · Julio M. Morales</title>
   <link rel="stylesheet" href="assets/css/redesign.css">
+  <script>
+    // This document supplies the routed site's professional sections. Direct
+    // visits use the canonical homepage and keep section deep links working.
+    const routes = {research: 'Research', teaching: 'Teaching', software: 'Software', experience: 'CV', contact: 'Contact'};
+    const section = location.hash.slice(1);
+    location.replace(new URL(`index.html${section ? `#${routes[section] || section}` : ''}`, location.href));
+  </script>
   <script src="assets/js/scroll-polish.js" defer></script>
 </head>
 <body>
@@ -30,19 +37,6 @@
   </header>
 
   <main id="academic-record" class="jm-record">
-    <section class="jm-record-intro" aria-labelledby="record-title">
-      <p class="jm-eyebrow">Academic record · May 2026 CV</p>
-      <h1 id="record-title">Research. Teaching. Practice.</h1>
-      <p class="jm-record-deck">I am an astronomy Ph.D. candidate at New Mexico State University working across helioseismology, solar atmospheric gravity waves, scientific computing, and research workflow development.</p>
-      <p class="jm-source-note">This page follows the May 2026 CV. Dates marked “present” and work listed as “in preparation” reflect that edition rather than an independently inferred status update.</p>
-      <div class="jm-quick-links" aria-label="Jump to section">
-        <a href="#research">Research</a>
-        <a href="#teaching">Teaching &amp; Mentorship</a>
-        <a href="#software">Software &amp; Workflows</a>
-        <a href="#experience">CV / Professional Record</a>
-      </div>
-    </section>
-
     <article id="research" class="jm-record-section">
       <header class="jm-section-heading">
         <p class="jm-eyebrow">Solar &amp; stellar astrophysics</p>
@@ -102,8 +96,9 @@
       <section class="jm-feature jm-feature-text">
         <div class="jm-feature-copy">
           <p class="jm-kicker">Research workflow development</p>
-          <h3>AstroStack</h3>
+          <h3><a class="jm-feature-title-link" href="index.html#AstroStack">AstroStack</a></h3>
           <p>I develop AstroStack, a research workflow platform for scientific project organization and automation. My computational work also includes applying language models to workflow automation, code generation and debugging, scientific visualization, documentation, and version-controlled development.</p>
+          <a class="jm-text-link" href="index.html#AstroStack">Explore the AstroStack feature gallery →</a>
           <a class="jm-text-link" href="https://github.com/JulioM1823/AstroStack">AstroStack on GitHub →</a>
         </div>
       </section>
@@ -139,14 +134,6 @@
       </header>
       <p class="jm-source-note">Download the latest compiled version of my CV.</p>
       <div class="jm-actions"><a class="jm-button" href="docs/Morales_CV.pdf" download>Download CV</a></div>
-
-      <div class="jm-cv-contact" aria-label="CV contact information">
-        <a href="mailto:jmmorales@nmsu.edu">jmmorales@nmsu.edu</a>
-        <a href="tel:+19784676662">(978) 467-6662</a>
-        <a href="https://juliom1823.github.io/">JulioM1823.com</a>
-        <a href="https://github.com/JulioM1823">GitHub</a>
-        <a href="https://www.linkedin.com/in/julio-morales-6642a3236/">LinkedIn</a>
-      </div>
 
       <div class="jm-cv-sections">
         <section id="cv-profile" class="jm-content-section" aria-labelledby="cv-profile-title">

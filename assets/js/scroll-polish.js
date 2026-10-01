@@ -111,7 +111,7 @@
     }
     const standalone = document.documentElement.classList.contains('jm-standalone');
     const links = standalone
-      ? [...document.querySelectorAll('.jm-record-header nav a[href^="#"], .jm-quick-links a[href^="#"]')]
+      ? [...document.querySelectorAll('.jm-record-header nav a[href^="#"]')]
       : [...scope.querySelectorAll('.jm-page-toc a[data-jm-section]')];
     entries = links.map(link => {
       let id;

@@ -20,12 +20,12 @@
     PMS: 'Accretion in young stars',
     Teaching: 'Teaching & Mentorship',
     elements: 'Original theme reference', gravitywaves: 'Atmospheric gravity waves',
-    Software: 'Software & Workflows',
+    Software: 'Software & Workflows', AstroStack: 'AstroStack',
     CV: 'CV / Professional Record', Contact: 'Contact'
   };
   const groups = [
     ['About Me', ['home', 'academicjourney', 'mylife', 'Contact']],
-    ['Research', ['Research', 'gravitywaves', 'PMS', 'Software']],
+    ['Research', ['Research', 'gravitywaves', 'PMS', 'Software', 'AstroStack']],
     ['Teaching', ['Teaching']],
     ['CV / Professional Record', ['CV']]
   ];
@@ -33,6 +33,7 @@
     Teaching: ['Courses taught or tutored', 'A complete course list from my teaching and tutoring experience appears below.']
   };
   const smallImages = new Set(['about_pic.jpeg', 'evo.jpg', 'me_at_umass.jpg', 'grad_pic.jpg']);
+  const personalImages = new Set(['fam_reunion_big.jpg', 'FRIENDS.jpg', 'papa_bartolo.jpg']);
   const alts = {
     'about_pic.jpeg': 'Julio outdoors on a summer day',
     'fam_reunion_big.jpg': 'Alicea family reunion in Chicago, 2004',
@@ -178,11 +179,35 @@
       if (!image) return;
       const width = Number(image.getAttribute('width')) || image.naturalWidth;
       const height = Number(image.getAttribute('height')) || image.naturalHeight;
-      const imageLimit = image.classList.contains('jm-small-image') ? 460 : 1200;
-      const heightLimit = width && height ? 850 * width / height : imageLimit;
+      const filename = decodeURIComponent(new URL(image.getAttribute('src'), root).pathname.split('/').pop());
+      const imageLimit = image.classList.contains('jm-small-image') ? 460 : personalImages.has(filename) ? 680 : 920;
+      const heightLimit = width && height ? 680 * width / height : imageLimit;
       figure.style.setProperty('--jm-figure-width', `${Math.min(width || imageLimit, heightLimit, imageLimit)}px`);
       figure.classList.add('jm-captioned-figure');
     });
+    // Number captions within each page, and update the older inline figure
+    // references to match the newly sequential research sequence.
+    [...wrapper.querySelectorAll('figure')].filter(figure => figure.querySelector('figcaption')).forEach((figure, index) => {
+      const caption = figure.querySelector('figcaption');
+      const body = caption.querySelector('p') || caption;
+      const oldLabel = [...body.children].find(child => /^(?:Figure|Fig\.|Picture|Image)\s*\d+\s*[:.]?$/i.test(child.textContent.trim()));
+      oldLabel?.remove();
+      const firstText = [...body.childNodes].find(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
+      if (firstText) firstText.textContent = firstText.textContent.replace(/^\s*(?:Figure|Fig\.|Picture|Image)\s*\d+\s*[:.]?\s*/i, '');
+      body.prepend(make('span', 'jm-figure-label', `Figure ${index + 1}.`), document.createTextNode(' '));
+      figure.classList.add('jm-numbered-figure');
+    });
+    const referenceNumbers = wrapper.parentElement.id === 'PMS' ? {2: 1, 3: 2, 4: 3, 5: 4, 8: 5, 9: 6, 10: 7} :
+      wrapper.parentElement.id === 'academicjourney' ? {1: 2} : null;
+    if (referenceNumbers) {
+      const walker = document.createTreeWalker(wrapper, NodeFilter.SHOW_TEXT);
+      while (walker.nextNode()) {
+        const node = walker.currentNode;
+        if (node.parentElement?.closest('figcaption')) continue;
+        node.textContent = node.textContent.replace(/\bFigure\s+(\d+)\b/g, (full, number) =>
+          referenceNumbers[number] ? `Figure ${referenceNumbers[number]}` : full);
+      }
+    }
     if (['academicjourney', 'mylife', 'PMS'].includes(wrapper.parentElement.id)) {
       // Older prose includes bare text nodes between media. Turn each run into
       // a paragraph so shared body styles apply consistently.
@@ -255,11 +280,9 @@
     const pms = main.querySelector('#PMS');
     if (pms) {
       const note = make('div', 'jm-current-content');
-      note.append(fragment('<p class="jm-lead">Accretion variability in transitional disk host-stars.</p><p class="jm-source-note">The detailed account below preserves my earlier 2021–2022 research and its original figure references. The May 2026 CV lists the associated Morales, Balmer &amp; Follette manuscript as in preparation. One original TW Hya passage says “three years,” while its figure caption compares 2014 and 2018; that interval remains unconfirmed.</p>'));
+      note.append(fragment('<p class="jm-lead">Accretion variability in transitional disk host-stars.</p><p class="jm-source-note">The detailed account below preserves my earlier 2021–2022 research and its figures. The May 2026 CV lists the associated Morales, Balmer &amp; Follette manuscript as in preparation. One original TW Hya passage says “three years,” while its figure caption compares 2014 and 2018; that interval remains unconfirmed.</p>'));
       pms.prepend(note);
     }
-    const aboutIntro = main.querySelector('#About');
-    if (aboutIntro) aboutIntro.prepend(fragment('<p class="jm-lead">I’m Julio, an astronomy Ph.D. candidate at New Mexico State University.</p><p>My work spans helioseismology, solar atmospheric gravity waves, and reproducible scientific computing. I completed my M.S. in Astronomy at NMSU in May 2025 and my B.S. in Physics and Astronomy at UMass Amherst in May 2022.</p>'));
 
     let articles = [...main.children].filter(node => node.matches('article[id]'));
     const byId = new Map(articles.map(article => [article.id, article]));
@@ -287,14 +310,14 @@
       pageHeader.append(title); article.append(pageHeader, content);
       // These original h3s are page sections once the record h2 becomes the h1.
       content.querySelectorAll('h3,h4,h5,h6').forEach(heading => {
-        if (heading.closest('.jm-course-group')) return;
+        if (heading.closest('.jm-course-group, .jm-about-card')) return;
         const level = Math.max(2, Number(heading.tagName.slice(1)) - 1);
         const replacement = make(`h${level}`);
         [...heading.attributes].forEach(attr => replacement.setAttribute(attr.name, attr.value));
         replacement.append(...heading.childNodes); heading.replaceWith(replacement);
       });
       const headings = [...content.querySelectorAll('h2')].filter(heading =>
-        heading.textContent.trim() && !heading.closest('details, .jm-timeline, .jm-record-list, .jm-course-group, #elements')
+        heading.textContent.trim() && !heading.closest('details, .jm-timeline, .jm-record-list, .jm-course-group, .jm-about-card, #elements')
       );
       if (headings.length > 1) {
         const rail = make('aside', 'jm-page-rail');

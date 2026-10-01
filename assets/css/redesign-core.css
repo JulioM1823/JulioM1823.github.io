@@ -76,6 +76,7 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 :is(.jm-redesign, .jm-standalone) .jm-button-solid:hover {background: #fff; color: #1b1f22;}
 :is(.jm-redesign, .jm-standalone) .jm-text-link {display: inline-block; font-size: .87rem; text-decoration: underline; text-decoration-thickness: 1px; padding: .45rem 0;}
 .jm-home-about {display: block; width: 100%; padding: clamp(2.75rem, 5vw, 5.5rem) 0 5rem;}
+.jm-home-about .jm-page-header, .jm-home-about .jm-page-content {width: min(100%, 1200px); margin-inline: auto;}
 .jm-home-about .jm-page-content {padding-bottom: 1rem;}
 :is(.jm-redesign, .jm-standalone) #main {display: block; padding: 0; margin: 0; width: 100%; max-width: none; min-width: 0;}
 .jm-page-layout {display: grid; grid-template-columns: var(--jm-sidebar) minmax(0,1fr); gap: var(--jm-gap); padding: clamp(2.25rem, 4vw, 5rem) 0 5rem; min-height: calc(100svh - var(--jm-header-height));}
@@ -149,12 +150,32 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 #PMS .jm-indented-prose > p {text-indent: 1.5em;}
 .jm-legacy-content .major {border: 0; padding: 0; width: auto;}
 .jm-legacy-content .image, .jm-legacy-content .image.main {margin: 1.75rem 0; width: 100%;}
-:is(.jm-redesign, .jm-standalone) .jm-legacy-content img {display: block; width: auto; height: auto; max-width: 100% !important; max-height: 850px; object-fit: contain; margin: 1.4rem auto .65rem; border: 1px solid var(--jm-line-soft) !important; border-radius: 3px;}
+:is(.jm-redesign, .jm-standalone) .jm-legacy-content img {display: block; width: auto; height: auto; max-width: 100% !important; max-height: 680px; object-fit: contain; margin: 1.4rem auto .65rem; border: 1px solid var(--jm-line-soft) !important; border-radius: 3px;}
 :is(.jm-redesign, .jm-standalone) .jm-legacy-content img.jm-small-image {max-width: min(100%,460px) !important;}
 .jm-legacy-content figcaption {display: block; width: 100%; max-width: 100%; font-size: .82rem; line-height: 1.65; color: var(--jm-muted); margin: .6rem 0 0; text-align: left;}
 .jm-legacy-content figcaption p {width: 100%; max-width: none !important; font-size: inherit !important; margin: 0; text-align: left;}
-:is(.jm-redesign, .jm-standalone) .jm-legacy-content figure.jm-captioned-figure {width: min(100%, var(--jm-figure-width, 1200px)); max-width: 100%; margin: 2.5rem auto;}
+.jm-figure-label {color: var(--jm-accent); font-weight: 600; white-space: nowrap;}
+:is(.jm-redesign, .jm-standalone) .jm-legacy-content figure.jm-captioned-figure {width: min(100%, var(--jm-figure-width, 920px)); max-width: 100%; margin: 2.5rem auto;}
 :is(.jm-redesign, .jm-standalone) .jm-legacy-content figure.jm-captioned-figure > img {display: block; width: 100%; max-width: 100% !important; max-height: none; height: auto; margin: 0;}
+.jm-about-hero {display: grid; grid-template-columns: minmax(0,1.4fr) minmax(240px,.6fr); align-items: start; gap: clamp(2rem,5vw,5rem); padding: .5rem 0 clamp(2rem,4vw,3.5rem); border-bottom: 1px solid var(--jm-line-soft);}
+.jm-about-hero-copy {min-width: 0;}
+.jm-about-hero-copy p {line-height: 1.8; margin: 0 0 1.25rem;}
+.jm-about-hero-copy .jm-about-lead {font-size: clamp(1.3rem,2vw,1.75rem); line-height: 1.45; color: var(--jm-accent); letter-spacing: -.018em; margin-bottom: 1.5rem;}
+.jm-about-hero-copy .jm-about-intro {margin-bottom: 0;}
+:is(.jm-redesign, .jm-standalone) .jm-legacy-content figure.jm-about-portrait {width: min(100%,320px); margin: 0 auto;}
+:is(.jm-redesign, .jm-standalone) .jm-legacy-content figure.jm-about-portrait > img {width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: var(--jm-radius);}
+.jm-about-paths {display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: clamp(1rem,2vw,1.5rem); margin-top: clamp(2rem,4vw,3.5rem);}
+.jm-about-card {min-width: 0; padding: clamp(1rem,2vw,1.5rem); border: 1px solid var(--jm-line-soft); border-radius: var(--jm-radius); background: #1a2932a8;}
+:is(.jm-redesign, .jm-standalone) .jm-legacy-content .jm-about-card figure.jm-captioned-figure {width: 100%; margin: 0;}
+:is(.jm-redesign, .jm-standalone) .jm-legacy-content .jm-about-card img {width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 4px;}
+.jm-about-card h3 {font-size: clamp(1.1rem,1.4vw,1.3rem) !important; margin: 1.4rem 0 0 !important;}
+:is(.jm-redesign, .jm-standalone) .jm-about-card h3 a {display: flex; justify-content: space-between; gap: 1rem; text-decoration: none; align-items: center;}
+:is(.jm-redesign, .jm-standalone) .jm-about-card h3 a:hover {color: var(--jm-accent);}
+.jm-astro-gallery {display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 1rem; margin-top: 1.5rem;}
+.jm-gallery-item {min-width: 0; margin: 0; padding: .55rem; border: 1px solid var(--jm-line-soft); border-radius: var(--jm-radius); background: #1a2932a8;}
+.jm-gallery-placeholder {display: grid; place-items: center; aspect-ratio: 4/3; border: 1px dashed #627e89; border-radius: 4px; color: var(--jm-faint); background: #17262e; text-align: center;}
+.jm-gallery-placeholder span {font-size: .7rem; letter-spacing: .09em; text-transform: uppercase;}
+.jm-gallery-item figcaption {font-size: .74rem; line-height: 1.5; margin-top: .6rem;}
 :is(.jm-redesign, .jm-standalone) .jm-legacy-content .row {display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;}
 :is(.jm-redesign, .jm-standalone) .jm-legacy-content .row::after {display: none;}
 :is(.jm-redesign, .jm-standalone) .jm-legacy-content .column {float: none; width: auto; padding: 0; min-width: 0;}
@@ -174,9 +195,6 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 .jm-load-warning {padding: 1rem; border: 1px solid var(--jm-line); margin: 1rem 0; font-size: .85rem;}
 .jm-record-header, .jm-record-footer {max-width: 1080px; margin: 0 auto; padding: 2rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; font-size: .8rem;}
 .jm-record {max-width: 1080px; margin: auto; padding: 2rem;}
-.jm-record-intro {padding: 2rem 0 3rem;}
-.jm-record-intro h1 {max-width: 16ch; margin-bottom: 2rem;}
-.jm-record-intro > p {max-width: none;}
 .jm-record-nav {display: flex; flex-wrap: wrap; gap: .7rem 1.3rem; font-size: .85rem;}
 .jm-record .jm-record-section {padding: 3rem 0; border-bottom: 1px solid var(--jm-line-soft);}
 .jm-record .jm-record-section > h2 {margin-top: 0;}
@@ -199,7 +217,6 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 .jm-section-heading > p:last-child {color: var(--jm-muted); max-width: none;}
 .jm-feature-copy, .jm-content-section {min-width: 0;}
 .jm-content-section > h3 {margin-top: 0;}
-.jm-cv-contact {display: flex; flex-wrap: wrap; gap: .35rem 1.5rem; margin: 1.5rem 0 2rem; font-size: .86rem; color: var(--jm-muted);}
 .jm-cv-sections {display: grid; grid-template-columns: minmax(0,1fr); gap: clamp(2.5rem, 4vw, 4rem); margin-top: 2rem;}
 .jm-cv-sections .jm-content-section {min-width: 0;}
 .jm-cv-sections .jm-content-section > :is(h2,h3) {padding-bottom: .8rem; border-bottom: 1px solid var(--jm-line); margin-bottom: .5rem;}
@@ -224,6 +241,8 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 .jm-course-period {font-size: .78rem; color: var(--jm-faint); margin-bottom: .85rem !important;}
 .jm-course-group ul {margin: 0; padding-left: 1.2rem;}
 .jm-course-group li {break-inside: avoid; line-height: 1.5; padding-bottom: .45rem;}
+.jm-course-private {grid-column: 1 / -1;}
+.jm-course-private ul {display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .1rem 1.5rem;}
 .jm-content-section > :last-child {margin-bottom: 0;}
 .jm-subsection {margin-top: 3rem;}
 .jm-page-content > .jm-section-heading:empty {display: none;}
@@ -282,6 +301,20 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 }
 @media (max-width: 760px) {
   :is(.jm-redesign, .jm-standalone) #bg::after {animation: none; transform: scale(1.03);}
+}
+@media (max-width: 1300px) {
+  .jm-astro-gallery {grid-template-columns: repeat(4,minmax(0,1fr));}
+}
+@media (max-width: 1000px) {
+  .jm-astro-gallery, .jm-course-private ul {grid-template-columns: repeat(3,minmax(0,1fr));}
+}
+@media (max-width: 700px) {
+  .jm-about-hero, .jm-about-paths {grid-template-columns: minmax(0,1fr);}
+  :is(.jm-redesign, .jm-standalone) .jm-legacy-content figure.jm-about-portrait {margin: 0;}
+  .jm-astro-gallery, .jm-course-private ul {grid-template-columns: repeat(2,minmax(0,1fr));}
+}
+@media (max-width: 520px) {
+  .jm-astro-gallery, .jm-course-private ul {grid-template-columns: minmax(0,1fr);}
 }
 @media (prefers-reduced-motion: reduce) {
   :is(.jm-redesign, .jm-standalone) *, :is(.jm-redesign, .jm-standalone) *::before, :is(.jm-redesign, .jm-standalone) *::after {scroll-behavior: auto !important; transition: none !important; animation: none !important;}
