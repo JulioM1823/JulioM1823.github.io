@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>3D Transverse Wave Interference</title>
+  <style>
+    :root{
+      --bg:#0b0d10;
+      --panel:#11151a;
+      --card:#0f1318;
+      --text:#f2f5f7;
+      --muted:#aeb8c2;
+      --border:#2a333c;
+      --accent:#4ea1ff;
+      --green:#36c56f;
+      --blue:#46b7ff;
+      --orange:#f0a33b;
+      --purple:#ad75e8;
+      --red:#ff5b62;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .app{
+      max-width:1180px;
+      margin:0 auto;
+      padding:18px;
+    }
+    .header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:14px;
+      flex-wrap:wrap;
+    }
+    h1{font-size:20px;margin:0 0 4px}
+    .sub{font-size:13px;color:var(--muted)}
+    .layout{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 280px;
+      gap:16px;
+    }
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:14px;
+    }
+    canvas{
+      width:100%;
+      height:auto;
+      display:block;
+      background:var(--card);
+      border-radius:12px;
+      touch-action:none;
+    }
+    .legend{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:8px;
+      margin-top:12px;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .legend b{color:var(--text)}
+    button,select,input{font:inherit}
+    button{
+      border:1px solid var(--border);
+      background:#18202a;
+      color:var(--text);
+      border-radius:10px;
+      padding:9px 12px;
+      cursor:pointer;
+    }
+    button:hover{background:#202a35}
+    .controls{display:grid;gap:14px}
+    .section{padding-top:12px;border-top:1px solid var(--border)}
+    .section:first-child{padding-top:0;border-top:0}
+    .title{font-size:14px;font-weight:700;margin-bottom:7px}
+    label.row{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      font-size:13px;
+      margin-bottom:5px;
+    }
+    input[type=range]{width:100%}
+    select{
+      width:100%;
+      background:var(--card);
+      color:var(--text);
+      border:1px solid var(--border);
+      border-radius:9px;
+      padding:8px;
+    }
+    .check{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:13px;
+    }
+    .readout{
+      background:var(--card);
+      border-radius:10px;
+      padding:10px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.6;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    }
+    .hint{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12px;
+    }
+    @media(max-width:900px){
+      .layout{grid-template-columns:1fr}
+      .legend{grid-template-columns:1fr 1fr}
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div>
+      <h1>Two-frequency 3D transverse-wave interference</h1>
+      <div class="sub">Particles respond to ξ = ξ₁ + ξ₂, so constructive interference, destructive interference, and beats arise from linear superposition.</div>
+    </div>
+    <button id="toggle">Pause</button>
+  </div>
+
+  <div class="layout">
+    <div class="panel">
+      <canvas id="canvas" width="900" height="620"></canvas>
+      <div class="legend">
+        <div><b>Orange:</b> wavevector k</div>
+        <div><b>Green:</b> total displacement ξ₁ + ξ₂</div>
+        <div><b>Purple plane:</b> plane perpendicular to k</div>
+        <div><b>Blue:</b> medium particles</div>
+      </div>
+      <div class="hint">Drag to rotate • Scroll/trackpad to zoom</div>
+    </div>
+
+    <div class="panel controls">
+      <div class="section">
+        <div class="title">Wavevector</div>
+        <label class="row"><span>kₓ</span><span id="kxv">1.00</span></label>
+        <input id="kx" type="range" min="-2" max="2" step="0.05" value="1">
+        <label class="row"><span>kᵧ</span><span id="kyv">0.60</span></label>
+        <input id="ky" type="range" min="-2" max="2" step="0.05" value="0.6">
+        <label class="row"><span>k_z</span><span id="kzv">0.80</span></label>
+        <input id="kz" type="range" min="-2" max="2" step="0.05" value="0.8">
+      </div>
+
+      <div class="section">
+        <div class="title">Wave 1</div>
+        <label class="row"><span>Frequency f₁</span><span id="f1v">1.00</span></label>
+        <input id="f1" type="range" min="0.10" max="3.00" step="0.05" value="1.00">
+        <label class="row"><span>Amplitude A₁</span><span id="a1v">0.45</span></label>
+        <input id="a1" type="range" min="0" max="0.8" step="0.025" value="0.45">
+      </div>
+
+      <div class="section">
+        <div class="title">Wave 2</div>
+        <label class="row"><span>Frequency f₂</span><span id="f2v">1.20</span></label>
+        <input id="f2" type="range" min="0.10" max="3.00" step="0.05" value="1.20">
+        <label class="row"><span>Amplitude A₂</span><span id="a2v">0.45</span></label>
+        <input id="a2" type="range" min="0" max="0.8" step="0.025" value="0.45">
+        <label class="row"><span>Relative phase φ₂</span><span id="phasev">0°</span></label>
+        <input id="phase" type="range" min="0" max="360" step="5" value="0">
+      </div>
+
+      <div class="section">
+        <label class="row"><span>Particle density</span><span id="densityv">Very high</span></label>
+        <input id="density" type="range" min="5" max="10" step="1" value="8">
+
+        <label class="row" style="margin-top:10px"><span>Polarization</span></label>
+        <select id="pol">
+          <option value="linear">Linear</option>
+          <option value="circular">Circular</option>
+          <option value="elliptical">Elliptical</option>
+        </select>
+
+        <label class="check" style="margin-top:12px">
+          <input id="plane" type="checkbox" checked>
+          Show transverse plane
+        </label>
+      </div>
+
+      <div class="readout">
+        <div id="kdisplay">k = (1.00, 0.60, 0.80)</div>
+        <div id="beat">Δf = 0.20</div>
+        <div id="beatperiod">beat period = 5.00</div>
+        <div id="dot">ξ · k = 0.000000</div>
+        <div id="count">particles: —</div>
+      </div>
+
+      <button id="reset">Reset view</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const q = s => document.querySelector(s);
+  const canvas=q('#canvas'), ctx=canvas.getContext('2d');
+  const kx=q('#kx'),ky=q('#ky'),kz=q('#kz'),f1=q('#f1'),f2=q('#f2'),
+        a1=q('#a1'),a2=q('#a2'),phase=q('#phase'),density=q('#density'),
+        pol=q('#pol'),plane=q('#plane');
+  const toggle=q('#toggle'),reset=q('#reset');
+  const kxv=q('#kxv'),kyv=q('#kyv'),kzv=q('#kzv'),f1v=q('#f1v'),f2v=q('#f2v'),
+        a1v=q('#a1v'),a2v=q('#a2v'),phasev=q('#phasev'),densityv=q('#densityv'),
+        kdisplay=q('#kdisplay'),beat=q('#beat'),beatperiod=q('#beatperiod'),
+        dot=q('#dot'),count=q('#count');
+
+  let running=true,t=0,last=performance.now(),yaw=-0.65,pitch=0.42,zoom=0.95;
+  let dragging=false,px=0,py=0;
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) running=false;
+
+  const add=(a,b)=>[a[0]+b[0],a[1]+b[1],a[2]+b[2]];
+  const sub=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]];
+  const scale=(a,s)=>[a[0]*s,a[1]*s,a[2]*s];
+  const dp=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+  const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+  const norm=a=>Math.hypot(...a);
+  const unit=a=>{const n=norm(a);return n>1e-8?scale(a,1/n):[1,0,0]};
+
+  function getK(){
+    let k=[+kx.value,+ky.value,+kz.value];
+    if(norm(k)<0.05) k=[0.05,0,0];
+    return k;
+  }
+
+  function basis(k){
+    const kh=unit(k);
+    const ref=Math.abs(kh[2])<0.9?[0,0,1]:[0,1,0];
+    const e1=unit(cross(kh,ref));
+    const e2=unit(cross(kh,e1));
+    return {kh,e1,e2};
+  }
+
+  function rotate(p){
+    let[x,y,z]=p;
+    const cy=Math.cos(yaw),sy=Math.sin(yaw);
+    const x1=x*cy-z*sy, z1=x*sy+z*cy;
+    const cp=Math.cos(pitch),sp=Math.sin(pitch);
+    return[x1,y*cp-z1*sp,y*sp+z1*cp];
+  }
+
+  function project(p){
+    const[x,y,z]=rotate(p);
+    const fac=330*zoom/(12+z);
+    return[canvas.width/2+x*fac,canvas.height/2-y*fac,z];
+  }
+
+  function line3(a,b,c,w=1,d=[]){
+    const A=project(a),B=project(b);
+    ctx.save();
+    ctx.strokeStyle=c; ctx.lineWidth=w; ctx.setLineDash(d);
+    ctx.beginPath(); ctx.moveTo(A[0],A[1]); ctx.lineTo(B[0],B[1]); ctx.stroke();
+    ctx.restore();
+  }
+
+  function arrow3(a,b,c,label){
+    const A=project(a),B=project(b);
+    ctx.save();
+    ctx.strokeStyle=c;ctx.fillStyle=c;ctx.lineWidth=2.5;
+    ctx.beginPath();ctx.moveTo(A[0],A[1]);ctx.lineTo(B[0],B[1]);ctx.stroke();
+    const ang=Math.atan2(B[1]-A[1],B[0]-A[0]),s=10;
+    ctx.beginPath();
+    ctx.moveTo(B[0],B[1]);
+    ctx.lineTo(B[0]-s*Math.cos(ang-.5),B[1]-s*Math.sin(ang-.5));
+    ctx.lineTo(B[0]-s*Math.cos(ang+.5),B[1]-s*Math.sin(ang+.5));
+    ctx.closePath();ctx.fill();
+    if(label){ctx.font='600 13px system-ui';ctx.fillText(label,B[0]+8,B[1]-6)}
+    ctx.restore();
+  }
+
+  function poly3(ps,fill,stroke){
+    const p=ps.map(project);
+    ctx.beginPath();ctx.moveTo(p[0][0],p[0][1]);
+    for(let i=1;i<p.length;i++)ctx.lineTo(p[i][0],p[i][1]);
+    ctx.closePath();
+    if(fill){ctx.fillStyle=fill;ctx.fill()}
+    if(stroke){ctx.strokeStyle=stroke;ctx.stroke()}
+  }
+
+  function oneWave(r,time,B,freq,amp,phi){
+    const k=getK();
+    const omega=2*Math.PI*freq;
+    const theta=dp(k,r)-omega*time+phi;
+
+    if(pol.value==='linear')
+      return scale(B.e1,amp*Math.sin(theta));
+
+    if(pol.value==='circular')
+      return add(
+        scale(B.e1,amp*Math.sin(theta)),
+        scale(B.e2,amp*Math.cos(theta))
+      );
+
+    return add(
+      scale(B.e1,amp*Math.sin(theta)),
+      scale(B.e2,0.5*amp*Math.cos(theta))
+    );
+  }
+
+  function totalDisp(r,time,B){
+    const xi1=oneWave(r,time,B,+f1.value,+a1.value,0);
+    const xi2=oneWave(r,time,B,+f2.value,+a2.value,+phase.value*Math.PI/180);
+    return add(xi1,xi2);
+  }
+
+  function buildParticles(){
+    const n=+density.value, span=3.6, step=2*span/(n-1), arr=[];
+    for(let ix=0;ix<n;ix++)
+      for(let iy=0;iy<n;iy++)
+        for(let iz=0;iz<n;iz++)
+          arr.push([-span+ix*step,-span+iy*step,-span+iz*step]);
+    return arr;
+  }
+
+  function render(){
+    const styles=getComputedStyle(document.documentElement);
+    const text=styles.getPropertyValue('--text').trim();
+    const muted=styles.getPropertyValue('--muted').trim();
+    const border=styles.getPropertyValue('--border').trim();
+    const card=styles.getPropertyValue('--card').trim();
+    const green=styles.getPropertyValue('--green').trim();
+    const blue=styles.getPropertyValue('--blue').trim();
+    const orange=styles.getPropertyValue('--orange').trim();
+    const purple=styles.getPropertyValue('--purple').trim();
+    const red=styles.getPropertyValue('--red').trim();
+
+    ctx.fillStyle=card;
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    const k=getK(), B=basis(k), kh=B.kh;
+
+    kxv.textContent=k[0].toFixed(2);
+    kyv.textContent=k[1].toFixed(2);
+    kzv.textContent=k[2].toFixed(2);
+    f1v.textContent=(+f1.value).toFixed(2);
+    f2v.textContent=(+f2.value).toFixed(2);
+    a1v.textContent=(+a1.value).toFixed(2);
+    a2v.textContent=(+a2.value).toFixed(2);
+    phasev.textContent=`${Math.round(+phase.value)}°`;
+
+    kdisplay.textContent=`k = (${k[0].toFixed(2)}, ${k[1].toFixed(2)}, ${k[2].toFixed(2)})`;
+
+    const df=Math.abs(+f2.value-+f1.value);
+    beat.textContent=`Δf = ${df.toFixed(2)}`;
+    beatperiod.textContent=df>1e-6?`beat period = ${(1/df).toFixed(2)}`:'beat period = ∞';
+
+    const den=+density.value;
+    densityv.textContent=den<=6?'High':den<=8?'Very high':'Extreme';
+
+    line3([-3,0,0],[3,0,0],border,1);
+    line3([0,-3,0],[0,3,0],border,1);
+    line3([0,0,-3],[0,0,3],border,1);
+
+    arrow3([0,0,0],[2.2,0,0],muted,'x');
+    arrow3([0,0,0],[0,2.2,0],muted,'y');
+    arrow3([0,0,0],[0,0,2.2],muted,'z');
+    arrow3([0,0,0],scale(kh,3.4),orange,'k');
+
+    if(plane.checked){
+      const aa=scale(B.e1,1.7), bb=scale(B.e2,1.7), c=[0,0,0];
+      poly3(
+        [add(add(c,aa),bb),add(sub(c,aa),bb),sub(sub(c,aa),bb),add(sub(c,bb),aa)],
+        'rgba(173,117,232,0.13)',
+        purple
+      );
+    }
+
+    const particles=buildParticles(), projected=[];
+    count.textContent=`particles: ${particles.length}`;
+
+    for(const r of particles){
+      const xi=totalDisp(r,t,B);
+      const pos=add(r,xi);
+      projected.push({p:project(pos)});
+    }
+
+    projected.sort((a,b)=>b.p[2]-a.p[2]);
+    const radius=Math.max(1.0,2.8-(den-5)*0.28);
+
+    ctx.globalAlpha=0.82;
+    for(const item of projected){
+      ctx.fillStyle=blue;
+      ctx.beginPath();
+      ctx.arc(item.p[0],item.p[1],radius,0,Math.PI*2);
+      ctx.fill();
+    }
+    ctx.globalAlpha=1;
+
+    const r0=[0,0,0];
+    const xi1=oneWave(r0,t,B,+f1.value,+a1.value,0);
+    const xi2=oneWave(r0,t,B,+f2.value,+a2.value,+phase.value*Math.PI/180);
+    const xi=add(xi1,xi2);
+    const pos=add(r0,xi);
+
+    arrow3(r0,pos,green,'ξ₁ + ξ₂');
+
+    const P=project(pos);
+    ctx.fillStyle=red;
+    ctx.beginPath();
+    ctx.arc(P[0],P[1],6.5,0,Math.PI*2);
+    ctx.fill();
+
+    dot.textContent=`ξ · k = ${dp(xi,k).toFixed(6)}`;
+
+    ctx.fillStyle=text;
+    ctx.font='13px system-ui';
+    ctx.fillText('ξ(r,t) = ξ₁(r,t) + ξ₂(r,t)',16,24);
+
+    ctx.fillStyle=muted;
+    ctx.font='12px system-ui';
+    ctx.fillText('Each wave uses phase k · r − 2πft + φ',16,45);
+  }
+
+  function loop(now){
+    const dt=Math.min(0.05,(now-last)/1000);
+    last=now;
+    if(running)t+=dt;
+    render();
+    requestAnimationFrame(loop);
+  }
+
+  toggle.textContent=running?'Pause':'Play';
+  toggle.addEventListener('click',()=>{
+    running=!running;
+    toggle.textContent=running?'Pause':'Play';
+  });
+
+  reset.addEventListener('click',()=>{
+    yaw=-0.65;
+    pitch=0.42;
+    zoom=0.95;
+  });
+
+  canvas.addEventListener('pointerdown',e=>{
+    dragging=true;
+    px=e.clientX;py=e.clientY;
+    canvas.setPointerCapture?.(e.pointerId);
+  });
+
+  canvas.addEventListener('pointermove',e=>{
+    if(!dragging)return;
+    yaw+=(e.clientX-px)*0.01;
+    pitch+=(e.clientY-py)*0.01;
+    pitch=Math.max(-1.3,Math.min(1.3,pitch));
+    px=e.clientX;py=e.clientY;
+  });
+
+  canvas.addEventListener('pointerup',e=>{
+    dragging=false;
+    canvas.releasePointerCapture?.(e.pointerId);
+  });
+
+  canvas.addEventListener('pointercancel',()=>dragging=false);
+
+  canvas.addEventListener('wheel',e=>{
+    e.preventDefault();
+    zoom*=Math.exp(-e.deltaY*0.001);
+    zoom=Math.max(0.5,Math.min(2.2,zoom));
+  },{passive:false});
+
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

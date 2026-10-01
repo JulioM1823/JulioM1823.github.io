@@ -64,6 +64,15 @@
     if (text !== undefined) element.textContent = text;
     return element;
   };
+  const makePlaceholderFigure = (className, ariaLabel, placeholderText, captionText) => {
+    const figure = make('figure', 'jm-placeholder-figure');
+    const placeholder = make('div', className);
+    placeholder.setAttribute('role', 'img');
+    placeholder.setAttribute('aria-label', ariaLabel);
+    placeholder.append(make('span', '', placeholderText));
+    figure.append(placeholder, make('figcaption', '', captionText));
+    return figure;
+  };
   const fragment = html => {
     const template = document.createElement('template');
     template.innerHTML = html;
@@ -127,11 +136,8 @@
       const pair = make('div', 'jm-teaching-media');
       pair.setAttribute('aria-label', `Image placeholders for ${title.textContent.trim()}`);
       for (let index = 1; index <= 2; index += 1) {
-        const image = make('div', 'jm-media-placeholder');
-        image.setAttribute('role', 'img');
-        image.setAttribute('aria-label', `Placeholder image ${index} for ${title.textContent.trim()}`);
-        image.append(make('span', '', `Image ${index} coming soon`));
-        pair.append(image);
+        const caption = `${title.textContent.trim()} image ${index} coming soon.`;
+        pair.append(makePlaceholderFigure('jm-media-placeholder', `Placeholder image ${index} for ${title.textContent.trim()}`, `Image ${index} coming soon`, caption));
       }
       title.after(pair);
     });
@@ -158,8 +164,17 @@
           <p class="jm-eyebrow">Graduate research / Solar atmosphere</p>
           <h2>Atmospheric gravity waves</h2>
           <div class="jm-detail-media">
-            <div class="jm-media-placeholder" role="img" aria-label="Atmospheric gravity waves image placeholder"><span>Image placeholder</span></div>
-            <div class="jm-video-placeholder" role="img" aria-label="Atmospheric gravity waves embedded video placeholder"><span>Embedded video placeholder</span></div>
+            <figure class="jm-embedded-media">
+              <iframe class="jm-interactive-frame" src="images/3d_transverse_wave_interference.html" title="Interactive 3D transverse-wave interference simulation" loading="lazy" sandbox="allow-scripts"></iframe>
+              <figcaption>Interactive 3D transverse-wave interference simulation. Drag to rotate, scroll to zoom, and use the controls to change the waves.</figcaption>
+            </figure>
+            <figure class="jm-embedded-media">
+              <video class="jm-video-player" controls playsinline preload="metadata" poster="images/solar_gravity_to_alfven_refined-poster.jpg" aria-label="Solar gravity-wave to Alfvén-wave visualization">
+                <source src="images/solar_gravity_to_alfven_refined.mp4" type="video/mp4">
+                Your browser does not support embedded video. <a href="images/solar_gravity_to_alfven_refined.mp4">Open the video.</a>
+              </video>
+              <figcaption>Solar gravity-wave conversion to Alfvén waves.</figcaption>
+            </figure>
           </div>
           <p class="jm-lead">Computational diagnostics of waves in the lower solar atmosphere.</p>
           <p>My Ph.D. research at New Mexico State University includes helioseismology and solar atmospheric gravity waves, with an emphasis on computational analysis of solar oscillation and atmospheric-wave diagnostics. Alongside that research, I develop reproducible workflows for analysis, visualization, documentation, and version control.</p>
@@ -360,6 +375,22 @@
     if (pms) {
       const note = make('div', 'jm-current-content');
       note.append(fragment('<p class="jm-lead">Accretion variability in transitional disk host-stars.</p><p class="jm-source-note">The detailed account below preserves my earlier 2021–2022 research and its figures. The May 2026 CV lists the associated Morales, Balmer &amp; Follette manuscript as in preparation. One original TW Hya passage says “three years,” while its figure caption compares 2014 and 2018; that interval remains unconfirmed.</p>'));
+      const videoFigure = make('figure', 'jm-embedded-media jm-accretion-video');
+      const video = make('video', 'jm-video-player');
+      video.controls = true;
+      video.playsInline = true;
+      video.preload = 'metadata';
+      video.poster = 'images/Magnetic_Infall_II_Shocks_to_Planets-poster.jpg';
+      video.setAttribute('aria-label', 'Magnetic Infall II: Shocks to Planets');
+      const source = make('source');
+      source.src = 'images/Magnetic_Infall_II_Shocks_to_Planets.mp4';
+      source.type = 'video/mp4';
+      video.append(source, document.createTextNode('Your browser does not support embedded video. '));
+      const fallbackLink = make('a', '', 'Open the video');
+      fallbackLink.href = source.src;
+      video.append(fallbackLink);
+      videoFigure.append(video, make('figcaption', '', 'Magnetic Infall II: Shocks to Planets.'));
+      note.append(videoFigure);
       pms.prepend(note);
     }
 
@@ -517,6 +548,14 @@
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const readHash = () => { try { return decodeURIComponent(location.hash.slice(1)); } catch (_) { return location.hash.slice(1); } };
     const newEntry = () => `jm-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    document.addEventListener('jm:routechange', ({detail}) => {
+      document.querySelectorAll('.jm-video-player').forEach(video => {
+        video.muted = true;
+        video.defaultMuted = true;
+        if (!detail.page.contains(video)) { video.pause(); return; }
+        video.play().catch(() => {});
+      });
+    });
     const entryState = () => {
       if (!history.state?.jmEntry) history.replaceState({...history.state, jmEntry: newEntry()}, '', location.href);
       return history.state.jmEntry;
