@@ -3,7 +3,9 @@
 
 html.jm-standalone {background: var(--jm-bg); scroll-behavior: smooth;}
 .jm-standalone body {
-  background: linear-gradient(90deg, #10191ff5, #10191fe0 55%, #10191fa8),
+  background: radial-gradient(ellipse at 74% 18%, #5c91a324, transparent 42%),
+    radial-gradient(ellipse at 20% 80%, #4b718b17, transparent 44%),
+    linear-gradient(90deg, #10191ff5, #10191ffe 55%, #10191fbb),
     url("../../images/bg.jpg") 65% center / cover fixed;
 }
 .jm-standalone .jm-record-header {
@@ -11,7 +13,6 @@ html.jm-standalone {background: var(--jm-bg); scroll-behavior: smooth;}
   min-height: var(--jm-header-height); max-width: none; margin: 0;
   padding: 1rem max(var(--jm-gutter), calc((100% - var(--jm-max)) / 2));
   align-items: center; background: #10191ff5;
-  border-bottom: 1px solid var(--jm-line-soft);
   backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
 }
 .jm-record-header nav {display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; align-items: center; margin-left: auto;}
@@ -23,7 +24,7 @@ html.jm-standalone {background: var(--jm-bg); scroll-behavior: smooth;}
 }
 .jm-standalone .jm-record-intro {
   min-height: min(800px, 85svh); display: flex; flex-direction: column; justify-content: center;
-  padding: clamp(3rem, 6vw, 7rem) 0; border-bottom: 1px solid var(--jm-line);
+  padding: clamp(3rem, 6vw, 7rem) 0;
 }
 .jm-standalone .jm-record-intro h1 {font-size: clamp(3.5rem, 6.5vw, 8rem); max-width: 16ch; margin-bottom: 2rem;}
 .jm-record-deck {max-width: 62ch; color: var(--jm-accent); font-size: clamp(1.1rem, 1.4vw, 1.5rem);}
@@ -36,11 +37,11 @@ html.jm-standalone {background: var(--jm-bg); scroll-behavior: smooth;}
 .jm-standalone .jm-section-heading p:last-child {margin: 0;}
 .jm-standalone .jm-record-section p, .jm-standalone .jm-record-section dd {max-width: var(--jm-reading);}
 .jm-standalone .jm-feature-text {grid-template-columns: minmax(0,1fr);}
-.jm-standalone .jm-feature-text .jm-feature-copy {display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: .5rem var(--jm-gap);}
-.jm-standalone .jm-feature-copy .jm-kicker {grid-column: 1;}
-.jm-standalone .jm-feature-copy h3 {grid-column: 1; grid-row: 2;}
-.jm-standalone .jm-feature-copy > p:not(.jm-kicker) {grid-column: 2; grid-row: 1 / span 2;}
-.jm-standalone .jm-feature-copy > a {grid-column: 2;}
+.jm-standalone .jm-feature-text:not(.jm-research-feature) .jm-feature-copy {display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: .5rem var(--jm-gap);}
+.jm-standalone .jm-feature-text:not(.jm-research-feature) .jm-feature-copy .jm-kicker {grid-column: 1;}
+.jm-standalone .jm-feature-text:not(.jm-research-feature) .jm-feature-copy h3 {grid-column: 1; grid-row: 2;}
+.jm-standalone .jm-feature-text:not(.jm-research-feature) .jm-feature-copy > p:not(.jm-kicker) {grid-column: 2; grid-row: 1 / span 2;}
+.jm-standalone .jm-feature-text:not(.jm-research-feature) .jm-feature-copy > a {grid-column: 2;}
 .jm-standalone .jm-record-footer {padding-block: 2.5rem;}
 .jm-standalone .jm-contact-email {font-size: clamp(1.4rem, 4vw, 4rem);}
 

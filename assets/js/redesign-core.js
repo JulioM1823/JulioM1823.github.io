@@ -15,18 +15,18 @@
   if (!main || !header || !footer) return;
 
   const labels = {
-    About: 'About me', mylife: 'Family, friends & values',
-    academicjourney: 'My academic journey', Research: 'Research',
+    About: 'About me', mylife: 'Personal Life',
+    academicjourney: 'Professional Journey', Research: 'Research',
     PMS: 'Accretion in young stars',
-    Teaching: 'Teaching & mentorship',
+    Teaching: 'Teaching & Mentorship',
     elements: 'Original theme reference', gravitywaves: 'Atmospheric gravity waves',
-    Software: 'Software & research workflows',
-    CV: 'Education & experience', Contact: 'Contact'
+    Software: 'Software & Workflows',
+    CV: 'CV / Professional Record', Contact: 'Contact'
   };
   const groups = [
     ['Research', ['Research', 'gravitywaves', 'PMS', 'Software']],
     ['Teaching', ['Teaching']],
-    ['Education & experience', ['CV']],
+    ['CV / Professional Record', ['CV']],
     ['More about Julio', ['academicjourney', 'mylife', 'Contact']]
   ];
   const historical = {
@@ -164,6 +164,45 @@
       image.loading = 'lazy'; image.decoding = 'async';
       if (smallImages.has(filename)) image.classList.add('jm-small-image');
     });
+    // The original document has both proper figures and orphan captions. Give
+    // every caption one image-sized container, including the legacy pairs.
+    wrapper.querySelectorAll('figcaption').forEach(caption => {
+      if (caption.closest('figure')) return;
+      const image = caption.previousElementSibling;
+      if (!image?.matches('img')) return;
+      const figure = make('figure', 'jm-captioned-figure');
+      image.before(figure); figure.append(image, caption);
+    });
+    wrapper.querySelectorAll('figure').forEach(figure => {
+      const image = figure.querySelector(':scope > img');
+      if (!image) return;
+      const width = Number(image.getAttribute('width')) || image.naturalWidth;
+      const height = Number(image.getAttribute('height')) || image.naturalHeight;
+      const imageLimit = image.classList.contains('jm-small-image') ? 460 : 1200;
+      const heightLimit = width && height ? 850 * width / height : imageLimit;
+      figure.style.setProperty('--jm-figure-width', `${Math.min(width || imageLimit, heightLimit, imageLimit)}px`);
+      figure.classList.add('jm-captioned-figure');
+    });
+    if (['academicjourney', 'mylife'].includes(wrapper.parentElement.id)) {
+      // Older prose includes bare text nodes between media. Turn each run into
+      // a paragraph so the shared reading measure applies to all body text.
+      let run = [];
+      const flush = () => {
+        if (!run.length) return;
+        const paragraph = make('p');
+        run[0].before(paragraph);
+        paragraph.append(...run);
+        run = [];
+      };
+      [...wrapper.childNodes].forEach(node => {
+        const inline = node.nodeType === Node.ELEMENT_NODE && /^(A|B|BR|EM|I|SPAN|STRONG|U)$/.test(node.tagName);
+        if (inline || node.nodeType === Node.TEXT_NODE && node.textContent.trim()) run.push(node);
+        else if (node.nodeType === Node.TEXT_NODE && run.length) run.push(node);
+        else flush();
+      });
+      flush();
+      wrapper.classList.add('jm-centered-prose');
+    }
     wrapper.querySelectorAll('a[href="mailto:jmmorale@nmsu.edu"]').forEach(link => { link.href = 'mailto:jmmorales@nmsu.edu'; });
   }
 
@@ -269,8 +308,12 @@
           }
           heading.tabIndex = -1;
           const item = make('li');
-          const link = make('a', '', heading.textContent.trim());
-          link.href = `#${heading.id}`; link.dataset.jmSection = heading.id;
+          const headingLabel = heading.textContent.trim();
+          const aboutRoute = article.id === 'About' && headingLabel === 'Julio M. Morales' ? 'academicjourney' :
+            article.id === 'About' && headingLabel === 'Personal Life' ? 'mylife' : null;
+          const link = make('a', '', aboutRoute === 'academicjourney' ? 'Professional Journey' : headingLabel);
+          link.href = `#${aboutRoute || heading.id}`;
+          if (!aboutRoute) link.dataset.jmSection = heading.id;
           item.append(link); list.append(item);
         });
         toc.append(list); rail.append(toc); content.before(rail);
@@ -319,7 +362,7 @@
     brandCopy.append(make('strong', 'jm-brand-name', 'Julio M. Morales'), make('span', 'jm-brand-tagline', 'Astronomer | Educator | Workflow Designer'));
     brand.append(brandPortrait, brandCopy);
     const primary = make('nav', 'jm-primary-nav'); primary.setAttribute('aria-label', 'Primary navigation');
-    [['Research','Research'],['Teaching','Teaching'],['CV','Education & experience'],['Software','Software and research workflows']].filter(([id]) => byId.has(id)).forEach(([id, label]) => { const link = make('a', '', label); link.href = `#${id}`; primary.append(link); });
+    [['Research','Research'],['Teaching',labels.Teaching],['CV',labels.CV],['Software',labels.Software]].filter(([id]) => byId.has(id)).forEach(([id, label]) => { const link = make('a', '', label); link.href = `#${id}`; primary.append(link); });
     const menu = make('button', 'jm-menu-button', 'Menu'); menu.type = 'button'; menu.setAttribute('aria-expanded', 'false'); menu.setAttribute('aria-controls', 'jm-menu');
     menu.setAttribute('aria-label', 'Open site menu');
     const menuSymbol = make('span', '', '+'); menuSymbol.setAttribute('aria-hidden','true'); menu.append(menuSymbol);

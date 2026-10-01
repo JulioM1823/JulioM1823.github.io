@@ -43,9 +43,10 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 :is(.jm-redesign, .jm-standalone) #wrapper {display: block; width: min(calc(100% - 2 * var(--jm-gutter)), var(--jm-max)); max-width: none; min-height: 0; margin: 0 auto; padding: 0; position: relative; z-index: 2; align-items: initial; justify-content: initial;}
 :is(.jm-redesign, .jm-standalone) #wrapper::before {display: none;}
 :is(.jm-redesign, .jm-standalone) #bg {z-index: 0; pointer-events: none; position: fixed; inset: 0; width: 100%; height: 100lvh; transform: none;}
-:is(.jm-redesign, .jm-standalone) #bg::before {background-image: linear-gradient(90deg, rgba(16,25,31,.97) 0%, rgba(16,25,31,.90) 45%, rgba(16,25,31,.62)), linear-gradient(0deg, rgba(16,25,31,.85), transparent 75%); background-size: 100% 100%; background-repeat: no-repeat; background-color: transparent; transition: none;}
-:is(.jm-redesign, .jm-standalone) #bg::after {transform: none; filter: none; transition: none; background-position: 65% center;}
-.jm-topbar {position: sticky; top: 0; z-index: 30; background: rgba(16,25,31,.96); border-bottom: 1px solid var(--jm-line-soft); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);}
+:is(.jm-redesign, .jm-standalone) #bg::before {background-image: radial-gradient(ellipse at 74% 18%, rgba(92,145,163,.14), transparent 42%), radial-gradient(ellipse at 20% 80%, rgba(75,113,139,.09), transparent 44%), linear-gradient(90deg, rgba(16,25,31,.97) 0%, rgba(16,25,31,.90) 45%, rgba(16,25,31,.68)), linear-gradient(0deg, rgba(16,25,31,.86), transparent 75%); background-size: 100% 100%; background-repeat: no-repeat; background-color: transparent; transition: none;}
+:is(.jm-redesign, .jm-standalone) #bg::after {transform: scale(1.06); filter: none; transition: none; background-position: 65% center; animation: jm-atmosphere-drift 90s ease-in-out infinite alternate;}
+@keyframes jm-atmosphere-drift {from {transform: scale(1.06) translate3d(-.4%, .2%, 0);} to {transform: scale(1.08) translate3d(.4%, -.2%, 0);}}
+.jm-topbar {position: sticky; top: 0; z-index: 30; background: rgba(16,25,31,.96); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);}
 .jm-topbar-inner {width: min(calc(100% - 2 * var(--jm-gutter)),var(--jm-max)); min-height: var(--jm-header-height); margin: auto; display: flex; align-items: center; gap: 1.65rem;}
 :is(.jm-redesign, .jm-standalone) .jm-brand {min-width: 0; display: flex; align-items: center; gap: .8rem; text-decoration: none; font-weight: 600; font-size: 1.08rem; letter-spacing: -.025em; line-height: 1.3;}
 .jm-brand-portrait {width: 52px; height: 52px; flex: 0 0 52px; object-fit: cover; object-position: center; border: 1px solid #b7d8de6b; border-radius: 50%; padding: 2px; background: #13232b;}
@@ -84,8 +85,7 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 .jm-sidebar a[aria-current='page'] {border-left-color: var(--jm-accent); color: var(--jm-accent); background: #abd9d611;}
 .jm-sidebar .jm-sidebar-divider {margin-top: 1.5rem;}
 :is(.jm-redesign, .jm-standalone) #main article {display: block; background: none; border: 0; border-radius: 0; width: 100%; max-width: none; padding: 0; margin: 0; position: relative; opacity: 1; transform: none; transition: none;}
-.jm-page-header {margin-bottom: 2.75rem; border-bottom: 1px solid var(--jm-line); padding: 0 0 clamp(2rem, 3vw, 3.5rem); grid-column: 1 / -1; position: relative;}
-.jm-page-header::after {content: ""; position: absolute; bottom: -1px; left: 0; width: 3rem; height: 2px; background: var(--jm-accent);}
+.jm-page-header {margin-bottom: 2.75rem; padding: 0 0 clamp(2rem, 3vw, 3.5rem); grid-column: 1 / -1; position: relative;}
 .jm-breadcrumb {display: flex; gap: .65rem; align-items: center; font-size: .72rem; color: var(--jm-muted); margin-bottom: 1.75rem;}
 .jm-breadcrumb a {text-decoration: none;}
 .jm-page-header .jm-eyebrow {margin-bottom: .9rem;}
@@ -102,6 +102,9 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 .jm-feature-text {grid-template-columns: 1fr;}
 :is(.jm-redesign, .jm-standalone) .jm-feature :is(h2,h3) {margin-top: 0;}
 .jm-feature p {font-size: .95rem; color: var(--jm-muted);}
+.jm-research-feature .jm-feature-copy {display: block; width: 100%;}
+.jm-research-feature .jm-research-prose {max-width: var(--jm-reading); margin-inline: auto; text-align: center;}
+.jm-research-feature .jm-text-link {display: block; max-width: var(--jm-reading); margin-inline: auto; text-align: center;}
 :is(.jm-redesign, .jm-standalone) .jm-feature-title-link {color: inherit; text-decoration: none;}
 :is(.jm-redesign, .jm-standalone) .jm-feature-title-link:hover {color: var(--jm-accent); text-decoration: underline;}
 .jm-visual-placeholder {aspect-ratio: 8/5; width: 100%; max-height: 260px; background: rgba(255,255,255,.015); border: 1px solid var(--jm-line-soft); border-radius: var(--jm-radius);}
@@ -117,6 +120,7 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 .jm-source-note {max-width: 79ch;}
 .jm-meta {margin-bottom: 0 !important;}
 .jm-entry {padding: 1.8rem 0; border-top: 1px solid var(--jm-line-soft);}
+:is(.jm-redesign, .jm-standalone) .jm-entry > p.jm-kicker {width: 100%; max-width: none;}
 :is(.jm-redesign, .jm-standalone) .jm-entry :is(h2,h3) {margin-top: 0;}
 .jm-entry p:last-child {margin-bottom: 0;}
 .jm-callout {padding: clamp(1.25rem, 2.3vw, 2.5rem); background: #1e303b88; border: 1px solid var(--jm-line); border-radius: var(--jm-radius); margin: 2rem 0;}
@@ -141,13 +145,15 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 .jm-legacy-intro h2 {margin-top: 0; font-size: 1.7rem;}
 .jm-legacy-content {max-width: none; min-width: 0;}
 .jm-legacy-content > p, .jm-legacy-content > ul, .jm-legacy-content > ol {max-width: var(--jm-reading);}
+.jm-home-about .jm-about-intro, .jm-centered-prose > p {max-width: var(--jm-reading); margin-inline: auto; text-align: center;}
 .jm-legacy-content .major {border: 0; padding: 0; width: auto;}
 .jm-legacy-content .image, .jm-legacy-content .image.main {margin: 1.75rem 0; width: 100%;}
 :is(.jm-redesign, .jm-standalone) .jm-legacy-content img {display: block; width: auto; height: auto; max-width: 100% !important; max-height: 850px; object-fit: contain; margin: 1.4rem auto .65rem; border: 1px solid var(--jm-line-soft) !important; border-radius: 3px;}
 :is(.jm-redesign, .jm-standalone) .jm-legacy-content img.jm-small-image {max-width: min(100%,460px) !important;}
-.jm-legacy-content figcaption {max-width: 85ch; font-size: .82rem; line-height: 1.65; color: var(--jm-muted); margin: .6rem 0 1.7rem; text-align: left;}
-.jm-legacy-content figcaption p {font-size: inherit !important; margin: 0;}
-:is(.jm-redesign, .jm-standalone) .jm-legacy-content figure {margin: 2.5rem 0; max-width: 1200px;}
+.jm-legacy-content figcaption {display: block; width: 100%; max-width: 100%; font-size: .82rem; line-height: 1.65; color: var(--jm-muted); margin: .6rem 0 0; text-align: left;}
+.jm-legacy-content figcaption p {width: 100%; max-width: none !important; font-size: inherit !important; margin: 0; text-align: left;}
+:is(.jm-redesign, .jm-standalone) .jm-legacy-content figure.jm-captioned-figure {width: min(100%, var(--jm-figure-width, 1200px)); max-width: 100%; margin: 2.5rem auto;}
+:is(.jm-redesign, .jm-standalone) .jm-legacy-content figure.jm-captioned-figure > img {display: block; width: 100%; max-width: 100% !important; max-height: none; height: auto; margin: 0;}
 :is(.jm-redesign, .jm-standalone) .jm-legacy-content .row {display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;}
 :is(.jm-redesign, .jm-standalone) .jm-legacy-content .row::after {display: none;}
 :is(.jm-redesign, .jm-standalone) .jm-legacy-content .column {float: none; width: auto; padding: 0; min-width: 0;}
@@ -167,7 +173,7 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 .jm-load-warning {padding: 1rem; border: 1px solid var(--jm-line); margin: 1rem 0; font-size: .85rem;}
 .jm-record-header, .jm-record-footer {max-width: 1080px; margin: 0 auto; padding: 2rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; font-size: .8rem;}
 .jm-record {max-width: 1080px; margin: auto; padding: 2rem;}
-.jm-record-intro {padding: 2rem 0 3rem; border-bottom: 1px solid var(--jm-line);}
+.jm-record-intro {padding: 2rem 0 3rem;}
 .jm-record-intro h1 {max-width: 16ch; margin-bottom: 2rem;}
 .jm-record-intro > p {max-width: 65ch;}
 .jm-record-nav {display: flex; flex-wrap: wrap; gap: .7rem 1.3rem; font-size: .85rem;}
@@ -243,6 +249,9 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
   .jm-callout {padding: 1.25rem;}
   :is(.jm-redesign, .jm-standalone) .jm-page-toc a {min-height: 44px; display: flex; align-items: center;}
   .jm-record, .jm-record-header, .jm-record-footer {padding: 1.25rem;}
+}
+@media (max-width: 760px) {
+  :is(.jm-redesign, .jm-standalone) #bg::after {animation: none; transform: scale(1.03);}
 }
 @media (prefers-reduced-motion: reduce) {
   :is(.jm-redesign, .jm-standalone) *, :is(.jm-redesign, .jm-standalone) *::before, :is(.jm-redesign, .jm-standalone) *::after {scroll-behavior: auto !important; transition: none !important; animation: none !important;}
