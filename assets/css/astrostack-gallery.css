@@ -1,0 +1,27 @@
+/* Product screenshots share the site's existing tokens and gallery grid. */
+.astro-eyebrow {color:var(--jm-accent,#a8d4d5);font-size:.75rem!important;letter-spacing:.12em;text-transform:uppercase;margin:0 0 .75rem!important;}
+.astro-showcase {margin:1.8rem 0 2.5rem;}
+.astro-shot {display:block;position:relative;overflow:hidden;border:0;border-radius:var(--jm-radius);background:var(--jm-bg);}
+.astro-shot img {display:block;width:100%!important;max-width:none!important;height:auto;margin:0!important;}
+.astro-hero {border:1px solid var(--jm-line-soft);box-shadow:0 8px 24px #0002;}
+.astro-enlarge {display:block;padding:.55rem .65rem;color:var(--jm-muted);background:var(--jm-surface);font-size:.7rem;line-height:1.4;}
+.astro-shot:hover .astro-enlarge {background:var(--jm-raised);color:var(--jm-ink);}
+.astro-shot:focus-visible,.astro-filters button:focus-visible,.astro-lightbox button:focus-visible {outline:2px solid var(--jm-accent);outline-offset:4px;}
+.astro-filters {display:flex;flex-wrap:wrap;gap:.5rem;margin:1.3rem 0 .5rem;}
+.astro-filters button {min-height:44px;height:auto;padding:.45rem .8rem;font:inherit;font-size:.75rem;letter-spacing:0;text-transform:none;white-space:normal;border:1px solid var(--jm-line-soft);border-radius:6px;background:transparent;color:var(--jm-muted);box-shadow:none;}
+.astro-filters button[aria-pressed="true"] {background:var(--jm-raised);color:var(--jm-accent);border-color:var(--jm-accent);}
+.astro-count {font-size:.78rem!important;color:var(--jm-muted);margin:.75rem 0!important;}
+#AstroStack .jm-gallery-item {display:flex;flex-direction:column;}
+#AstroStack .jm-gallery-item[hidden] {display:none;}
+#AstroStack .jm-gallery-item img {aspect-ratio:16/10;object-fit:contain;background:var(--jm-bg);}
+.astro-lightbox {box-sizing:border-box;width:min(96vw,1600px);max-width:96vw;max-height:94dvh;padding:1rem;border:1px solid var(--jm-line);border-radius:12px;background:var(--jm-surface);color:var(--jm-ink);box-shadow:0 24px 64px #0006;}
+.astro-lightbox::backdrop {background:#141315ed;}
+.astro-lightbox:not([open]) {display:none;}
+.astro-lightbox-header {display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:.75rem;}
+.astro-lightbox h2 {margin:0;font-family:var(--jm-font);font-size:1rem;letter-spacing:0;text-transform:none;}
+.astro-lightbox button {height:auto;min-height:44px;padding:.4rem .75rem;color:var(--jm-ink);border:1px solid var(--jm-line);background:var(--jm-raised);border-radius:6px;font-size:.8rem;letter-spacing:0;text-transform:none;box-shadow:none;}
+.astro-lightbox img {display:block;width:100%;height: min(68dvh,900px);object-fit:contain;background:var(--jm-bg);border-radius:6px;}
+.astro-lightbox-footer {display:flex;justify-content:space-between;align-items:center;gap:.7rem;margin-top:.8rem;}
+.astro-lightbox-footer span {font-size:.8rem;color:var(--jm-muted);}
+@media(max-width:600px){.astro-showcase{margin:1.3rem 0 1.8rem}.astro-lightbox{padding:.7rem}.astro-lightbox img{height:58dvh}.astro-lightbox h2{font-size:.85rem}}
+@media(prefers-reduced-motion:reduce){.astro-shot,.astro-filters button{transition:none}}

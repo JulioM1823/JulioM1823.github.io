@@ -10,12 +10,9 @@
   let scope = null;
   let revealObserver = null;
   let resizeObserver = null;
-  let progress = null;
-  let progressBar = null;
   let entries = [];
   let frame = 0;
   let measureNeeded = true;
-  let pageTop = 0;
   let pageBottom = 0;
   let topInset = 100;
 
@@ -33,7 +30,6 @@
     const bounds = scope.getBoundingClientRect();
     const masthead = document.querySelector('.jm-topbar-inner, .jm-record-header');
     topInset = (masthead?.getBoundingClientRect().height || 76) + 36;
-    pageTop = bounds.top + window.scrollY;
     pageBottom = bounds.bottom + window.scrollY;
     entries.forEach(entry => { entry.top = entry.heading.getBoundingClientRect().top + window.scrollY; });
     entries.sort((a, b) => a.top - b.top);
@@ -44,12 +40,6 @@
     frame = 0;
     if (!scope) return;
     if (measureNeeded) measure();
-    const range = pageBottom - pageTop - window.innerHeight + topInset;
-    const value = Math.max(0, Math.min(1, (window.scrollY - pageTop + topInset) / Math.max(1, range)));
-    if (progressBar) {
-      progress.hidden = range < 160;
-      progressBar.style.transform = `scaleX(${value.toFixed(4)})`;
-    }
     const marker = window.scrollY + topInset + 16;
     let current = entries[0]?.heading;
     for (const entry of entries) {
@@ -83,9 +73,9 @@
         if (revealed.has(target) || reducedMotion.matches) return;
         revealed.add(target);
         const animation = target.animate([
-          {opacity: .55, transform: 'translateY(6px)'},
+          {opacity: .85, transform: 'translateY(2px)'},
           {opacity: 1, transform: 'translateY(0)'}
-        ], {duration: 380, easing: 'cubic-bezier(.2,.65,.3,1)'});
+        ], {duration: 220, easing: 'ease-out'});
         animations.add(animation);
         animation.finished.then(() => animations.delete(animation), () => animations.delete(animation));
       });
@@ -103,12 +93,6 @@
     if (scope === page && resizeObserver) { schedule(true); return; }
     cleanup();
     scope = page;
-    if (!progress) {
-      progress = document.createElement('div'); progress.className = 'jm-reading-progress';
-      progress.setAttribute('aria-hidden', 'true');
-      progressBar = document.createElement('span'); progress.append(progressBar);
-      document.body.append(progress);
-    }
     const standalone = document.documentElement.classList.contains('jm-standalone');
     const links = standalone
       ? [...document.querySelectorAll('.jm-record-header nav a[href^="#"]')]

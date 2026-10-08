@@ -23,11 +23,11 @@
     Software: 'Software & Workflows', AstroStack: 'AstroStack',
     Materials: 'Materials', 'templates-title': 'Notion Templates',
     'software-apple-shortcuts': 'Apple Shortcuts', 'software-other-products': 'Other Products',
-    CV: 'CV / Professional Record', Contact: 'Contact'
+    CV: 'CV / Professional Record'
   };
   // One source of truth for the primary tabs, sidebar, and Menu columns.
   const navigation = [
-    {label: 'About Me', route: 'home', children: ['home', 'academicjourney', 'mylife', 'Contact']},
+    {label: 'About Me', route: 'home', children: ['home', 'academicjourney', 'mylife']},
     {label: 'Research', route: 'Research', children: ['Research', 'gravitywaves', 'PMS']},
     {label: 'Teaching & Mentorship', route: 'Teaching', children: ['Teaching', 'Materials']},
     {label: 'CV / Professional Record', route: 'CV', children: ['CV']},
@@ -64,13 +64,13 @@
     if (text !== undefined) element.textContent = text;
     return element;
   };
-  const makePlaceholderFigure = (className, ariaLabel, placeholderText, captionText) => {
+  const makePlaceholderFigure = (className, ariaLabel, placeholderText) => {
     const figure = make('figure', 'jm-placeholder-figure');
     const placeholder = make('div', className);
     placeholder.setAttribute('role', 'img');
     placeholder.setAttribute('aria-label', ariaLabel);
     placeholder.append(make('span', '', placeholderText));
-    figure.append(placeholder, make('figcaption', '', captionText));
+    figure.append(placeholder);
     return figure;
   };
   const fragment = html => {
@@ -117,7 +117,7 @@
       research: ['Research-current', 'Research'],
       teaching: ['Teaching-current', 'Teaching'],
       software: ['Software'],
-      experience: ['CV'], contact: ['Contact']
+      experience: ['CV']
     };
     Object.entries(routes).forEach(([id, [route, augment]]) => {
       const section = page.getElementById(id);
@@ -136,8 +136,7 @@
       const pair = make('div', 'jm-teaching-media');
       pair.setAttribute('aria-label', `Image placeholders for ${title.textContent.trim()}`);
       for (let index = 1; index <= 2; index += 1) {
-        const caption = `${title.textContent.trim()} image ${index} coming soon.`;
-        pair.append(makePlaceholderFigure('jm-media-placeholder', `Placeholder image ${index} for ${title.textContent.trim()}`, `Image ${index} coming soon`, caption));
+        pair.append(makePlaceholderFigure('jm-media-placeholder', `Placeholder image ${index} for ${title.textContent.trim()}`, `Image ${index} coming soon`));
       }
       title.after(pair);
     });
@@ -199,7 +198,6 @@
   function polishLegacy(wrapper) {
     wrapper.querySelectorAll('style, meta').forEach(node => node.remove());
     wrapper.querySelectorAll('center, head').forEach(node => node.replaceWith(...node.childNodes));
-    wrapper.querySelectorAll('p').forEach(node => { if (!node.textContent.trim() && !node.children.length) node.remove(); });
     wrapper.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(node => {
       // Personal prose and all links are retained; replace only its presentation.
       const replacement = make('h3');
@@ -271,6 +269,9 @@
         run = [];
       };
       [...wrapper.childNodes].forEach(node => {
+        if (node.nodeType === Node.ELEMENT_NODE && node.matches('p') && !node.textContent.trim() && !node.children.length) {
+          flush(); node.remove(); return;
+        }
         const inline = node.nodeType === Node.ELEMENT_NODE && /^(A|B|BR|EM|I|SPAN|STRONG|U)$/.test(node.tagName);
         if (inline || node.nodeType === Node.TEXT_NODE && node.textContent.trim()) run.push(node);
         else if (node.nodeType === Node.TEXT_NODE && run.length) run.push(node);
@@ -280,6 +281,7 @@
       if (wrapper.parentElement.id === 'PMS') wrapper.classList.add('jm-indented-prose');
       else wrapper.classList.add('jm-centered-prose');
     }
+    wrapper.querySelectorAll('p').forEach(node => { if (!node.textContent.trim() && !node.children.length) node.remove(); });
     wrapper.querySelectorAll('a[href="mailto:jmmorale@nmsu.edu"]').forEach(link => { link.href = 'mailto:jmmorales@nmsu.edu'; });
     const page = wrapper.parentElement.id;
     if (page === 'mylife' || page === 'academicjourney') {
@@ -304,6 +306,22 @@
       });
       wrapper.append(intro, sequence);
       if (!intro.textContent.trim()) intro.remove();
+      sequence.querySelectorAll('.jm-story-beat').forEach(section => {
+        const words = section.querySelector('.jm-story-copy').textContent.trim().split(/\s+/).length;
+        const paired = section.classList.contains('jm-story-beat-wide');
+        if (!paired) section.classList.add(words > 220 ? 'jm-story-beat-flow' : 'jm-story-beat-compact');
+        // Derive the width cap from the original aspect ratio. The caption and
+        // image share that width; portrait photos stay proportionate to the prose.
+        section.querySelectorAll('figure').forEach(figure => {
+          const image = figure.querySelector('img');
+          if (!image) return;
+          const width = Number(image.getAttribute('width')) || image.naturalWidth;
+          const height = Number(image.getAttribute('height')) || image.naturalHeight;
+          const heightLimit = paired ? 260 : words < 45 ? 220 : 300;
+          const widthLimit = paired ? 300 : 320;
+          figure.style.setProperty('--jm-figure-width', `${Math.min(width || widthLimit, widthLimit, width && height ? heightLimit * width / height : widthLimit)}px`);
+        });
+      });
     } else if (page === 'PMS') {
       // Keep the research text and figures in their original order, with
       // section rhythm supplied by a shared chapter component.
@@ -616,7 +634,9 @@
       }
       event.preventDefault(); saveScroll(true);
       if (url.href !== location.href) history.pushState({jmEntry: newEntry()}, '', url);
-      render({smooth: true});
+      // Pointer navigation should not focus the destination heading. Keyboard
+      // activation retains focus transfer for accessible reading/navigation.
+      render({smooth: true, focus: event.detail === 0});
     });
     const onHistory = () => {
       if (location.href === lastURL && history.state?.jmEntry === activeEntry) return;

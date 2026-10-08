@@ -13,7 +13,7 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="description" content="Julio M. Morales — astronomy Ph.D. candidate at New Mexico State University. Helioseismology, solar atmospheric waves, teaching, and scientific workflows." />
-        <meta name="theme-color" content="#11161b" />
+        <meta name="theme-color" content="#19191b" />
         <link rel="stylesheet" href="assets/css/main.css" />
         <link rel="stylesheet" href="assets/css/redesign.css" />
         <style>
@@ -26,7 +26,8 @@
 		<noscript>
 			<link rel="stylesheet" href="assets/css/noscript.css" />
 		</noscript>
-	</head>
+	<link rel="stylesheet" href="assets/css/astrostack-gallery.css">
+</head>
 
 	<body class="is-preload">
 
@@ -71,24 +72,24 @@
 										</div>
 										<figure class="jm-about-portrait">
 											<img decoding="async" alt="Julio outdoors on a summer day" width="768" height="1024" src="images/about_pic.jpeg" />
-											<figcaption>Me on a warm summer day!</figcaption>
+
 										</figure>
 									</div>
 									<div class="jm-about-paths" aria-label="Explore more about Julio">
-										<section class="jm-about-card">
+										<a class="jm-about-card" href="#academicjourney" aria-labelledby="jm-path-professional">
 											<figure>
 												<img decoding="async" loading="lazy" alt="Julio attending Cool Stars 21" width="1440" height="1085" src="images/coolstars.jpg" />
-												<figcaption>Me at Cool Stars 21.</figcaption>
+
 											</figure>
-											<h3><a href="#academicjourney">Professional Journey <span aria-hidden="true">→</span></a></h3>
-										</section>
-										<section class="jm-about-card">
+											<h3 id="jm-path-professional">Professional Journey <span aria-hidden="true">→</span></h3>
+										</a>
+										<a class="jm-about-card" href="#mylife" aria-labelledby="jm-path-personal">
 											<figure>
 												<img decoding="async" loading="lazy" alt="Alicea family reunion in Chicago, 2004" width="960" height="720" src="images/fam_reunion_big.jpg" />
-												<figcaption>Alicea family reunion in Chicago Illinois, 2004.</figcaption>
+
 										</figure>
-											<h3><a href="#mylife">Personal Life <span aria-hidden="true">→</span></a></h3>
-										</section>
+											<h3 id="jm-path-personal">Personal Life <span aria-hidden="true">→</span></h3>
+										</a>
 									</div>
 								</article>
 
@@ -103,10 +104,7 @@
 									   ;
 									   border: solid 1px #CCC" />
 
-										<figcaption>
-											<p style="font-size: 14px"> Alicea family reunion in Chicago Illinois, 2004.
-											</p>
-										</figcaption>
+
 
 										Like many people of Hispanic-descent, I grew up in a gigantic family, with 6
 										siblings, 15 aunts and uncles, and hundreds of first, second, and third cousins.
@@ -124,10 +122,7 @@
 											   ;
 											   border: solid 1px #CCC" />
 
-											<figcaption>
-												<p style="font-size: 14px"> My mom, aunts, and I at Evolution 2016 in
-													Las Vegas, Nevada. </p>
-											</figcaption>
+
 
 
 											At some time around the age of 12, I became interested in becoming a
@@ -145,9 +140,7 @@
 											   ;
 											   border: solid 1px #CCC" />
 
-												<figcaption>
-													<p style="font-size: 14px"> My bestfriends and I. </p>
-												</figcaption>
+
 
 
 												At UMass Amherst, I met these guys, who taught me about life-long
@@ -160,10 +153,7 @@
 											   ;
 											   border: solid 1px #CCC" />
 
-													<figcaption>
-														<p style="font-size: 14px"> My great-great-grandparents. Mama
-															Maria (left) and Papa Bartolo (right). </p>
-													</figcaption>
+
 
 													One of my maternal family names—Alicea, orginates from my
 													great-great-grandfather, Bartolo Alicea, shown in the image above.
@@ -219,10 +209,7 @@
 												<figure>
 													<img decoding="async" alt="Julio as a child with his siblings" width="689" height="689" src="/images/family.jpg" style="max-width:100%">
 
-														<figcaption>
-															<p style="font-size: 14px"> 6 year old me with my siblings
-															</p>
-														</figcaption>
+
 
 												</figure>
 											</div>
@@ -231,10 +218,7 @@
 													<img decoding="async" alt="Comparison of the sizes of various stars" width="718" height="718" src="/images/size_comparisons.png"
 														style="max-width:100%">
 
-														<figcaption>
-															<p style="font-size: 14px"> <strong>Figure 1: </strong> Size
-																comparisons of various stars </p>
-														</figcaption>
+
 
 												</figure>
 											</div>
@@ -261,10 +245,7 @@
 
 										   border: solid 1px #CCC" />
 
-											<figcaption>
-												<p style="font-size: 14px"> Me at the UMass Amherst campus tour after
-													being accepted</p>
-											</figcaption>
+
 
 										<p></p>
 
@@ -288,10 +269,7 @@
 
 								 border: solid 1px #CCC" />
 
-											<figcaption>
-												<p style="font-size: 14px"> Me at the UMass Amherst 2022 commencement
-													ceremony. </p>
-											</figcaption>
+
 
 										<p></p>
 
@@ -313,69 +291,6 @@
 									<article id="Research">
 										<h2 class="major">Research</h2>
 										<p>Current research projects are available in the <a href="professional.html#research">academic record</a>.</p>
-										<section class="jm-subsection" aria-labelledby="solar-video-title">
-											<h3 id="solar-video-title">Solar wave simulations</h3>
-											<p>Numerical visualizations of atmospheric gravity waves, wave conversion, and magnetic infall.</p>
-											<div class="jm-video-gallery">
-												<figure class="jm-embedded-media">
-													<video class="jm-video-player" controls preload="metadata" playsinline aria-label="Three-dimensional atmospheric gravity-wave particle motion" aria-describedby="video-caption-agw-particles">
-														<source src="images/3D_agw_particle_motion.mov" type="video/quicktime">
-														Your browser cannot play this video. <a href="images/3D_agw_particle_motion.mov">Download the video</a>.
-													</video>
-													<figcaption id="video-caption-agw-particles">Three-dimensional atmospheric gravity-wave particle motion. <a href="images/3D_agw_particle_motion.mov" download>Download video</a>.</figcaption>
-												</figure>
-												<figure class="jm-embedded-media">
-													<video class="jm-video-player" controls preload="metadata" playsinline poster="images/Magnetic_Infall_II_Shocks_to_Planets-poster.jpg" aria-label="Magnetic infall, from shocks to planets" aria-describedby="video-caption-magnetic-infall">
-														<source src="images/Magnetic_Infall_II_Shocks_to_Planets.mp4" type="video/mp4">
-														Your browser cannot play this video. <a href="images/Magnetic_Infall_II_Shocks_to_Planets.mp4">Download the video</a>.
-													</video>
-													<figcaption id="video-caption-magnetic-infall">Magnetic infall, from shocks to planets. <a href="images/Magnetic_Infall_II_Shocks_to_Planets.mp4" download>Download video</a>.</figcaption>
-												</figure>
-												<figure class="jm-embedded-media">
-													<video class="jm-video-player" controls preload="metadata" playsinline aria-label="Solar gravity-wave conversion" aria-describedby="video-caption-gravity-wave-conversion">
-														<source src="images/Solar_Gravity_Wave_Conversion.mp4" type="video/mp4">
-														Your browser cannot play this video. <a href="images/Solar_Gravity_Wave_Conversion.mp4">Download the video</a>.
-													</video>
-													<figcaption id="video-caption-gravity-wave-conversion">Solar gravity-wave conversion. <a href="images/Solar_Gravity_Wave_Conversion.mp4" download>Download video</a>.</figcaption>
-												</figure>
-												<figure class="jm-embedded-media">
-													<video class="jm-video-player" controls preload="metadata" playsinline aria-label="Alfvén wave propagation" aria-describedby="video-caption-alfven-propagation">
-														<source src="images/alfven_wave_propagation.mp4" type="video/mp4">
-														Your browser cannot play this video. <a href="images/alfven_wave_propagation.mp4">Download the video</a>.
-													</video>
-													<figcaption id="video-caption-alfven-propagation">Alfvén wave propagation. <a href="images/alfven_wave_propagation.mp4" download>Download video</a>.</figcaption>
-												</figure>
-												<figure class="jm-embedded-media">
-													<video class="jm-video-player" controls preload="metadata" playsinline aria-label="Solar gravity-to-Alfvén wave conversion, multiview" aria-describedby="video-caption-multiview">
-														<source src="images/solar_gravity_to_alfven_multiview.mp4" type="video/mp4">
-														Your browser cannot play this video. <a href="images/solar_gravity_to_alfven_multiview.mp4">Download the video</a>.
-													</video>
-													<figcaption id="video-caption-multiview">Solar gravity-to-Alfvén wave conversion, multiview. <a href="images/solar_gravity_to_alfven_multiview.mp4" download>Download video</a>.</figcaption>
-												</figure>
-												<figure class="jm-embedded-media">
-													<video class="jm-video-player" controls preload="metadata" playsinline poster="images/solar_gravity_to_alfven_refined-poster.jpg" aria-label="Refined solar gravity-to-Alfvén wave conversion" aria-describedby="video-caption-refined-conversion">
-														<source src="images/solar_gravity_to_alfven_refined.mp4" type="video/mp4">
-														Your browser cannot play this video. <a href="images/solar_gravity_to_alfven_refined.mp4">Download the video</a>.
-													</video>
-													<figcaption id="video-caption-refined-conversion">Refined solar gravity-to-Alfvén wave conversion. <a href="images/solar_gravity_to_alfven_refined.mp4" download>Download video</a>.</figcaption>
-												</figure>
-												<figure class="jm-embedded-media">
-													<video class="jm-video-player" controls preload="metadata" playsinline aria-label="Solar gravity waves viewed from the photosphere" aria-describedby="video-caption-photosphere">
-														<source src="images/solar_gravity_wave_photosphere_pov.mp4" type="video/mp4">
-														Your browser cannot play this video. <a href="images/solar_gravity_wave_photosphere_pov.mp4">Download the video</a>.
-													</video>
-													<figcaption id="video-caption-photosphere">Solar gravity waves viewed from the photosphere. <a href="images/solar_gravity_wave_photosphere_pov.mp4" download>Download video</a>.</figcaption>
-												</figure>
-											</div>
-										</section>
-									<section class="jm-subsection" aria-labelledby="transverse-wave-tool-title">
-										<h3 id="transverse-wave-tool-title">Interactive transverse-wave interference</h3>
-										<p>Explore how two transverse waves combine as you adjust their direction, frequency, amplitude, phase, and polarization.</p>
-										<figure class="jm-embedded-media">
-											<iframe class="jm-interactive-frame" src="images/3d_transverse_wave_interference.html" title="Interactive three-dimensional transverse-wave interference simulation" loading="lazy" sandbox="allow-scripts"></iframe>
-											<figcaption>Adjust the wave controls, drag the canvas to rotate the view, and scroll to zoom. <a href="images/3d_transverse_wave_interference.html" target="_blank" rel="noopener">Open the simulation in a new tab</a>.</figcaption>
-										</figure>
-									</section>
 									</article>
 
 
@@ -812,116 +727,61 @@
 									<h2 class="major">AstroStack</h2>
 									<p>I develop AstroStack, a research workflow platform for scientific project organization and automation. My computational work also includes applying language models to workflow automation, code generation and debugging, scientific visualization, documentation, and version-controlled development.</p>
 									<p><a class="jm-text-link" href="https://github.com/JulioM1823/AstroStack">AstroStack on GitHub →</a></p>
-									<section class="jm-gallery-section" aria-labelledby="jm-gallery-title">
-										<h3 id="jm-gallery-title">Feature gallery</h3>
-										<p class="jm-source-note">These 25 panels are placeholders for future AstroStack feature screenshots.</p>
-										<div class="jm-astro-gallery">
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 1"><span>Screenshot 01</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 01.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 2"><span>Screenshot 02</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 02.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 3"><span>Screenshot 03</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 03.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 4"><span>Screenshot 04</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 04.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 5"><span>Screenshot 05</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 05.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 6"><span>Screenshot 06</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 06.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 7"><span>Screenshot 07</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 07.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 8"><span>Screenshot 08</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 08.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 9"><span>Screenshot 09</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 09.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 10"><span>Screenshot 10</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 10.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 11"><span>Screenshot 11</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 11.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 12"><span>Screenshot 12</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 12.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 13"><span>Screenshot 13</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 13.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 14"><span>Screenshot 14</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 14.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 15"><span>Screenshot 15</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 15.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 16"><span>Screenshot 16</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 16.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 17"><span>Screenshot 17</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 17.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 18"><span>Screenshot 18</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 18.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 19"><span>Screenshot 19</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 19.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 20"><span>Screenshot 20</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 20.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 21"><span>Screenshot 21</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 21.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 22"><span>Screenshot 22</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 22.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 23"><span>Screenshot 23</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 23.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 24"><span>Screenshot 24</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 24.</figcaption>
-										</figure>
-										<figure class="jm-gallery-item">
-											<div class="jm-gallery-placeholder" role="img" aria-label="AstroStack feature screenshot placeholder 25"><span>Screenshot 25</span></div>
-											<figcaption>Future AstroStack feature screenshot, slot 25.</figcaption>
-										</figure>
-										</div>
-								</section>
-							</article>
+									<div class="astro-showcase"><p class="astro-eyebrow">AstroStack · Beta</p><a class="astro-shot astro-hero" href="images/astrostack/astrostack-09-katex-mathematics.png" data-astro-shot="9" aria-label="Enlarge mathematical notation screenshot"><img src="images/astrostack/astrostack-09-katex-mathematics.png" width="3024" height="1656" alt="AstroStack — mathematical notation: Phase-difference and coherence expressions rendered in a demonstration note." decoding="async"><span class="astro-enlarge" aria-hidden="true">Explore the workspace ↗</span></a></div>
+<section class="jm-gallery-section" aria-labelledby="jm-gallery-title"><h3 id="jm-gallery-title">Inside AstroStack</h3><p>Explore 25 views of the actual application. Select any image to inspect it at full resolution.</p><div class="astro-filters" role="group" aria-label="Filter AstroStack screenshots"><button type="button" data-astro-filter="all" aria-pressed="true">All features</button><button type="button" data-astro-filter="Reading" aria-pressed="false">Reading</button><button type="button" data-astro-filter="Annotations" aria-pressed="false">Annotations</button><button type="button" data-astro-filter="Customization" aria-pressed="false">Customization</button><button type="button" data-astro-filter="Research tools" aria-pressed="false">Research tools</button><button type="button" data-astro-filter="Connected library" aria-pressed="false">Connected library</button></div><p class="astro-count" aria-live="polite">25 screenshots</p><div class="jm-astro-gallery"><figure class="jm-gallery-item" data-astro-category="Connected library">
+<a class="astro-shot" href="images/astrostack/astrostack-01-library-overview.png" data-astro-shot="1" aria-label="Enlarge Research library"><img src="images/astrostack/astrostack-01-library-overview.webp" width="800" height="438" alt="AstroStack — research library: A populated solar-physics library alongside the selected paper and PDF preview." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Reading">
+<a class="astro-shot" href="images/astrostack/astrostack-02-pdf-reader.png" data-astro-shot="2" aria-label="Enlarge PDF reader"><img src="images/astrostack/astrostack-02-pdf-reader.webp" width="800" height="438" alt="AstroStack — pdf reader: A scientific PDF open beside its publication library." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Reading">
+<a class="astro-shot" href="images/astrostack/astrostack-03-immersive-reading.png" data-astro-shot="3" aria-label="Enlarge Immersive reading"><img src="images/astrostack/astrostack-03-immersive-reading.webp" width="800" height="438" alt="AstroStack — immersive reading: A solar-observation figure in the expanded reader with the library panel tucked away." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Reading">
+<a class="astro-shot" href="images/astrostack/astrostack-04-pdf-search.png" data-astro-shot="4" aria-label="Enlarge Search inside papers"><img src="images/astrostack/astrostack-04-pdf-search.webp" width="800" height="438" alt="AstroStack — search inside papers: The phrase “magnetic field” highlighted within a scientific paper." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Reading">
+<a class="astro-shot" href="images/astrostack/astrostack-05-publication-details.png" data-astro-shot="5" aria-label="Enlarge Publication details"><img src="images/astrostack/astrostack-05-publication-details.webp" width="800" height="438" alt="AstroStack — publication details: An expanded abstract, paper metadata, and extracted-figure inventory." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Annotations">
+<a class="astro-shot" href="images/astrostack/astrostack-06-annotation-workspace.png" data-astro-shot="6" aria-label="Enlarge Annotation workspace"><img src="images/astrostack/astrostack-06-annotation-workspace.webp" width="800" height="438" alt="AstroStack — annotation workspace: Highlighted source material beside saved demonstration reading notes." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Annotations">
+<a class="astro-shot" href="images/astrostack/astrostack-07-highlighting.png" data-astro-shot="7" aria-label="Enlarge Highlights and notes"><img src="images/astrostack/astrostack-07-highlighting.webp" width="800" height="438" alt="AstroStack — highlights and notes: The note composer and annotation color choices alongside a selected passage." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Annotations">
+<a class="astro-shot" href="images/astrostack/astrostack-08-rich-text-notes.png" data-astro-shot="8" aria-label="Enlarge Rich-text research notes"><img src="images/astrostack/astrostack-08-rich-text-notes.webp" width="800" height="438" alt="AstroStack — rich-text research notes: A formatted reading note with a heading and follow-up checklist." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Annotations">
+<a class="astro-shot" href="images/astrostack/astrostack-09-katex-mathematics.png" data-astro-shot="9" aria-label="Enlarge Mathematical notation"><img src="images/astrostack/astrostack-09-katex-mathematics.webp" width="800" height="438" alt="AstroStack — mathematical notation: Phase-difference and coherence expressions rendered in a demonstration note." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Reading">
+<a class="astro-shot" href="images/astrostack/astrostack-10-publication-tabs.png" data-astro-shot="10" aria-label="Enlarge Publication tabs"><img src="images/astrostack/astrostack-10-publication-tabs.webp" width="800" height="453" alt="AstroStack — publication tabs: Two publications kept open in the native tab bar." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Customization">
+<a class="astro-shot" href="images/astrostack/astrostack-11-font-customization.png" data-astro-shot="11" aria-label="Enlarge Font customization"><img src="images/astrostack/astrostack-11-font-customization.webp" width="800" height="667" alt="AstroStack — font customization: Controls for annotation and interface fonts." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Customization">
+<a class="astro-shot" href="images/astrostack/astrostack-12-theme-customization.png" data-astro-shot="12" aria-label="Enlarge Theme customization"><img src="images/astrostack/astrostack-12-theme-customization.webp" width="800" height="667" alt="AstroStack — theme customization: Appearance mode and accent-color controls." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Customization">
+<a class="astro-shot" href="images/astrostack/astrostack-13-glass-customization.png" data-astro-shot="13" aria-label="Enlarge Glass and transparency"><img src="images/astrostack/astrostack-13-glass-customization.webp" width="800" height="667" alt="AstroStack — glass and transparency: Glass tint and transparency controls for the research workspace." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Customization">
+<a class="astro-shot" href="images/astrostack/astrostack-14-dark-pdf.png" data-astro-shot="14" aria-label="Enlarge Dark PDF reading"><img src="images/astrostack/astrostack-14-dark-pdf.webp" width="800" height="438" alt="AstroStack — dark pdf reading: A dark PDF reading view beside light annotation cards." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Customization">
+<a class="astro-shot" href="images/astrostack/astrostack-15-annotation-palettes.png" data-astro-shot="15" aria-label="Enlarge Annotation palettes"><img src="images/astrostack/astrostack-15-annotation-palettes.webp" width="800" height="667" alt="AstroStack — annotation palettes: Named annotation palettes and their coordinated color swatches." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Research tools">
+<a class="astro-shot" href="images/astrostack/astrostack-16-ai-assisted-reading.png" data-astro-shot="16" aria-label="Enlarge AI reading controls"><img src="images/astrostack/astrostack-16-ai-assisted-reading.webp" width="800" height="667" alt="AstroStack — ai reading controls: AI provider, model, consent, and workflow-button configuration." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Research tools">
+<a class="astro-shot" href="images/astrostack/astrostack-17-figure-gallery.png" data-astro-shot="17" aria-label="Enlarge Extracted figure gallery"><img src="images/astrostack/astrostack-17-figure-gallery.webp" width="800" height="457" alt="AstroStack — extracted figure gallery: An extracted figure selected from its source paper’s figure inventory." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Research tools">
+<a class="astro-shot" href="images/astrostack/astrostack-18-figure-inspection.png" data-astro-shot="18" aria-label="Enlarge Figure inspection"><img src="images/astrostack/astrostack-18-figure-inspection.webp" width="800" height="457" alt="AstroStack — figure inspection: A phase-and-coherence figure enlarged alongside its extracted caption." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Research tools">
+<a class="astro-shot" href="images/astrostack/astrostack-19-plot-digitization.png" data-astro-shot="19" aria-label="Enlarge Plot digitization"><img src="images/astrostack/astrostack-19-plot-digitization.webp" width="800" height="444" alt="AstroStack — plot digitization: A logarithmic spectrum with a clearly labeled demonstration trace and sampled coordinates." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Research tools">
+<a class="astro-shot" href="images/astrostack/astrostack-20-data-export.png" data-astro-shot="20" aria-label="Enlarge Data export"><img src="images/astrostack/astrostack-20-data-export.webp" width="800" height="835" alt="AstroStack — data export: CSV columns, precision, uncertainty fields, and reproducibility options." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Research tools">
+<a class="astro-shot" href="images/astrostack/astrostack-21-citation-enrichment.png" data-astro-shot="21" aria-label="Enlarge Citation enrichment"><img src="images/astrostack/astrostack-21-citation-enrichment.webp" width="800" height="341" alt="AstroStack — citation enrichment: Automatic scholarly citation enrichment and its supported public providers." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Connected library">
+<a class="astro-shot" href="images/astrostack/astrostack-22-arxiv-discovery.png" data-astro-shot="22" aria-label="Enlarge arXiv discovery"><img src="images/astrostack/astrostack-22-arxiv-discovery.webp" width="800" height="453" alt="AstroStack — arxiv discovery: Public arXiv announcements and the selected scientific paper." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Connected library">
+<a class="astro-shot" href="images/astrostack/astrostack-23-email-ingestion.png" data-astro-shot="23" aria-label="Enlarge Email announcement lookback"><img src="images/astrostack/astrostack-23-email-ingestion.webp" width="800" height="453" alt="AstroStack — email announcement lookback: The lookback-window control for public arXiv email announcements." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Connected library">
+<a class="astro-shot" href="images/astrostack/astrostack-24-zotero-collections.png" data-astro-shot="24" aria-label="Enlarge Zotero collections"><img src="images/astrostack/astrostack-24-zotero-collections.webp" width="800" height="453" alt="AstroStack — zotero collections: The collection selector for a connected Zotero library." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure><figure class="jm-gallery-item" data-astro-category="Connected library">
+<a class="astro-shot" href="images/astrostack/astrostack-25-reading-progress.png" data-astro-shot="25" aria-label="Enlarge Reading-state tracking"><img src="images/astrostack/astrostack-25-reading-progress.webp" width="800" height="453" alt="AstroStack — reading-state tracking: Reading-state symbols alongside publications and open paper tabs." loading="lazy" decoding="async"><span class="astro-enlarge" aria-hidden="true">View full size ↗</span></a>
+</figure></div></section>
+</article>
 
 										<!-- About -->
-											<!-- Contact -->
 
 
 												<!-- Elements -->
@@ -1235,7 +1095,7 @@
 			</div>
 
 			<!-- BG -->
-				<div id="bg"></div>
+				<div id="bg" aria-hidden="true"></div>
 
 				<!-- Scripts -->
 					<script src="assets/js/jquery.min.js"></script>
@@ -1245,6 +1105,8 @@
 					<script src="assets/js/scroll-polish.js" defer></script>
 					<script src="assets/js/main.js"></script>
 
-	</body>
+	<script src="assets/js/astrostack-gallery.js" defer></script>
+<script src="assets/js/image-viewer.js" defer></script>
+</body>
 
 	</html>
