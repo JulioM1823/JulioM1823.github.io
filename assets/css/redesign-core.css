@@ -18,7 +18,6 @@
 /* Reserve a quiet first paint while the enhanced document is assembled. */
 html.jm-loading body {background: var(--jm-bg);}
 html.jm-loading #wrapper {visibility: hidden; min-height: 100svh;}
-html.jm-loading #bg::after {background-image: url('../../images/stsci-deep-field.webp');}
 
 html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-height) + 1.5rem); color-scheme: dark; font-size: clamp(17px, calc(15px + .15vw), 20px);}
 :is(.jm-redesign, .jm-standalone) *, :is(.jm-redesign, .jm-standalone) *::before, :is(.jm-redesign, .jm-standalone) *::after {box-sizing: border-box;}
@@ -47,12 +46,17 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 :is(.jm-redesign, .jm-standalone) h1[tabindex='-1']:focus {outline: none;}
 :is(.jm-redesign, .jm-standalone) #wrapper {display: block; width: min(calc(100% - 2 * var(--jm-gutter)), var(--jm-max)); max-width: none; min-height: 0; margin: 0 auto; padding: 0; position: relative; z-index: 2; align-items: initial; justify-content: initial;}
 :is(.jm-redesign, .jm-standalone) #wrapper::before {display: none;}
-/* User-supplied deep-field photograph, optimized locally. Static rendering
-   avoids animation costs; the dark mask preserves content readability. */
-:is(.jm-redesign, .jm-standalone) #bg {z-index: 0; pointer-events: none; position: fixed; inset: 0; width: 100%; height: 100lvh; transform: none; overflow: hidden; background: var(--jm-bg); contain: strict;}
-:is(.jm-redesign, .jm-standalone) #bg::before, :is(.jm-redesign, .jm-standalone) #bg::after {content: ''; position: absolute; display: block; width: auto; height: auto; inset: 0; transition: none; filter: none;}
-:is(.jm-redesign, .jm-standalone) #bg::before {z-index: 0; background: radial-gradient(ellipse at 92% 8%, #b88a6814, transparent 58%), radial-gradient(ellipse at 6% 88%, #6d7b860d, transparent 56%);}
-:is(.jm-redesign, .jm-standalone) #bg::after {z-index: 1; background: url('../../images/stsci-deep-field.webp') center / cover no-repeat; opacity: .26; mask-image: linear-gradient(90deg, #000b, #0007 32%, #0007 64%, #000b); -webkit-mask-image: linear-gradient(90deg, #000b, #0007 32%, #0007 64%, #000b); transform: none; animation: none;}
+/* Observational BBSO/Zhao et al. sunspot waves; the poster also covers
+   reduced motion, data saving, autoplay rejection, and unavailable media. */
+:is(.jm-loading, .jm-redesign, .jm-standalone) #bg {z-index: 0; pointer-events: none; position: fixed; inset: 0; width: 100%; height: 100lvh; transform: none; overflow: hidden; background: var(--jm-bg); contain: strict;}
+:is(.jm-loading, .jm-redesign, .jm-standalone) #bg::before, :is(.jm-loading, .jm-redesign, .jm-standalone) #bg::after {content: ''; position: absolute; display: block; width: auto; height: auto; inset: 0; transition: none; transform: none; animation: none;}
+:is(.jm-loading, .jm-redesign, .jm-standalone) #bg::before {z-index: 0; background: url('../../images/bbso-sunspot-waves-poster.webp') center / cover no-repeat; opacity: .24; filter: sepia(.15);}
+:is(.jm-loading, .jm-redesign, .jm-standalone) #bg::after {z-index: 2; opacity: 1; filter: none; background: linear-gradient(90deg, #19191b55, #19191b99 32%, #19191b99 68%, #19191b55), linear-gradient(0deg, #19191b66, transparent 55%, #19191b33); mask-image: none; -webkit-mask-image: none;}
+:is(.jm-redesign, .jm-standalone) #bg .jm-solar-background {position: absolute; inset: 0; z-index: 1; display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: 0; filter: sepia(.15); pointer-events: none;}
+:is(.jm-redesign, .jm-standalone) #bg[data-solar-ready='true']:not(.jm-solar-static) .jm-solar-background {opacity: .24;}
+:is(.jm-redesign, .jm-standalone) #bg[data-solar-ready='true']:not(.jm-solar-static)::before {opacity: 0;}
+.jm-background-credit {display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .25rem 1.25rem; margin-top: 1rem; color: var(--jm-faint); font-size: .75rem;}
+:is(.jm-redesign, .jm-standalone) .jm-background-toggle {min-height: 44px; height: auto; padding: .35rem .6rem; border: 0; font-size: inherit; line-height: 1.5; text-decoration: underline; text-decoration-color: var(--jm-line); text-underline-offset: .22em;}
 .jm-topbar {position: sticky; top: 0; z-index: 30; background: #1c1b1dfc; box-shadow: 0 1px 0 var(--jm-line-soft);}
 .jm-topbar-inner {width: min(calc(100% - 2 * var(--jm-gutter)),var(--jm-max)); min-height: var(--jm-header-height); margin: auto; display: flex; align-items: center; gap: 1.65rem;}
 :is(.jm-redesign, .jm-standalone) .jm-brand {min-width: 0; display: flex; align-items: center; gap: .8rem; text-decoration: none; font-weight: 600; font-size: 1.08rem; letter-spacing: -.025em; line-height: 1.3;}
@@ -358,9 +362,6 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
   .jm-teaching-media, .jm-materials-grid, .jm-shortcut-grid {grid-template-columns: minmax(0,1fr);}
   .jm-drawer-group p {min-height: 0; margin-bottom: .35rem;}
   .jm-drawer-column + .jm-drawer-column {border-top: 1px solid var(--jm-line-soft); padding-top: 1rem;}
-}
-@media (max-width: 760px) {
-  :is(.jm-redesign, .jm-standalone) #bg::after {background-image: url('../../images/stsci-deep-field-mobile.webp'); background-size: cover; background-position: center; opacity: .24;}
 }
 @media (max-width: 1300px) {
   .jm-astro-gallery {grid-template-columns: repeat(4,minmax(0,1fr));}
