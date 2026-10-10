@@ -1,0 +1,4 @@
+# Keep private local screenshots out of the GitHub Pages output.
+exclude:
+  - images/astrostack
+  - tests

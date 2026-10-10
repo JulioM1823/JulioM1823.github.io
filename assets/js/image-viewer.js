@@ -21,8 +21,14 @@
     dialog.showModal();
   }
   function enhance() {
+    // Source normalization owns figure/paragraph structure. Wait until it has
+    // finished before inserting interactive wrappers around those images.
+    if (document.documentElement.classList.contains('jm-loading') ||
+        (!document.documentElement.classList.contains('jm-standalone') &&
+         document.documentElement.dataset.jmReady !== 'true')) return;
     document.querySelectorAll('img').forEach(image => {
-      if (processed.has(image) || image.closest('#bg, dialog, [data-astro-shot]')) return;
+      // Navigation cards remain one native link across images, copy and padding.
+      if (processed.has(image) || image.closest('#bg, dialog, [data-astro-shot], .jm-about-card')) return;
       processed.add(image);
       if (!image.getAttribute('src')) return;
       let parentLink = image.closest('a');
@@ -32,17 +38,6 @@
         parentLink.replaceWith(brand); brand.append(image, parentLink);
         parentLink.classList.remove('jm-brand'); parentLink.classList.add('jm-brand-home');
         image.alt = 'Julio M. Morales profile portrait'; parentLink = null;
-      }
-      // Image controls and navigation links must not be nested interactively.
-      if (parentLink?.classList.contains('jm-about-card')) {
-        const card = document.createElement('div'); card.className = parentLink.className;
-        const destination = parentLink.getAttribute('href');
-        parentLink.replaceWith(card);
-        while (parentLink.firstChild) card.append(parentLink.firstChild);
-        const title = card.querySelector('h3');
-        const link = document.createElement('a'); link.href = destination; link.className = 'jm-card-destination';
-        while (title.firstChild) link.append(title.firstChild);
-        title.append(link); parentLink = null;
       }
       if (parentLink) {
         // Existing image links retain their useful fallback and accessible name.

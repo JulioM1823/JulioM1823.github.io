@@ -14,12 +14,15 @@
   const footer = document.getElementById('footer');
   if (!main || !header || !footer) return;
 
+  // Expanded reading headings are independent of compact navigation labels.
+  const researchTitles = {gravitywaves: 'Magneto-acoustic-gravity Waves', PMS: 'Pre-main-sequence Accretion'};
+
   const labels = {
     About: 'About Me', mylife: 'Personal Life',
     academicjourney: 'Professional Journey', Research: 'Research',
-    PMS: 'Accretion in young stars',
+    PMS: 'PMS Accretion',
     Teaching: 'Teaching & Mentorship',
-    elements: 'Original theme reference', gravitywaves: 'Atmospheric gravity waves',
+    elements: 'Original theme reference', gravitywaves: 'MAG Waves',
     Software: 'Software & Workflows', AstroStack: 'AstroStack',
     Materials: 'Materials', 'templates-title': 'Notion Templates',
     'software-apple-shortcuts': 'Apple Shortcuts', 'software-other-products': 'Other Products',
@@ -157,29 +160,6 @@
       if (status) status.textContent = 'Download from iCloud →';
       card.replaceWith(link);
     });
-    if (!page.getElementById('gravitywaves')) {
-      page.querySelector('main')?.append(fragment(`
-        <article id="gravitywaves" data-title="Atmospheric gravity waves" class="jm-record-section">
-          <p class="jm-eyebrow">Graduate research / Solar atmosphere</p>
-          <h2>Atmospheric gravity waves</h2>
-          <div class="jm-detail-media">
-            <figure class="jm-embedded-media">
-              <iframe class="jm-interactive-frame" src="images/3d_transverse_wave_interference.html" title="Interactive 3D transverse-wave interference simulation" loading="lazy" sandbox="allow-scripts"></iframe>
-              <figcaption>Interactive 3D transverse-wave interference simulation. Drag to rotate, scroll to zoom, and use the controls to change the waves.</figcaption>
-            </figure>
-            <figure class="jm-embedded-media">
-              <video class="jm-video-player" controls playsinline preload="metadata" poster="images/solar_gravity_to_alfven_refined-poster.jpg" aria-label="Solar gravity-wave to Alfvén-wave visualization">
-                <source src="images/solar_gravity_to_alfven_refined.mp4" type="video/mp4">
-                Your browser does not support embedded video. <a href="images/solar_gravity_to_alfven_refined.mp4">Open the video.</a>
-              </video>
-              <figcaption>Solar gravity-wave conversion to Alfvén waves.</figcaption>
-            </figure>
-          </div>
-          <p class="jm-lead">Computational diagnostics of waves in the lower solar atmosphere.</p>
-          <p>My Ph.D. research at New Mexico State University includes helioseismology and solar atmospheric gravity waves, with an emphasis on computational analysis of solar oscillation and atmospheric-wave diagnostics. Alongside that research, I develop reproducible workflows for analysis, visualization, documentation, and version control.</p>
-          <section class="jm-callout"><h3>Related publication</h3><p>Vesa, O., Morales, J. M., Jackiewicz, J., Vigeesh, G., &amp; Reardon, K. (2025). <em>Atmospheric Gravity Waves Modulated by the Magnetic Field Configuration.</em> <em>ApJ</em>, 992, 201.</p><a class="jm-text-link" href="https://doi.org/10.3847/1538-4357/ae0a55">Read the publication →</a></section>
-        </article>`));
-    }
     return page;
   }
 
@@ -199,6 +179,8 @@
     wrapper.querySelectorAll('style, meta').forEach(node => node.remove());
     wrapper.querySelectorAll('center, head').forEach(node => node.replaceWith(...node.childNodes));
     wrapper.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(node => {
+      // The About hero declares its own section/subsection hierarchy.
+      if (node.closest('.jm-about-hero-copy')) return;
       // Personal prose and all links are retained; replace only its presentation.
       const replacement = make('h3');
       [...node.attributes].forEach(attr => { if (!['style', 'align'].includes(attr.name)) replacement.setAttribute(attr.name, attr.value); });
@@ -223,6 +205,15 @@
       const figure = make('figure', 'jm-captioned-figure');
       image.before(figure); figure.append(image, caption);
     });
+    // Captions are optional. All narrative photographs need the same figure
+    // wrapper so responsive story layouts do not depend on caption presence.
+    if (['academicjourney', 'mylife'].includes(wrapper.parentElement.id)) {
+      wrapper.querySelectorAll('img').forEach(image => {
+        if (image.closest('figure')) return;
+        const figure = make('figure', 'jm-captioned-figure');
+        image.before(figure); figure.append(image);
+      });
+    }
     wrapper.querySelectorAll('figure').forEach(figure => {
       const image = figure.querySelector(':scope > img');
       if (!image) return;
@@ -288,6 +279,7 @@
       // Preserve every photograph and paragraph, but group each visual with
       // the prose it introduces. The same component adapts to both narratives.
       const sequence = make('div', 'jm-story-sequence');
+      sequence.classList.add('jm-story-alternating');
       const intro = make('div', 'jm-story-intro');
       let beat = null;
       let copy = null;
@@ -300,7 +292,7 @@
           const media = make('div', 'jm-story-media');
           copy = make('div', 'jm-story-copy');
           media.append(node); beat.append(media, copy); sequence.append(beat);
-          if (media.querySelectorAll('figure').length > 1) beat.classList.add('jm-story-beat-wide');
+          if (media.querySelectorAll('figure').length > 1) beat.classList.add('jm-story-beat-paired');
         } else if (beat) copy.append(node);
         else intro.append(node);
       });
@@ -308,7 +300,7 @@
       if (!intro.textContent.trim()) intro.remove();
       sequence.querySelectorAll('.jm-story-beat').forEach(section => {
         const words = section.querySelector('.jm-story-copy').textContent.trim().split(/\s+/).length;
-        const paired = section.classList.contains('jm-story-beat-wide');
+        const paired = section.classList.contains('jm-story-beat-paired');
         if (!paired) section.classList.add(words > 220 ? 'jm-story-beat-flow' : 'jm-story-beat-compact');
         // Derive the width cap from the original aspect ratio. The caption and
         // image share that width; portrait photos stay proportionate to the prose.
@@ -325,6 +317,10 @@
     } else if (page === 'PMS') {
       // Keep the research text and figures in their original order, with
       // section rhythm supplied by a shared chapter component.
+      // Bibliography is a peer of the scientific chapters, not a child of the
+      // final research subsection. Keep its source markup editable in index.html.
+      const publications = wrapper.querySelector(':scope > .jm-publications');
+      publications?.remove();
       const chapters = make('div', 'jm-research-chapters');
       const intro = make('div', 'jm-story-intro');
       let chapter = null;
@@ -341,6 +337,7 @@
       });
       if (intro.textContent.trim()) wrapper.append(intro);
       wrapper.append(chapters);
+      if (publications) wrapper.append(publications);
     }
   }
 
@@ -392,14 +389,14 @@
     const pms = main.querySelector('#PMS');
     if (pms) {
       const note = make('div', 'jm-current-content');
-      note.append(fragment('<p class="jm-lead">Accretion variability in transitional disk host-stars.</p><p class="jm-source-note">The detailed account below preserves my earlier 2021–2022 research and its figures. The May 2026 CV lists the associated Morales, Balmer &amp; Follette manuscript as in preparation. One original TW Hya passage says “three years,” while its figure caption compares 2014 and 2018; that interval remains unconfirmed.</p>'));
+      note.append(make('p', 'jm-lead', "Accretion variability in transitional disk host-stars - Julio M. Morales, Senior Thesis 2022"), make('p', 'jm-source-note', "Here you will find a fun animation and a written narrative to guide you through the work of my undergraduate thesis I completed at Amherst College with Professor Katherine B. Follete, 2022."));
       const videoFigure = make('figure', 'jm-embedded-media jm-accretion-video');
       const video = make('video', 'jm-video-player');
       video.controls = true;
       video.playsInline = true;
       video.preload = 'metadata';
       video.poster = 'images/Magnetic_Infall_II_Shocks_to_Planets-poster.jpg';
-      video.setAttribute('aria-label', 'Magnetic Infall II: Shocks to Planets');
+      video.setAttribute('aria-label', 'AI-generated animation of Julio M. Morales’s senior thesis research');
       const source = make('source');
       source.src = 'images/Magnetic_Infall_II_Shocks_to_Planets.mp4';
       source.type = 'video/mp4';
@@ -407,7 +404,7 @@
       const fallbackLink = make('a', '', 'Open the video');
       fallbackLink.href = source.src;
       video.append(fallbackLink);
-      videoFigure.append(video, make('figcaption', '', 'Magnetic Infall II: Shocks to Planets.'));
+      videoFigure.append(video, make('figcaption', '', "I am passionate about finding legitimate and educationally enriching use-cases for artificial intelligence.  One I've found is producing animated visualizations of astrophysical processes for illustrative purposes.  The above video is the result of such an experiment where I prompted an LLM to create an \"interstellar-like\" animation of the work in my thesis document.  All of the science in the output has been personally verified and the video credits all cited work."));
       note.append(videoFigure);
       pms.prepend(note);
     }
@@ -433,18 +430,19 @@
       pageHeader.append(breadcrumb);
       if (eyebrow) pageHeader.append(eyebrow);
       if (importedTitle) importedTitle.remove();
-      const title = make('h1', 'jm-page-title', labels[article.id] || article.dataset.title || article.id);
+      const title = make('h1', 'jm-page-title', researchTitles[article.id] || labels[article.id] || article.dataset.title || article.id);
+      if (researchTitles[article.id]) title.classList.add('jm-research-title');
       title.tabIndex = -1; title.id = `jm-title-${article.id}`;
       pageHeader.append(title); article.append(pageHeader, content);
       // These original h3s are page sections once the record h2 becomes the h1.
       content.querySelectorAll('h3,h4,h5,h6').forEach(heading => {
-        if (heading.closest('.jm-course-group, .jm-about-card')) return;
+        if (heading.closest('.jm-course-group, .jm-about-card, .jm-about-hero-copy')) return;
         const level = Math.max(2, Number(heading.tagName.slice(1)) - 1);
         const replacement = make(`h${level}`);
         [...heading.attributes].forEach(attr => replacement.setAttribute(attr.name, attr.value));
         replacement.append(...heading.childNodes); heading.replaceWith(replacement);
       });
-      const headings = [...content.querySelectorAll('h2')].filter(heading =>
+      const headings = [...content.querySelectorAll('h2, [data-toc]')].filter(heading =>
         heading.textContent.trim() && !heading.closest('details, .jm-timeline, .jm-record-list, .jm-course-group, .jm-about-card, #elements')
       );
       if (headings.length > 1) {
@@ -461,7 +459,7 @@
           }
           heading.tabIndex = -1;
           const item = make('li');
-          const headingLabel = heading.textContent.trim();
+          const headingLabel = heading.dataset.tocLabel || heading.textContent.trim();
           const aboutRoute = article.id === 'About' && headingLabel === 'Julio M. Morales' ? 'academicjourney' :
             article.id === 'About' && headingLabel === 'Personal Life' ? 'mylife' : null;
           const link = make('a', '', aboutRoute === 'academicjourney' ? 'Professional Journey' : headingLabel);
@@ -556,7 +554,7 @@
     document.addEventListener('focusin', event => { if (!drawer.hidden && !topbar.contains(event.target)) closeMenu(); });
 
     footer.replaceChildren();
-    footer.append(fragment('<div class="jm-footer-top"><span>Julio M. Morales · Astronomy</span><div class="jm-footer-links"><a href="mailto:jmmorales@nmsu.edu">Email</a><a href="https://github.com/JulioM1823">GitHub</a><a href="https://www.linkedin.com/in/julio-morales-6642a3236/">LinkedIn</a><a href="docs/Morales_CV.pdf" download>Download CV</a></div></div>'));
+    footer.append(fragment('<div class="jm-footer-top"><span>Julio M. Morales · Ph.D in Astronomy, New Mexico State University (expected 2027)</span><div class="jm-footer-links"><a href="mailto:jmmorales@nmsu.edu">Email</a><a href="https://github.com/JulioM1823">GitHub</a><a href="https://www.linkedin.com/in/julio-morales-6642a3236/">LinkedIn</a><a href="docs/Morales_CV.pdf" download>Download CV</a></div></div>'));
     const announce = make('p','jm-announce'); announce.setAttribute('role','status'); announce.setAttribute('aria-live','polite'); document.body.append(announce);
     const notFound = make('article'); notFound.id = 'jm-not-found'; notFound.hidden = true;
     notFound.append(fragment('<header class="jm-page-header"><h1 class="jm-page-title" tabindex="-1">Section not found</h1></header><p>This address does not match a section of the website. Use the navigation to explore, or <a href="#">return to the homepage</a>.</p>'));
@@ -566,12 +564,18 @@
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const readHash = () => { try { return decodeURIComponent(location.hash.slice(1)); } catch (_) { return location.hash.slice(1); } };
     const newEntry = () => `jm-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    let videoPage = null;
     document.addEventListener('jm:routechange', ({detail}) => {
+      // In-page section navigation should not interrupt deliberate playback.
+      if (detail.page === videoPage) return;
+      videoPage = detail.page;
       document.querySelectorAll('.jm-video-player').forEach(video => {
-        video.muted = true;
-        video.defaultMuted = true;
-        if (!detail.page.contains(video)) { video.pause(); return; }
-        video.play().catch(() => {});
+        video.autoplay = false;
+        video.removeAttribute('autoplay');
+        video.pause();
+        // Reload on entry to show the poster again, including return visits.
+        // Posters are extracted at 00:03; playback still starts at 00:00.
+        if (detail.page.contains(video)) video.load();
       });
     });
     const entryState = () => {
