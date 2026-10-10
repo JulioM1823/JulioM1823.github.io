@@ -37,7 +37,7 @@
     {label: 'Software & Workflows', route: 'Software', children: ['Software', 'AstroStack', 'templates-title', 'software-apple-shortcuts', 'software-other-products']}
   ];
   const historical = {
-    Teaching: ['Courses taught or tutored', 'A complete course list from my teaching and tutoring experience appears below.']
+    Teaching: ['Courses taught or tutored']
   };
   const smallImages = new Set(['about_pic.jpeg', 'evo.jpg', 'me_at_umass.jpg', 'grad_pic.jpg']);
   const personalImages = new Set(['fam_reunion_big.jpg', 'FRIENDS.jpg', 'papa_bartolo.jpg']);
@@ -377,7 +377,8 @@
           if (retainedHistory) {
             const intro = make('section', existing.id === 'Teaching' ? 'jm-content-section' : 'jm-legacy-intro');
             const [title, note] = retainedHistory;
-            intro.append(make('h2', '', title), make('p', 'jm-source-note', note));
+            intro.append(make('h2', '', title));
+            if (note) intro.append(make('p', 'jm-source-note', note));
             existing.prepend(content, intro);
           } else {
             existing.replaceChildren(content);
