@@ -435,3 +435,8 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 :is(.jm-redesign, .jm-standalone) .jm-legacy-content figure.jm-captioned-figure > .jm-image-open {width: 100%;}
 :is(.jm-redesign, .jm-standalone) .jm-legacy-content figure.jm-captioned-figure > .jm-image-open > img {display: block; width: 100%; max-width: 100% !important; max-height: none; height: auto; margin: 0;}
 :is(.jm-redesign, .jm-standalone) .jm-legacy-content figure.jm-about-portrait > .jm-image-open > img {width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: var(--jm-radius);}
+
+/* Shared, uncropped illustrations for software and workflow sections. */
+.jm-workflow-image {width: min(100%, 880px); margin: 1.25rem auto 1.75rem;}
+.jm-workflow-image img {display: block; width: 100%; height: auto; border-radius: var(--jm-radius);}
+.jm-workflow-image .jm-image-open {width: 100%;}
