@@ -300,8 +300,6 @@ html:is(.jm-redesign, .jm-standalone) {scroll-padding-top: calc(var(--jm-header-
 .jm-cv-entry-head .jm-cv-date {font-size: .83rem; color: var(--jm-accent); text-align: right; white-space: nowrap;}
 .jm-cv-place, .jm-cv-meta {font-size: .86rem; color: var(--jm-faint); margin: .3rem 0 0 !important;}
 .jm-cv-entry > ul {margin: 1rem 0 0; color: var(--jm-muted);}
-#cv-research-experience .jm-cv-entry > ul {list-style: none; padding-left: 0;}
-#cv-research-experience .jm-cv-entry > ul > li {padding-left: 0;}
 .jm-cv-publications {display: grid; gap: .8rem; padding-left: 1.6rem; margin: 1.25rem 0 0;}
 .jm-cv-publications li, .jm-cv-outreach li {padding-left: .35rem;}
 .jm-cv-lines {list-style: none; padding: 0 !important; margin: 1rem 0 0 !important;}
