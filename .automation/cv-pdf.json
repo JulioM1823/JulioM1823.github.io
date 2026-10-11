@@ -1,68 +1,12 @@
 {
-  "overfull_boxes": [
-    {
-      "context": "",
-      "kind": "h",
-      "points": 3.99998
-    },
-    {
-      "context": "",
-      "kind": "h",
-      "points": 3.99998
-    },
-    {
-      "context": "",
-      "kind": "h",
-      "points": 3.99998
-    },
-    {
-      "context": "",
-      "kind": "h",
-      "points": 3.99998
-    },
-    {
-      "context": "",
-      "kind": "h",
-      "points": 3.99998
-    },
-    {
-      "context": "",
-      "kind": "h",
-      "points": 3.99998
-    },
-    {
-      "context": "",
-      "kind": "h",
-      "points": 3.99998
-    },
-    {
-      "context": "",
-      "kind": "h",
-      "points": 3.99998
-    },
-    {
-      "context": "",
-      "kind": "h",
-      "points": 3.99998
-    },
-    {
-      "context": "",
-      "kind": "h",
-      "points": 3.99998
-    },
-    {
-      "context": "",
-      "kind": "h",
-      "points": 3.99998
-    }
-  ],
-  "pages": 4,
-  "pdf_blob_sha": "c85336603cb88dc1ba1fd9bdde482ed2a52726e7",
-  "pdf_sha256": "e8295a8b322a77211116c53cdd49ddd71ce96637154e0d582dc38604c018aa8c",
-  "processed_at": "2026-09-15T08:02:52.177927+00:00",
-  "source_branch": "master",
-  "source_commit": "78e2c86e8f496567a2917b00dcf81e8400d8e45f",
-  "source_fingerprint": "9178ffef52adea66ad9d69598fe8b0f12413254567c86f640a16c6c1280ffe8b",
+  "version": 1,
   "source_repo": "JulioM1823/Morales-CV",
-  "version": 1
+  "source_branch": "master",
+  "source_commit": "bd3935698664e485eff58e930efe74387c6b6afb",
+  "source_fingerprint": "77caa55342149f5909887aa417030d87c618c6d1df633e5082539bfb953e402a",
+  "pdf_sha256": "99f8cdcf9005b6152f3397c7468b2fc648a586415b9176a1e2d1be543e6dff9a",
+  "pdf_blob_sha": "0991e5867c3ecb1d1a36da152d89478e05a189af",
+  "pages": 4,
+  "processed_at": "2026-10-11T01:44:30.391136+00:00",
+  "overfull_boxes": []
 }
