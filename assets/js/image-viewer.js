@@ -39,6 +39,7 @@
         parentLink.classList.remove('jm-brand'); parentLink.classList.add('jm-brand-home');
         image.alt = 'Julio M. Morales profile portrait'; parentLink = null;
       }
+      if (parentLink?.getAttribute('href')?.startsWith('https://marketplace.visualstudio.com/')) return;
       if (parentLink) {
         // Existing image links retain their useful fallback and accessible name.
         parentLink.setAttribute('aria-label', `Open image: ${image.alt || 'Website image'}`);
