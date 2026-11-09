@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2025, macos-15-intel]
+        os: [windows-2025]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -25,6 +25,12 @@ jobs:
           root=next(pathlib.Path('app').iterdir())
           for p in root.iterdir(): p.rename(pathlib.Path('app')/p.name)
           root.rmdir()
+          import shutil
+          for p in pathlib.Path('patches').rglob('*'):
+            if p.is_file():
+              target=pathlib.Path('app')/p.relative_to('patches')
+              target.parent.mkdir(parents=True,exist_ok=True)
+              shutil.copy2(p,target)
       - name: Install build tools
         working-directory: app
         run: python -m pip install -r packaging/requirements-build.txt
