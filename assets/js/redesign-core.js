@@ -25,7 +25,7 @@
     elements: 'Original theme reference', gravitywaves: 'MAG Waves',
     Software: 'Software & Workflows', AstroStack: 'AstroStack',
     Materials: 'Materials', 'templates-title': 'Notion Templates',
-    'software-apple-shortcuts': 'Apple Shortcuts', 'software-other-products': 'Other Products',
+    'software-apple-shortcuts': 'Apple Shortcuts', 'software-other-products': 'Other Tools',
     CV: 'CV / Professional Record'
   };
   // One source of truth for the primary tabs, sidebar, and Menu columns.
