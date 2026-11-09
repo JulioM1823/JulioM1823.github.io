@@ -1,0 +1,84 @@
+name: NCS native platform validation
+on:
+  push:
+    branches: ['codex/ncs-platform-validation-*']
+permissions:
+  contents: read
+jobs:
+  validate:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2025, macos-15-intel]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+          architecture: x64
+      - name: Extract allowlisted application source
+        shell: python
+        run: |
+          import zipfile, pathlib
+          with zipfile.ZipFile('application-source.zip') as z: z.extractall('app')
+          root=next(pathlib.Path('app').iterdir())
+          for p in root.iterdir(): p.rename(pathlib.Path('app')/p.name)
+          root.rmdir()
+      - name: Install build tools
+        working-directory: app
+        run: python -m pip install -r packaging/requirements-build.txt
+      - name: Test native setup and sync logic
+        working-directory: app
+        env:
+          PYTHONPATH: src
+        run: python -m unittest discover -s tests -v
+      - name: Desktop acceptance through official adapters and controlled provider endpoints
+        working-directory: app
+        env:
+          PYTHONPATH: src
+        run: python scripts/desktop_acceptance.py --output acceptance.json
+      - name: Source native window
+        working-directory: app
+        env:
+          PYTHONPATH: src
+        run: python -m notion_calendar_sync.desktop --smoke-test
+      - name: Build native application
+        working-directory: app
+        run: python scripts/build-desktop.py native
+      - name: Build Windows portable bundle
+        if: runner.os == 'Windows'
+        working-directory: app
+        run: python scripts/build-desktop.py windows-portable
+      - name: Windows native credential, lock, installer and GUI checks
+        if: runner.os == 'Windows'
+        working-directory: app
+        shell: pwsh
+        run: |
+          Expand-Archive -Path dist/desktop/Notion-Calendar-Sync-0.2.1-Windows-x64.zip -DestinationPath portable
+          & './portable/Notion Calendar Sync/runtime/python.exe' -I scripts/windows_platform_check.py --bundle './portable/Notion Calendar Sync' --output windows-native.json
+          if ($LASTEXITCODE -ne 0) { throw 'Windows native checks failed' }
+          & './portable/Notion Calendar Sync/runtime/python.exe' -I scripts/desktop_acceptance.py --output windows-portable-acceptance.json
+          if ($LASTEXITCODE -ne 0) { throw 'Packaged desktop acceptance failed' }
+      - name: Frozen Intel Mac window
+        if: runner.os == 'macOS'
+        working-directory: app
+        run: '"dist/desktop/Notion Calendar Sync.app/Contents/MacOS/Notion Calendar Sync" --smoke-test'
+      - name: Native Intel credential and process checks
+        if: runner.os == 'macOS'
+        working-directory: app
+        env:
+          PYTHONPATH: src
+        run: python ../macos_platform_check.py --bundle 'dist/desktop/Notion Calendar Sync.app' --output macos-native.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ncs-validation-${{ matrix.os }}
+          path: |
+            app/*acceptance.json
+            app/windows-native.json
+            app/macos-native.json
+            app/dist/desktop/*.zip
+            app/dist/desktop/*.dmg
+            app/dist/desktop/*.sha256
+            app/dist/desktop/*.manifest.json
