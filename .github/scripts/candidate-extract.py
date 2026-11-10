@@ -4,7 +4,7 @@ from hashlib import sha256
 import argparse,json,platform,zipfile,shutil
 p=argparse.ArgumentParser();p.add_argument('--platform',choices=['windows','intel'],required=True);a=p.parse_args()
 root=Path('.github/validation');checks=[]
-for name,destination in [('Notion-Calendar-Sync-0.2.2-Source.zip','candidate')]+([('Notion-Calendar-Sync-0.2.2-Windows-x64.zip','portable')] if a.platform=='windows' else []):
+for name,destination in [('Notion-Calendar-Sync-0.2.3-Source.zip','candidate')]+([('Notion-Calendar-Sync-0.2.3-Windows-x64.zip','portable')] if a.platform=='windows' else []):
  f=root/name;actual=sha256(f.read_bytes()).hexdigest();expected=(root/(name+'.sha256')).read_text().split()[0];assert actual==expected
  with zipfile.ZipFile(f) as z:
   assert z.testzip() is None

@@ -23,7 +23,7 @@ jobs:
         run: python .github/scripts/candidate-extract.py --platform windows
       - name: Fresh Windows source installation following guide commands
         run: |
-          Set-Location candidate/notion-calendar-sync-0.2.2
+          Set-Location candidate/notion-calendar-sync-0.2.3
           py -3 --version
           py -3 -m venv .venv
           & ./.venv/Scripts/python.exe -m pip install '.[desktop]'
@@ -38,37 +38,45 @@ jobs:
           Remove-Item Env:PYTHONUTF8,Env:PYTHONIOENCODING
       - name: Full fixed source suite without UTF-8 workaround
         run: |
-          Set-Location candidate/notion-calendar-sync-0.2.2
+          Set-Location candidate/notion-calendar-sync-0.2.3
           & ./.venv/Scripts/python.exe -m unittest discover -s tests -v 2>&1 | Tee-Object -FilePath ../../reports/windows-suite.txt
           if ($LASTEXITCODE -ne 0) { throw 'Fixed source suite failed' }
       - name: Full setup and consistency through exact final portable runtime
         run: |
-          & './portable/Notion Calendar Sync/runtime/python.exe' -I candidate/notion-calendar-sync-0.2.2/scripts/desktop_acceptance.py --output reports/windows-portable-acceptance.json
+          & './portable/Notion Calendar Sync/runtime/python.exe' -I candidate/notion-calendar-sync-0.2.3/scripts/desktop_acceptance.py --output reports/windows-portable-acceptance.json
           if ($LASTEXITCODE -ne 0) { throw 'Fixed portable setup acceptance failed' }
+      - name: New normalization regressions against actual portable engine
+        run: |
+          & './portable/Notion Calendar Sync/runtime/python.exe' -I -m unittest discover -s candidate/notion-calendar-sync-0.2.3/tests -p test_provider_normalization.py -v 2>&1 | Tee-Object -FilePath reports/windows-portable-normalization-tests.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Portable normalization safety regressions failed' }
+      - name: Full setup and sync with actual native Credential Manager
+        run: |
+          & './portable/Notion Calendar Sync/runtime/python.exe' -I .github/scripts/native-vault-acceptance.py --source-script candidate/notion-calendar-sync-0.2.3/scripts/desktop_acceptance.py --output reports/windows-native-vault-acceptance.json
+          if ($LASTEXITCODE -ne 0) { throw 'Native credential vault setup acceptance failed' }
       - name: Native vault, packaged window and installer rollback
         run: |
-          & './portable/Notion Calendar Sync/runtime/python.exe' -I candidate/notion-calendar-sync-0.2.2/scripts/windows_platform_check.py --bundle './portable/Notion Calendar Sync' --output reports/windows-native.json
+          & './portable/Notion Calendar Sync/runtime/python.exe' -I candidate/notion-calendar-sync-0.2.3/scripts/windows_platform_check.py --bundle './portable/Notion Calendar Sync' --output reports/windows-native.json
           if ($LASTEXITCODE -ne 0) { throw 'Fixed native platform check failed' }
       - name: Test actual VBS and CMD setup launchers
         run: ./.github/scripts/check-public-launchers.ps1 -Bundle './portable/Notion Calendar Sync' -Output reports/windows-launchers.json
       - name: Build fixed Windows native executable
         run: |
-          Set-Location candidate/notion-calendar-sync-0.2.2
+          Set-Location candidate/notion-calendar-sync-0.2.3
           & ./.venv/Scripts/python.exe -m pip install -r packaging/requirements-build.txt
           if ($LASTEXITCODE -ne 0) { throw 'Build dependency install failed' }
           & ./.venv/Scripts/python.exe scripts/build-desktop.py native
           if ($LASTEXITCODE -ne 0) { throw 'Windows native build failed' }
       - name: Fixed frozen executable setup and crash recovery
-        run: ./candidate/notion-calendar-sync-0.2.2/scripts/check-frozen-windows.ps1 -Executable './candidate/notion-calendar-sync-0.2.2/dist/desktop/Notion Calendar Sync/Notion Calendar Sync.exe' -Output reports/windows-frozen.json
+        run: ./candidate/notion-calendar-sync-0.2.3/scripts/check-frozen-windows.ps1 -Executable './candidate/notion-calendar-sync-0.2.3/dist/desktop/Notion Calendar Sync/Notion Calendar Sync.exe' -Output reports/windows-frozen.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: guide-fixed-Windows-native-and-reports
           path: |
             reports/
-            candidate/notion-calendar-sync-0.2.2/dist/desktop/*.zip
-            candidate/notion-calendar-sync-0.2.2/dist/desktop/*.sha256
-            candidate/notion-calendar-sync-0.2.2/dist/desktop/*.manifest.json
+            candidate/notion-calendar-sync-0.2.3/dist/desktop/*.zip
+            candidate/notion-calendar-sync-0.2.3/dist/desktop/*.sha256
+            candidate/notion-calendar-sync-0.2.3/dist/desktop/*.manifest.json
           if-no-files-found: error
   intel:
     runs-on: macos-15-intel
@@ -85,7 +93,7 @@ jobs:
         run: python .github/scripts/candidate-extract.py --platform intel
       - name: Fresh source setup and full suite
         run: |
-          cd candidate/notion-calendar-sync-0.2.2
+          cd candidate/notion-calendar-sync-0.2.3
           python -m venv .venv
           .venv/bin/python -m pip install .
           cp examples/config.toml authorize.toml
@@ -93,25 +101,25 @@ jobs:
           .venv/bin/python -m unittest discover -s tests -v > ../../reports/intel-suite.txt 2>&1
       - name: Complete fixed setup and consistency acceptance
         run: |
-          cd candidate/notion-calendar-sync-0.2.2
+          cd candidate/notion-calendar-sync-0.2.3
           .venv/bin/python scripts/desktop_acceptance.py --output ../../reports/intel-acceptance.json
       - name: Build native Intel application with fixed UI and bundle version
         run: |
-          cd candidate/notion-calendar-sync-0.2.2
+          cd candidate/notion-calendar-sync-0.2.3
           .venv/bin/python -m pip install -r packaging/requirements-build.txt
           .venv/bin/python scripts/build-desktop.py native --mac-arch x86_64
       - name: Validate exact native Intel app metadata and native APIs
         run: |
-          cd candidate/notion-calendar-sync-0.2.2
+          cd candidate/notion-calendar-sync-0.2.3
           codesign --verify --deep --strict 'dist/desktop/Notion Calendar Sync.app'
-          hdiutil verify dist/desktop/Notion-Calendar-Sync-0.2.2-macOS-x86_64.dmg
+          hdiutil verify dist/desktop/Notion-Calendar-Sync-0.2.3-macOS-x86_64.dmg
           .venv/bin/python scripts/macos_platform_check.py --bundle 'dist/desktop/Notion Calendar Sync.app' --output ../../reports/intel-native.json
           .venv/bin/python - <<'PY'
           from pathlib import Path
           import plistlib,json
           p=Path('dist/desktop/Notion Calendar Sync.app/Contents/Info.plist')
           d=plistlib.loads(p.read_bytes())
-          assert d['CFBundleShortVersionString']=='0.2.2' and d['CFBundleVersion']=='0.2.2'
+          assert d['CFBundleShortVersionString']=='0.2.3' and d['CFBundleVersion']=='0.2.3'
           Path('../../reports/intel-bundle-version.json').write_text(json.dumps({'passed':True,'CFBundleShortVersionString':d['CFBundleShortVersionString'],'CFBundleVersion':d['CFBundleVersion']}))
           PY
       - uses: actions/upload-artifact@v4
@@ -120,7 +128,7 @@ jobs:
           name: guide-fixed-Intel-native-and-reports
           path: |
             reports/
-            candidate/notion-calendar-sync-0.2.2/dist/desktop/*.dmg
-            candidate/notion-calendar-sync-0.2.2/dist/desktop/*.sha256
-            candidate/notion-calendar-sync-0.2.2/dist/desktop/*.manifest.json
+            candidate/notion-calendar-sync-0.2.3/dist/desktop/*.dmg
+            candidate/notion-calendar-sync-0.2.3/dist/desktop/*.sha256
+            candidate/notion-calendar-sync-0.2.3/dist/desktop/*.manifest.json
           if-no-files-found: error
