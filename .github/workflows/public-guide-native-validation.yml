@@ -1,0 +1,91 @@
+name: Public setup guide native validation
+on:
+  push:
+    branches: ['codex/public-guide-native-validation-20261109']
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-2025
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+          architecture: x64
+      - name: Download published guide and release files and verify SHA-256
+        run: python .github/scripts/public-downloads.py --platform windows
+      - name: Follow published fresh Windows source authorization installation
+        run: |
+          Set-Location source/notion-calendar-sync-0.2.1
+          python -m venv .venv
+          & ./.venv/Scripts/python.exe -m pip install '.[desktop]'
+          if ($LASTEXITCODE -ne 0) { throw 'Documented installation failed' }
+          Copy-Item examples/config.toml authorize.toml
+          & ./.venv/Scripts/ncs.exe --config authorize.toml --help
+          if ($LASTEXITCODE -ne 0) { throw 'Documented CLI unavailable' }
+      - name: Complete source suite from public ZIP
+        run: |
+          Set-Location source/notion-calendar-sync-0.2.1
+          & ./.venv/Scripts/python.exe -m unittest discover -s tests -v 2>&1 | Tee-Object -FilePath ../../reports/windows-suite.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Public source tests failed' }
+      - name: Controlled full setup and consistency using actual shipped portable runtime
+        run: |
+          & './portable/Notion Calendar Sync/runtime/python.exe' -I source/notion-calendar-sync-0.2.1/scripts/desktop_acceptance.py --output reports/windows-portable-acceptance.json
+          if ($LASTEXITCODE -ne 0) { throw 'Public portable acceptance failed' }
+      - name: Native vault, startup serialization, packaged GUI and installer rollback
+        run: |
+          & './portable/Notion Calendar Sync/runtime/python.exe' -I source/notion-calendar-sync-0.2.1/scripts/windows_platform_check.py --bundle './portable/Notion Calendar Sync' --output reports/windows-native.json
+          if ($LASTEXITCODE -ne 0) { throw 'Native Windows platform check failed' }
+      - name: Follow both documented public double-click launchers
+        run: ./.github/scripts/check-public-launchers.ps1 -Bundle './portable/Notion Calendar Sync' -Output reports/windows-launchers.json
+      - name: Published frozen executable lifecycle and crash recovery
+        run: ./source/notion-calendar-sync-0.2.1/scripts/check-frozen-windows.ps1 -Executable './native/Notion Calendar Sync/Notion Calendar Sync.exe' -Output reports/windows-frozen.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: public-guide-Windows-results
+          path: reports/
+          if-no-files-found: error
+  intel:
+    runs-on: macos-15-intel
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+          architecture: x64
+      - name: Download published guide, source and Intel disk image
+        run: python .github/scripts/public-downloads.py --platform intel
+      - name: Fresh public source installation and suite
+        run: |
+          cd source/notion-calendar-sync-0.2.1
+          python -m venv .venv
+          .venv/bin/python -m pip install .
+          .venv/bin/python -m unittest discover -s tests -v > ../../reports/intel-suite.txt 2>&1
+      - name: Controlled complete setup and consistency from public source
+        run: |
+          cd source/notion-calendar-sync-0.2.1
+          .venv/bin/python scripts/desktop_acceptance.py --output ../../reports/intel-acceptance.json
+      - name: Mount public Intel app and perform native vault/window checks
+        run: |
+          mkdir -p mounted
+          hdiutil attach public-downloads/Notion-Calendar-Sync-0.2.1-macOS-x86_64.dmg -mountpoint "$PWD/mounted" -nobrowse -readonly
+          trap 'hdiutil detach "$PWD/mounted"' EXIT
+          "mounted/Notion Calendar Sync.app/Contents/MacOS/Notion Calendar Sync" --smoke-test
+          source/notion-calendar-sync-0.2.1/.venv/bin/python source/notion-calendar-sync-0.2.1/scripts/macos_platform_check.py --bundle 'mounted/Notion Calendar Sync.app' --output reports/intel-native.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: public-guide-Intel-Mac-results
+          path: reports/
+          if-no-files-found: error
