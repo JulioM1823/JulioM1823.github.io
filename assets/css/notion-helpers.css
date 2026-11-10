@@ -1,0 +1,90 @@
+/* Reading layout for optional Notion helper instructions. */
+.jm-standalone .jm-record.jm-helper-guide {
+  width: min(calc(100% - 2 * var(--jm-gutter)), 64rem);
+}
+.jm-helper-guide .jm-record-section {
+  padding-block: clamp(2rem, 5vw, 5rem);
+}
+.jm-helper-guide h1 {
+  max-width: 22ch;
+  margin-bottom: 1.5rem;
+}
+.jm-helper-guide :is(p, li) {
+  overflow-wrap: anywhere;
+}
+.jm-helper-guide .jm-helper-intro {
+  max-width: 75ch;
+  font-size: 1.08rem;
+}
+.jm-helper-guide section {
+  margin-top: 3rem;
+}
+.jm-helper-guide section h2 {
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+}
+.jm-helper-steps ol {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .25rem 2rem;
+}
+.jm-helper-guide code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: .88em;
+  overflow-wrap: anywhere;
+}
+.jm-helper-guide pre {
+  max-width: 100%;
+  overflow: auto;
+  padding: 1.25rem;
+  border: 1px solid var(--jm-line-soft);
+  border-radius: var(--jm-radius);
+  background: var(--jm-card);
+  line-height: 1.65;
+}
+.jm-helper-guide pre code {
+  white-space: pre;
+}
+.jm-helper-table {
+  max-width: 100%;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+}
+.jm-helper-table table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.jm-helper-table :is(th, td) {
+  padding: .8rem;
+  border-bottom: 1px solid var(--jm-line-soft);
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+.jm-helper-table th {
+  font-weight: 600;
+}
+.jm-helper-table thead {
+  background: var(--jm-card);
+}
+.jm-helper-download {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: .7rem 1rem;
+  border: 1px solid var(--jm-accent) !important;
+  border-radius: var(--jm-radius);
+  background: var(--jm-card);
+  text-decoration: none !important;
+}
+.jm-helper-guide .jm-callout p:last-child {
+  margin-bottom: 0;
+}
+@media (max-width: 600px) {
+  .jm-helper-steps ol {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .jm-helper-table :is(th, td) {
+    padding: .6rem .4rem;
+    font-size: .88rem;
+  }
+}

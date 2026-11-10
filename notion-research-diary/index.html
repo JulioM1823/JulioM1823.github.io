@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en" class="jm-standalone">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Set up optional GitHub commit bookkeeping for the Projects and Research databases in the PhD Notion system, with manual testing and duplicate protection.">
+  <meta name="theme-color" content="#19191b">
+  <title>GitHub to Notion Research Diary · Julio M. Morales</title>
+  <link rel="stylesheet" href="../assets/css/redesign.css">
+  <link rel="stylesheet" href="../assets/css/notion-helpers.css">
+</head>
+<body>
+  <a class="jm-skip" href="#notion-research-diary">Skip to setup instructions</a>
+  <header class="jm-record-header">
+    <a class="jm-brand" href="../" aria-label="Julio M. Morales home">Julio M. Morales</a>
+    <nav aria-label="Helper tool navigation">
+      <a href="../#Software">Software &amp; Workflows</a>
+      <a href="../#templates-title">Notion templates</a>
+    </nav>
+  </header>
+
+  <main id="notion-research-diary" class="jm-record jm-helper-guide">
+    <article class="jm-record-section">
+      <header>
+        <p class="jm-eyebrow"><a href="../#software-notion-helper-tools">Optional Notion Helper Tools</a></p>
+        <h1>GitHub to Notion Research Diary</h1>
+        <div class="jm-helper-intro">
+          <p>This optional automation is designed to work alongside the <strong>Projects</strong> and <strong>Research</strong> databases in the <strong>PhD Notion system</strong>. It is not required for the system to function. It provides an extra layer of bookkeeping and redundancy by recording GitHub commits as Research database items linked to their matching projects.</p>
+          <p>Each newly pushed commit creates a Research database item. Its <strong>name, or Notion page title, comes from the first line of the commit message</strong>. The item also includes the permanent commit link, matching project, assigned Notion user, and automatic creation date. Existing matching commit links are skipped to prevent duplicate entries.</p>
+        </div>
+        <p>The automation runs through GitHub Actions. You need permission to manage the GitHub repository and a Notion workspace owner account to create the connection.</p>
+        <p><a class="jm-helper-download" href="../assets/downloads/notion-research-diary-setup.zip" download>Download the automation files (.zip)</a></p>
+      </header>
+
+      <nav class="jm-helper-steps jm-callout" aria-label="Setup steps">
+        <p><strong>Setup instructions</strong></p>
+        <ol>
+          <li><a href="#prepare-databases">Prepare the databases</a></li>
+          <li><a href="#create-connection">Create a Notion connection</a></li>
+          <li><a href="#data-source-id">Copy the data source ID</a></li>
+          <li><a href="#entry-owner">Identify the entry owner</a></li>
+          <li><a href="#automation-files">Add the automation files</a></li>
+          <li><a href="#repository-secrets">Add repository secrets</a></li>
+          <li><a href="#commit-and-push">Commit and push</a></li>
+          <li><a href="#manual-test">Run a manual test</a></li>
+          <li><a href="#additional-repositories">Enable other repositories and branches</a></li>
+        </ol>
+      </nav>
+
+      <section aria-labelledby="prepare-databases">
+        <h2 id="prepare-databases">1. Prepare the Projects and Research databases.</h2>
+        <p>Use the existing databases in the PhD Notion system. If recreating the setup from scratch, create equivalent databases with the properties described below.</p>
+        <p>In <strong>Projects</strong>, create one entry for each project. Give each project the same name as its GitHub repository.</p>
+        <p>For example, repository <code>Morales_2025a</code> can match either <code>Morales_2025a</code> or <code>Morales 2025a</code>. The script tries the exact repository name first, then replaces underscores and hyphens with spaces. Matching project names must be unique.</p>
+        <p>In <strong>Research</strong>, confirm these properties exist:</p>
+        <div class="jm-helper-table" role="region" aria-label="Research database properties" tabindex="0">
+          <table>
+            <thead><tr><th scope="col">Property name</th><th scope="col">Notion property type</th><th scope="col">Purpose</th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><code>Entry Title</code></th><td>Title, the existing first column</td><td>Receives the first line of the commit message</td></tr>
+              <tr><th scope="row"><code>Commit Link</code></th><td>URL</td><td>Stores the permanent GitHub commit link</td></tr>
+              <tr><th scope="row"><code>Project</code></th><td>Relation</td><td>Connects the entry to the Projects database</td></tr>
+              <tr><th scope="row"><code>Person</code></th><td>Person/People</td><td>Assigns a real Notion user</td></tr>
+              <tr><th scope="row"><code>Date</code></th><td>Created time</td><td>Notion automatically records when the entry is created</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The title column can have another name; the script detects it automatically. The other property names must match exactly. <code>Owner</code> is also supported instead of <code>Person</code>.</p>
+        <p>The GitHub workflow is named <strong>Notion Research Diary</strong>, but its destination is your <strong>Research database</strong>.</p>
+      </section>
+
+      <section aria-labelledby="create-connection">
+        <h2 id="create-connection">2. Create a Notion connection and give it access.</h2>
+        <p>Open the <a href="https://app.notion.com/developers">Notion Developer portal</a>, find <strong>Internal connections</strong>, and create a connection in the workspace containing your databases. Give it a recognizable name, such as “GitHub Research Diary.”</p>
+        <p>In its <strong>Configuration</strong> tab, enable:</p>
+        <ul>
+          <li>Read content</li>
+          <li>Insert content</li>
+          <li>Read user information without email addresses</li>
+        </ul>
+        <p>Copy its API token and keep it private.</p>
+        <p>Open <strong>Content access → Edit access</strong>, select both the <strong>Research</strong> and <strong>Projects</strong> databases, and save. The connection needs access to both databases to create entries with a project relation. These steps follow <a href="https://developers.notion.com/guides/connections-and-tokens/internal-connections">Notion’s internal connection guide</a>.</p>
+      </section>
+
+      <section aria-labelledby="data-source-id">
+        <h2 id="data-source-id">3. Copy the Research database’s data source ID.</h2>
+        <p>Open the Research database’s settings, choose <strong>Manage data sources</strong>, and use <strong>Copy data source ID</strong> for the appropriate source.</p>
+        <p>Save this value for the GitHub setup below. It must be the <strong>data source ID</strong>, rather than a page, view, or database ID. <a href="https://developers.notion.com/guides/get-started/upgrade-guide-2025-09-03#step-1-add-a-discovery-step-to-fetch-and-store-the-data_source_id">Notion documents the distinction here.</a></p>
+      </section>
+
+      <section aria-labelledby="entry-owner">
+        <h2 id="entry-owner">4. Identify the person who will own the entries.</h2>
+        <p>The supplied script automatically looks for a person named <strong>Julio M. Morales</strong> or <strong>Julio Morales</strong>. For that configuration, the owner ID secret is optional.</p>
+        <p>To assign another person, or distinguish between people with the same name, obtain their native Notion user ID:</p>
+        <ul>
+          <li>Open Notion’s <a href="https://developers.notion.com/reference/get-users">List all users API page</a> and select <strong>Try it</strong>.</li>
+          <li>Authenticate with your connection token and use <code>2026-03-11</code> for <code>Notion-Version</code>.</li>
+          <li>Run the request. Find the result with the intended person’s name and <code>"type": "person"</code>.</li>
+          <li>Copy that result’s <code>id</code>. If more results are available, follow the pagination controls or use <code>next_cursor</code> as <code>start_cursor</code>.</li>
+        </ul>
+        <p>This ID will become <code>NOTION_OWNER_USER_ID</code>. It identifies the person account rather than the connection’s bot account.</p>
+      </section>
+
+      <section aria-labelledby="automation-files">
+        <h2 id="automation-files">5. Add the automation files to the repository.</h2>
+        <p><a href="../assets/downloads/notion-research-diary-setup.zip" download>Download the automation files</a>. The bundle contains the working implementation and passed all 32 local tests.</p>
+        <p>Extract its contents into the top-level folder of your repository, preserving these paths:</p>
+        <pre tabindex="0" aria-label="Automation file paths"><code>.github/workflows/notion-research-diary.yml
+.github/scripts/notion-research-diary.mjs
+.github/scripts/notion-research-diary.test.mjs
+Notes/notion_research_diary.md</code></pre>
+        <p>The <code>.github</code> folder may be hidden in your file manager.</p>
+        <p>The workflow already includes automatic pushes to every branch and the manual <code>workflow_dispatch</code> trigger. GitHub installs Node.js 24 and runs the tests before processing commits.</p>
+      </section>
+
+      <section aria-labelledby="repository-secrets">
+        <h2 id="repository-secrets">6. Add the GitHub repository secrets.</h2>
+        <p>In the GitHub repository, open <strong>Settings → Secrets and variables → Actions → New repository secret</strong>.</p>
+        <p>Add each value separately:</p>
+        <div class="jm-helper-table" role="region" aria-label="GitHub repository secrets" tabindex="0">
+          <table>
+            <thead><tr><th scope="col">Secret name</th><th scope="col">Value</th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><code>NOTION_TOKEN</code></th><td>The connection token from step 2</td></tr>
+              <tr><th scope="row"><code>NOTION_DATA_SOURCE_ID</code></th><td>The Research database’s data source ID from step 3</td></tr>
+              <tr><th scope="row"><code>NOTION_OWNER_USER_ID</code></th><td>The person’s ID from step 4; optional for Julio’s automatic name lookup</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Enter these through GitHub’s secret fields. Keep the token out of source files and commit messages. GitHub’s <a href="https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets">repository secret instructions</a> show this process.</p>
+      </section>
+
+      <section aria-labelledby="commit-and-push">
+        <h2 id="commit-and-push">7. Commit and push the files.</h2>
+        <p>Put the files on the repository’s default branch, usually <code>main</code> or <code>master</code>. From that branch in your local repository, run:</p>
+        <pre tabindex="0" aria-label="Git setup commands"><code>git add .github/workflows/notion-research-diary.yml \
+  .github/scripts/notion-research-diary.mjs \
+  .github/scripts/notion-research-diary.test.mjs \
+  Notes/notion_research_diary.md
+
+git commit -m "Add Notion Research Diary automation"
+git push</code></pre>
+        <p>This push can itself create a Research database entry for the setup commit.</p>
+        <p>The workflow must exist on the default branch for GitHub’s manual <strong>Run workflow</strong> button to appear. <a href="https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow">GitHub documents this requirement.</a></p>
+      </section>
+
+      <section aria-labelledby="manual-test">
+        <h2 id="manual-test">8. Run a manual test.</h2>
+        <p>Open <strong>GitHub → Actions → Notion Research Diary → Run workflow</strong>.</p>
+        <p>Choose a branch containing the automation files, then choose either:</p>
+        <ul>
+          <li>Leave <code>commit_sha</code> empty to process the latest commit of the selected branch.</li>
+          <li>Paste a full commit ID into <code>commit_sha</code> to process that specific commit.</li>
+        </ul>
+        <p>Start the run and inspect <strong>Record pushed or manually selected commits</strong>. A successful run logs either that it created the entry or skipped an existing entry.</p>
+        <p>In the Research database, check:</p>
+        <ul>
+          <li>The item’s title matches the first line of the commit message.</li>
+          <li><code>Commit Link</code> opens the exact GitHub commit.</li>
+          <li><code>Project</code> points to the matching project.</li>
+          <li><code>Person</code> or <code>Owner</code> contains the intended Notion user.</li>
+          <li><code>Date</code> contains the entry’s automatic creation timestamp.</li>
+        </ul>
+        <p>Run the same test again. It should skip the existing record because its <code>Commit Link</code> already matches. The setup push may already have recorded the commit, so a skipped result during the first manual test can be correct.</p>
+      </section>
+
+      <section aria-labelledby="additional-repositories">
+        <h2 id="additional-repositories">9. Enable additional repositories and branches.</h2>
+        <p>Repeat the GitHub file installation and secret configuration for every repository with a matching Notion project. The repositories can share the same connection token, Research database data source, and owner.</p>
+        <p>Existing branches also need the automation files merged or copied into them. New branches inherit the files when created from an installed branch.</p>
+        <p>A push containing three new commits creates up to three Research database entries. Repeated commits within the same repository are skipped. Creating a matching Notion project alone does not install the workflow in a new repository.</p>
+      </section>
+
+      <aside class="jm-callout" aria-label="Troubleshooting">
+        <p>If a run fails, its Actions logs identify the cause. Common causes are an incorrect token, missing database access, the wrong data source ID, incorrectly named properties, or a missing or ambiguous project match. After correcting the cause, rerunning the workflow safely skips entries already created.</p>
+      </aside>
+    </article>
+  </main>
+  <footer class="jm-record-footer">
+    <span>Julio M. Morales · Optional Notion Helper Tools</span>
+    <a href="../#templates-title">Back to Notion templates</a>
+  </footer>
+</body>
+</html>
