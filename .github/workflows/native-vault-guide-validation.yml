@@ -1,0 +1,31 @@
+name: Full Windows setup with native credential vault
+on:
+  push:
+    branches: ['codex/native-vault-guide-validation-20261109']
+permissions:
+  contents: read
+jobs:
+  windows-native-vault:
+    runs-on: windows-2025
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+          architecture: x64
+      - name: Verify and extract exact final portable and sanitized source
+        run: python .github/scripts/candidate-extract.py --platform windows
+      - name: Full 43-check setup and sync with real Credential Manager
+        shell: pwsh
+        run: |
+          & './portable/Notion Calendar Sync/runtime/python.exe' -I .github/scripts/native-vault-acceptance.py --source-script candidate/notion-calendar-sync-0.2.2/scripts/desktop_acceptance.py --output reports/windows-native-vault-acceptance.json
+          if ($LASTEXITCODE -ne 0) { throw 'Native vault full acceptance failed' }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: guide-Windows-native-vault-results
+          path: reports/
+          if-no-files-found: error
