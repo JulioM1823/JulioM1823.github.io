@@ -8,6 +8,8 @@ jobs:
   windows:
     runs-on: windows-2025
     timeout-minutes: 20
+    env:
+      PYTHONUTF8: '1'
     defaults:
       run:
         shell: pwsh
@@ -24,7 +26,8 @@ jobs:
       - name: Follow published fresh Windows source authorization installation
         run: |
           Set-Location source/notion-calendar-sync-0.2.1
-          python -m venv .venv
+          py -3 --version
+          py -3 -m venv .venv
           & ./.venv/Scripts/python.exe -m pip install '.[desktop]'
           if ($LASTEXITCODE -ne 0) { throw 'Documented installation failed' }
           Copy-Item examples/config.toml authorize.toml
