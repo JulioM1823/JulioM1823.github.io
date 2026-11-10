@@ -1,1 +1,392 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Notion Calendar Sync</title><style>body{font:17px/1.6 system-ui,sans-serif;max-width:760px;margin:48px auto;padding:0 24px;color:#202124}a{color:#174ea6}h1{line-height:1.2}</style><main><h1>Notion Calendar Sync</h1><p>A personal, self-hosted integration operated by Julio Morales that synchronizes selected Notion calendar database entries and Google Calendar events in both directions.</p><p>The Python service runs on the account owner's Raspberry Pi. It uses the official Notion and Google Calendar APIs, stores synchronization state in SQLite, and supports polling, conflict review, and optional authenticated change notifications. It is not a hosted service accepting public registrations.</p><p>Google authorization requests permission to view and edit calendar events and to read the calendar list. The service configuration selects which calendars participate; the OAuth grant itself can cover all calendars accessible to the account. Attendee invitations and RSVP management are excluded by default.</p><p><a href="privacy.html">Privacy and data handling</a></p><p>Operator contact: <a href="mailto:juliomorales1823@gmail.com">juliomorales1823@gmail.com</a></p><p><small>Updated October 30, 2026. Not affiliated with or endorsed by Google or Notion.</small></p></main></html>
+<!doctype html>
+<html lang="en" class="jm-standalone">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Connect the PhD Notion Calendar Database to Google Calendar with an optional, self-hosted two-way sync tool. Downloads, field mapping, desktop setup and Raspberry Pi instructions.">
+  <meta name="theme-color" content="#19191b">
+  <title>Notion-Google Calendar Sync · Julio M. Morales</title>
+  <link rel="canonical" href="https://juliom1823.github.io/notion-calendar-sync/">
+  <link rel="stylesheet" href="../assets/css/redesign.css">
+  <link rel="stylesheet" href="../assets/css/notion-helpers.css">
+  <link rel="stylesheet" href="../assets/css/notion-calendar-sync.css">
+</head>
+<body>
+  <a class="jm-skip" href="#notion-calendar-sync">Skip to setup instructions</a>
+  <header class="jm-record-header">
+    <a class="jm-brand" href="../" aria-label="Julio M. Morales home">Julio M. Morales</a>
+    <nav aria-label="Helper tool navigation">
+      <a href="../#Software">Software &amp; Workflows</a>
+      <a href="../#templates-title">Notion templates</a>
+    </nav>
+  </header>
+
+  <main id="notion-calendar-sync" class="jm-record jm-helper-guide jm-calendar-guide">
+    <article class="jm-record-section">
+      <header>
+        <p class="jm-eyebrow"><a href="../#software-notion-helper-tools">Optional Notion Helper Tools</a></p>
+        <h1>Notion-Google Calendar Sync</h1>
+        <div class="jm-helper-intro">
+          <p>This optional helper tool connects the <strong>Calendar Database in my PhD Notion system</strong> with <strong>Google Calendar</strong>. It works alongside the existing Calendar Database. <strong>The PhD Notion system works without this integration.</strong> Use it when you want an optional connection between the Notion calendar and Google Calendar.</p>
+          <p>Supported events can be created, edited, rescheduled and explicitly deleted from either service. The integration keeps their mapped fields in step, records their identities locally and holds conflicting edits for review. It does not synchronize every kind of Google event or every Notion property. Read the <a href="#behavior">supported behavior and limits</a> before enabling it.</p>
+        </div>
+        <p>This is free, open-source software under the <a href="downloads/LICENSE.txt">MIT license</a>, using the official Notion and Google Calendar APIs. An API is the supported way for an application to read and change an account's data. <strong>You must configure your own accounts, credentials, database access and any required hosting.</strong> There is no hosted registration service, paid automation requirement or bundled access to my accounts.</p>
+        <p>Choose the guided desktop application for macOS or Windows, or run the same synchronization engine continuously on your own Raspberry Pi. The selected host must be powered on, awake, connected to the internet and running the application. Desktop startup at login starts after you sign in. It cannot sync while a laptop is asleep.</p>
+        <p><a href="privacy.html">Privacy and data handling</a> · Operator contact: <a href="mailto:juliomorales1823@gmail.com">juliomorales1823@gmail.com</a></p>
+        <p><small>Guide and implementation reviewed November 9, 2026. Release 0.2.1. Not affiliated with or endorsed by Google or Notion.</small></p>
+      </header>
+
+      <nav class="jm-helper-steps jm-callout" aria-label="Setup steps">
+        <p><strong>Setup instructions</strong></p>
+        <ol>
+          <li><a href="#requirements">Choose a host and prepare accounts</a></li>
+          <li><a href="#database">Prepare the Calendar Database</a></li>
+          <li><a href="#notion-connection">Create and share a Notion connection</a></li>
+          <li><a href="#google-project">Configure Google Cloud and OAuth</a></li>
+          <li><a href="#downloads">Download and install</a></li>
+          <li><a href="#desktop-setup">Connect accounts and map desktop fields</a></li>
+          <li><a href="#initial-sync">Preview and start safely</a></li>
+          <li><a href="#pi-setup">Alternative: Raspberry Pi service</a></li>
+          <li><a href="#testing">Test your connection</a></li>
+          <li><a href="#behavior">Understand synchronization rules</a></li>
+          <li><a href="#maintenance">Operate, back up and upgrade</a></li>
+          <li><a href="#troubleshooting">Troubleshoot and check validation</a></li>
+        </ol>
+      </nav>
+
+      <section aria-labelledby="requirements">
+        <h2 id="requirements">1. Choose a host and prepare accounts.</h2>
+        <ul>
+          <li><strong>Notion:</strong> a workspace containing your Calendar Database, permission to edit its properties, and a workspace owner who can create an internal connection. On a managed workspace, its administrator may need to approve access.</li>
+          <li><strong>Google:</strong> a Google account with owner or writer access to the calendar, plus permission to create a Google Cloud project and OAuth client. Read-only and free/busy calendar access are insufficient.</li>
+          <li><strong>Desktop:</strong> a Mac with Intel or Apple Silicon, or Windows x64. The downloads include Python and the window toolkit; a separate Python installation is unnecessary. Windows 10/11 are the intended client targets; see <a href="#validation">the exact tested platforms</a>.</li>
+          <li><strong>Raspberry Pi alternative:</strong> Raspberry Pi OS or Debian Bookworm/Trixie, arm64 or armhf, with Python 3.11 or newer, administrator access, SSH (an encrypted remote connection) for installation and a browser on another computer for Google authorization. The installer checks the operating system and CPU architecture.</li>
+          <li><strong>Network:</strong> outbound HTTPS access to Notion and Google. Normal polling needs no public address, port forwarding, domain, tunnel or paid hosting. Paid Notion database automations are not used.</li>
+        </ul>
+        <p>Start with a dedicated test calendar and test Notion data source. Before connecting existing data, export or otherwise back up the participating provider data. Automatic application backups protect local synchronization state and settings; they are <strong>not a complete Notion or Google account backup</strong>.</p>
+        <p>Only one synchronizer may own a data-source/calendar pair. Stop an existing third-party sync, Pi service or other desktop worker for that pair before starting this one. Installing a desktop copy does not transfer another worker's saved links.</p>
+      </section>
+
+      <section aria-labelledby="database">
+        <h2 id="database">2. Prepare the Calendar Database.</h2>
+        <p>Use the existing Calendar Database in the PhD Notion system. A <strong>database</strong> is a container; a <strong>data source</strong> is the particular table of entries and properties inside it. One database can contain several data sources. A calendar view is a way of displaying those entries, not a separate set of API permissions.</p>
+        <p>The names below are examples, not fixed requirements. Map the actual properties in your copy. For example, your existing title might be <code>Task</code> and your notes might be <code>Note</code>. Each mapped field needs its own distinct, writable property.</p>
+        <div class="jm-helper-table" role="region" aria-label="Calendar Database schema and mapping" tabindex="0">
+          <table>
+            <caption>Field mapping reference. Scroll horizontally on a narrow screen.</caption>
+            <thead><tr><th scope="col">Field / server key</th><th scope="col">Example property and exact type</th><th scope="col">Use</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Title · <code>title</code></th><td><code>Name</code> · Title</td><td>Required. Use the existing title column.</td></tr>
+              <tr><th scope="row">Date range · <code>date</code></th><td><code>Date</code> · Date</td><td>Required. One property holds start, optional end and whether times are enabled.</td></tr>
+              <tr><th scope="row">Google event identity · <code>google_event_id</code></th><td><code>NCS Event ID</code> · Text, API <code>rich_text</code></td><td>Required. Service-owned stable event ID. Keep it intact after linking.</td></tr>
+              <tr><th scope="row">Notes · <code>description</code></th><td><code>Notes</code> · Text</td><td>Optional. Literal event description, not Notion page blocks.</td></tr>
+              <tr><th scope="row">Location · <code>location</code></th><td><code>Location</code> · Text</td><td>Optional.</td></tr>
+              <tr><th scope="row">Time zone · <code>timezone</code></th><td><code>NCS Time Zone</code> · Text</td><td>Optional, recommended for exact daylight-saving behavior. Holds an IANA zone such as <code>America/Denver</code>.</td></tr>
+              <tr><th scope="row">Google event link · <code>google_url</code></th><td><code>Calendar Link</code> · URL</td><td>Optional, service-owned clickable Google link. Google stores the Notion page identity in private metadata. A Notion source link is added when it does not replace another application's source; Google limits its visibility.</td></tr>
+              <tr><th scope="row">Recurrence · <code>recurrence</code></th><td><code>Recurrence</code> · Text</td><td>Optional. Required to synchronize supported repeating series. See <a href="#recurrence">recurrence rules</a>.</td></tr>
+              <tr><th scope="row">Participation · <code>sync_enabled</code></th><td><code>Sync enabled</code> · Checkbox</td><td>Optional. If mapped, only checked, dated Notion entries participate. Check intended existing entries yourself.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>No separate end-date, all-day checkbox or Notion-page-link column is required. Turn off time in the Date property for an all-day item. A timed entry with no end receives the configured duration, initially 60 minutes. Undated entries are skipped; clearing a linked date pauses that pair and retains its event.</p>
+        <p>Formula, Rollup, Relation, Status, People and other property types cannot stand in for the writable fields above. Page content, unmapped properties and existing third-party sync metadata remain outside the mapping. Text is called <code>rich_text</code> in the API, but this tool treats mapped text as literal text. Formatting inside a mapped title or Text value can be replaced when that field changes.</p>
+        <p>Optional category filtering uses an existing <strong>Select</strong> property and one exact option, for example <code>Type</code> = <code>Research</code>. Status and Multi-select are not supported category filters. Notion view filters do not limit this application's API scope. These types follow <a href="https://developers.notion.com/reference/page-property-values">Notion's property reference</a>.</p>
+      </section>
+
+      <section aria-labelledby="notion-connection">
+        <h2 id="notion-connection">3. Create a Notion connection and grant access.</h2>
+        <ol>
+          <li>As a workspace owner, open the <a href="https://app.notion.com/developers">Notion Developer portal</a>. Choose <strong>Build → Internal connections → Create</strong>, select the workspace and give the connection a recognizable name.</li>
+          <li>In <strong>Configuration</strong>, enable <strong>Read content</strong>, <strong>Insert content</strong> and <strong>Update content</strong>. These allow reading entries, creating counterparts, changing mapped properties and moving supported pages to Trash. Comments and user email access are unnecessary.</li>
+          <li>Copy the internal connection API token. This credential lets the application act as that connection. Keep it private. Desktop setup accepts it in a masked field and stores it in the operating system's credential store. The Pi uses the protected <code>NOTION_TOKEN</code> setting described below.</li>
+          <li>Open <strong>Content access → Edit access</strong>, select the Calendar Database and save. Alternatively, open the database's <strong>••• → Connections → Add connection</strong> and select the connection. Capability settings alone do not share the database. Sharing a parent can also expose descendants, so limit access to the intended data.</li>
+          <li>In the database settings, open <strong>Manage data sources</strong> and use <strong>Copy data source ID</strong> for the intended source. Save that ID. The desktop can also discover it from the database's name, ID or URL and show each source for selection.</li>
+        </ol>
+        <p>A database URL contains a database identifier; a <code>?v=…</code> part refers to a view and is not the data source ID. The server's <code>notion_data_source</code> must hold the source ID. For API-based discovery, <a href="https://developers.notion.com/reference/retrieve-a-database">retrieve the database</a> and select the appropriate entry in <code>data_sources</code>. This release sends <code>Notion-Version: 2026-03-11</code> automatically.</p>
+        <p>Official references: <a href="https://developers.notion.com/guides/connections-and-tokens/internal-connections">create an internal connection and share content</a>, <a href="https://developers.notion.com/reference/capabilities">capabilities</a>, and <a href="https://developers.notion.com/guides/get-started/upgrade-guide-2025-09-03">database and data source IDs</a>. An existing Notion MCP login is not a deployable token for this application.</p>
+      </section>
+
+      <section aria-labelledby="google-project">
+        <h2 id="google-project">4. Configure Google Cloud and OAuth.</h2>
+        <p><strong>OAuth</strong> is Google's browser-based permission flow. It gives this application a revocable grant without giving it your Google password. This build uses <strong>your own Desktop app OAuth client</strong>; it does not distribute the author's client credentials.</p>
+        <ol>
+          <li>Open <a href="https://console.cloud.google.com/">Google Cloud Console</a>, create or select a project, then open <strong>APIs &amp; Services → Library</strong>. Enable <strong>Google Calendar API</strong>. Enabling only the Calendar MCP server/API is not this setup.</li>
+          <li>Open <strong>Google Auth Platform</strong>. Complete Branding with an application name, support email and developer contact. Select an Audience. A personal Gmail account uses <strong>External</strong>; Internal is limited to eligible Google Workspace organizations.</li>
+          <li>While the external app is in <strong>Testing</strong>, add your Google account to its test users. Under Data Access, configure the two scopes below. A scope is a named permission requested by the app.</li>
+          <li>Under <strong>Clients → Create client</strong>, select <strong>Desktop app</strong>, name it and download the client JSON file, a structured configuration file. Do not use a Web application client or service-account key. Keep the JSON outside public repositories.</li>
+          <li>For ongoing unattended use, finish the applicable consent settings and change the external app to <strong>In production</strong>, then authorize again. Calendar refresh tokens issued in Testing normally expire after seven days. Production removes that particular testing expiration; revocation, inactivity, security changes and administrator policy can still require reconnection.</li>
+        </ol>
+        <pre tabindex="0" aria-label="Google OAuth scopes"><code>https://www.googleapis.com/auth/calendar.events
+https://www.googleapis.com/auth/calendar.calendarlist.readonly</code></pre>
+        <p>The first permission reads and edits events; the second lists calendars so you can choose one. The OAuth grant can cover calendars accessible to your account. The application limits actual synchronization to the configured calendar. There is no requested scope limited to just one existing calendar.</p>
+        <p><strong>Redirect address:</strong> the app automatically opens a local receiver at <code>http://127.0.0.1:PORT/oauth/callback</code>, choosing an unused port. This is a loopback address, meaning the same computer, not a publicly hosted page. A Desktop app client does not require a manually registered web redirect address. Leave Web application origins/redirect settings out of this setup. The browser and authorizing application must run on the same computer. The app uses random state and PKCE, a one-time proof that protects the authorization exchange.</p>
+        <p>Google's unverified-app warning can appear for a personal client. Personal-use verification exceptions may apply, but production status is not Google verification. Publicly distributing one OAuth client or using a managed account can require verification or administrator approval. Follow the policies for your account rather than treating the warning as a permission error to bypass.</p>
+        <p>Official references: <a href="https://developers.google.com/workspace/guides/enable-apis">enable APIs</a>, <a href="https://developers.google.com/workspace/guides/configure-oauth-consent">consent settings</a>, <a href="https://developers.google.com/workspace/guides/create-credentials#desktop-app">create Desktop app credentials</a>, <a href="https://developers.google.com/identity/protocols/oauth2/native-app">loopback authorization</a>, <a href="https://developers.google.com/identity/protocols/oauth2#expiration">refresh-token expiration</a>, and <a href="https://developers.google.com/identity/protocols/oauth2/production-readiness/brand-verification">verification requirements and exceptions</a>.</p>
+      </section>
+
+      <section aria-labelledby="downloads">
+        <h2 id="downloads">5. Download and install release 0.2.1.</h2>
+        <p>These permanent downloads are hosted on this website. They include no user credentials, private configuration or synchronization database. Keep the bundled third-party license notices with the application.</p>
+        <ul class="jm-resource-list">
+          <li><a href="downloads/Notion-Calendar-Sync-0.2.1-macOS-universal2.dmg" download>macOS: Intel and Apple Silicon <span>Universal disk image · 27.1 MB →</span></a></li>
+          <li><a href="downloads/Notion-Calendar-Sync-0.2.1-macOS-x86_64.dmg" download>macOS: Intel only <span>Disk image · 18.9 MB →</span></a></li>
+          <li><a href="downloads/Notion-Calendar-Sync-0.2.1-Windows-x64.zip" download>Windows x64: portable app and optional installer <span>ZIP with private Python runtime · 30.9 MB →</span></a></li>
+          <li><a href="downloads/Notion-Calendar-Sync-0.2.1-Windows-native-x64.zip" download>Windows x64: native executable alternative <span>Complete app folder · 15.9 MB →</span></a></li>
+          <li><a href="downloads/Notion-Calendar-Sync-0.2.1-Source.zip" download>Source code, tests and Raspberry Pi deployment files <span>MIT source ZIP · 236 KB →</span></a></li>
+        </ul>
+        <p>Also available: <a href="downloads/SHA256SUMS.txt">SHA-256 checksums</a>, <a href="downloads/config.toml" download>example server configuration</a>, <a href="downloads/secrets.env.example" download>secret-file template</a>, <a href="downloads/server-setup.md" download>downloadable server setup notes</a>, and <a href="downloads/validation-0.2.1.md">release validation report</a>. SHA-256 detects a changed or damaged download; it is not a trusted code-signing identity.</p>
+        <h3>macOS</h3>
+        <p>Open the disk image, drag <strong>Notion Calendar Sync.app</strong> to Applications, then open it. These builds are not Developer ID signed or notarized. macOS may require Finder's Open action or approval in <strong>System Settings → Privacy &amp; Security</strong>. Approve only a download you trust; do not disable system-wide protections. The universal image contains both CPU architectures.</p>
+        <h3>Windows</h3>
+        <p>Extract the entire portable ZIP to a local folder before opening <strong>Start Notion Calendar Sync.vbs</strong>. Do not run it from inside the ZIP. The included runtime needs no administrator privileges, separate Python or PATH changes. <strong>Install.vbs</strong> optionally copies it to your user's Programs directory and creates shortcuts. If Windows Script Host is disabled, use <strong>Start Notion Calendar Sync.cmd</strong>; it briefly opens a console while launching the window.</p>
+        <p>The native alternative contains <strong>Notion Calendar Sync.exe</strong>. Extract and retain its entire app folder before running it. These Windows builds are unsigned, so download protection or organization policy may block them. Native Windows ARM builds are not supplied.</p>
+        <h3>Source</h3>
+        <p>Extract the source ZIP to obtain <code>notion-calendar-sync-0.2.1/</code>. It includes the engine, desktop UI, tests, build instructions, <code>scripts/install-pi.sh</code> and <code>deploy/</code>. Personal deployment reports are intentionally omitted. Use the server instructions below rather than an account-specific configuration from another installation.</p>
+      </section>
+
+      <section aria-labelledby="desktop-setup">
+        <h2 id="desktop-setup">6. Connect accounts, select data and map desktop fields.</h2>
+        <ol>
+          <li>Open the desktop app. Paste the Notion internal token into its masked field and connect. Select your downloaded Google Desktop client JSON, choose <strong>Authorize Google</strong>, and complete consent in the browser. Return to the app when authorization finishes. The imported client, Notion token and Google access/refresh tokens are held in macOS Keychain or Windows Credential Manager.</li>
+          <li>Search by the shared Notion database's name, or paste its database/data source ID or URL. Choose <strong>Find</strong>, then <strong>Use selected database / entered ID</strong>. When names repeat, compare the displayed identifiers. If the database has several sources, select the specific source with the Calendar Database's properties.</li>
+          <li>Choose a writable Google calendar from the retrieved list. For the first test, choose your dedicated test calendar. To find a stable calendar ID manually, use <strong>Google Calendar → Settings and sharing → Integrate calendar → Calendar ID</strong>. An event's ID is a different identifier.</li>
+          <li>Review each suggested field mapping. The dropdowns contain compatible properties from your actual schema. Required mappings are Title, Date range and Google event identity. Leave unwanted optional fields unselected. Separate start, end and all-day columns are not mapped.</li>
+          <li>If needed, choose <strong>Create missing integration properties…</strong> and review the explicit confirmation. This action can add <code>NCS Event ID</code>, <code>NCS Time Zone</code> and <code>Recurrence</code> as Text, and <code>Calendar Link</code> as URL. It does not create the title, Date, Notes, Location or participation Checkbox for you. A same-name property with the wrong type must be corrected in Notion or replaced in your mapping.</li>
+          <li>Optionally select a category Select property and its exact option. Optionally map a participation Checkbox. These filters limit Notion entries, not Google's authorization. Newly imported Google events receive the chosen category and participation value.</li>
+          <li>Set the <strong>Default IANA time zone</strong>, missing-end duration, <strong>Poll interval</strong> and <strong>Full check interval</strong>. An IANA zone is a regional identifier such as <code>Europe/London</code>, which includes daylight-saving rules; an abbreviation such as EST is not an equivalent choice. Initial values are <code>America/Denver</code>, 60 minutes, 45 seconds and 900 seconds.</li>
+        </ol>
+        <p>The desktop uses its UI settings, not environment variables or the Pi's TOML configuration file. TOML is a text format organized into named sections and settings, as shown below. The desktop supports one active data-source/calendar pair. Multiple mappings and additional conflict policies are available in the server configuration.</p>
+      </section>
+
+      <section aria-labelledby="initial-sync">
+        <h2 id="initial-sync">7. Preview and start safely.</h2>
+        <ol>
+          <li>Choose <strong>Preview synchronization →</strong>. This reads current provider data without changing it. Review proposed creates, updates, stable-ID links, conflicts and unsupported or paused items.</li>
+          <li>If both services already contain copies of the same items, check their stable links before approving any creates. Matching titles or dates do not prove identity. A saved pair, an exact Google event identity marker or the tool's private Google page marker can establish a link. A displayed event URL alone does not automatically establish one.</li>
+          <li>For a new, empty test setup, confirm the preview contains only the intended test data. For historical data lacking preserved stable IDs, keep the app paused. This version has no historical-linking UI; use the <a href="#existing-links">explicit CLI linking procedure</a> in a single server-owned setup before applying an initial import. Do not expect reconnecting the desktop to inherit another installation's SQLite links.</li>
+          <li>Choose <strong>Approve this preview &amp; start</strong>, then confirm. The app backs up local state/settings and rechecks current data. Changed or expired previews require a new review. Ordinary polling then runs continuously.</li>
+        </ol>
+        <p>Pause, Resume, Reconnect accounts and Edit mapping are available on the dashboard. Changing a mapping requires a new preview. A scope change cannot silently reuse unrelated identities. Never delete the local state to clear an error or to force a fresh import.</p>
+      </section>
+
+      <section aria-labelledby="pi-setup">
+        <h2 id="pi-setup">8. Alternative: run the Raspberry Pi service.</h2>
+        <p>Use this route instead of the desktop worker for the same pair. <strong>systemd</strong>, the Linux service manager, starts the worker at boot and restarts failures. <strong>SQLite</strong> is a local database that retains identities, pending operations, conflicts and deletion records across restarts.</p>
+        <h3>Install the source on the Pi</h3>
+        <p>Download and extract the source ZIP on the Pi, or copy the extracted folder there over SSH. From its root directory, run:</p>
+        <pre tabindex="0" aria-label="Install the Raspberry Pi service"><code>cd notion-calendar-sync-0.2.1
+cat /etc/os-release
+dpkg --print-architecture
+python3 --version
+sudo sh scripts/install-pi.sh
+sudoedit /etc/ncs/config.toml
+sudoedit /etc/ncs/secrets.env</code></pre>
+        <p>The installer accepts Bookworm/Trixie and arm64/armhf. It installs the distribution's Python/venv tools, time-zone data, CA certificates and SQLite, creates a dedicated <code>ncs</code> service account, installs code in <code>/opt/ncs/app</code> and a virtual environment in <code>/opt/ncs/venv</code>. It leaves synchronization disabled and preserves existing configuration on upgrades. The engine has no third-party Python runtime dependencies.</p>
+        <h3>Set the exact configuration</h3>
+        <p>Replace the placeholders and example property names below. All keys are implemented by this release. Paths here are the installer's Pi paths. In other installations, relative paths resolve against the TOML file's directory. Omit optional property keys when unused; TOML has no null value.</p>
+        <pre tabindex="0" aria-label="Raspberry Pi TOML configuration"><code>[service]
+state_path = "/var/lib/ncs/sync.sqlite3"
+google_token_path = "/var/lib/ncs/google-token.json"
+google_client_path = "/etc/ncs/google-client.json"
+notion_token_env = "NOTION_TOKEN"
+log_level = "INFO"
+public_url = ""
+
+[[mappings]]
+name = "calendar"
+notion_data_source = "YOUR_DATA_SOURCE_UUID"
+google_calendar = "YOUR_CALENDAR_ID"
+timezone = "America/Denver"
+poll_seconds = 45
+reconcile_seconds = 900
+notion_incremental = false
+default_duration_minutes = 60
+conflict_policy = "manual"
+allow_attendees = false
+# Optional category filter; both keys are required together:
+# notion_select_property = "Type"
+# notion_select_value = "Research"
+# Optional cutoff for unlinked historical items, not linked records:
+# import_since = "2026-11-09T00:00:00Z"
+
+[mappings.properties]
+title = "Name"
+date = "Date"
+google_event_id = "NCS Event ID"
+description = "Notes"
+location = "Location"
+timezone = "NCS Time Zone"
+google_url = "Calendar Link"
+recurrence = "Recurrence"
+# Enable only if you created and checked this Checkbox:
+# sync_enabled = "Sync enabled"</code></pre>
+        <p>In <code>/etc/ncs/secrets.env</code>, set the following with your real token. Keep this file root-owned and mode <code>0600</code>. Do not put credentials in HTML, TOML, shell command arguments or Git.</p>
+        <pre tabindex="0" aria-label="Notion secret environment file"><code>NOTION_TOKEN='YOUR_INTERNAL_CONNECTION_TOKEN'
+# Only used with an optional verified Notion webhook subscription:
+NOTION_WEBHOOK_SECRET=''</code></pre>
+        <p><code>NOTION_TOKEN</code> is the default secret environment variable; <code>notion_token_env</code> can name another. <code>NOTION_WEBHOOK_SECRET</code> is unused in ordinary polling. A second mapping requires another <code>[[mappings]]</code> and its own <code>[mappings.properties]</code>. Mapping names and Google calendar IDs must be distinct. Sharing a Notion source is allowed only with distinct values of the same Select filter.</p>
+        <h3>Authorize Google from a browser computer</h3>
+        <p>On a Mac or Linux computer with Python 3.11+ and a browser, extract the same source release. Create a virtual environment and install the local package:</p>
+        <pre tabindex="0" aria-label="Authorize Google on the browser computer"><code>cd notion-calendar-sync-0.2.1
+python3 -m venv .venv
+.venv/bin/python -m pip install .
+cp examples/config.toml authorize.toml
+# Edit authorize.toml: use absolute LOCAL google_client_path,
+# google_token_path and state_path, plus your real mapping IDs/names.
+.venv/bin/ncs --config authorize.toml authorize</code></pre>
+        <p>On Windows, install Python 3.11+ from its official distributor for this source-based authorization route, then use PowerShell. The desktop extra supplies time-zone data that Windows does not provide in the same format as Unix:</p>
+        <pre tabindex="0" aria-label="Authorize from Windows PowerShell"><code>cd notion-calendar-sync-0.2.1
+py -3 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install ".[desktop]"
+Copy-Item examples\config.toml authorize.toml
+# Edit authorize.toml with absolute LOCAL paths and your mapping.
+# TOML Windows paths can use forward slashes, for example C:/Users/NAME/…
+.\.venv\Scripts\ncs.exe --config authorize.toml authorize</code></pre>
+        <p>Place the Google Desktop client JSON at the local <code>google_client_path</code>. The command opens the browser on this computer and creates the local <code>google_token_path</code> after consent. Do not open that authorization URL on a different computer from the receiver. <code>--no-browser</code> only suppresses launching the browser; it does not create a remote or copy-and-paste OAuth flow.</p>
+        <p>Transfer both files over SSH. Replace every placeholder with your own file paths, SSH username and Pi host. SSH is an encrypted remote connection; these commands do not require publishing a web endpoint. The <code>chmod</code> line below is for macOS/Linux; on Windows keep the files inside your private user profile and use <code>scp</code> with Windows paths. Run the <code>sudo</code> installation lines on the Pi.</p>
+        <pre tabindex="0" aria-label="Transfer Google authorization to the Pi"><code>chmod 600 /LOCAL/PATH/google-token.json /LOCAL/PATH/google-client.json
+scp /LOCAL/PATH/google-token.json PI_USER@PI_HOST:/tmp/ncs-google-token.json
+scp /LOCAL/PATH/google-client.json PI_USER@PI_HOST:/tmp/ncs-google-client.json
+
+# Then on the Pi:
+sudo install -o ncs -g ncs -m 0600 /tmp/ncs-google-token.json /var/lib/ncs/google-token.json
+sudo install -o root -g ncs -m 0640 /tmp/ncs-google-client.json /etc/ncs/google-client.json
+rm /tmp/ncs-google-token.json /tmp/ncs-google-client.json
+sudo ncs-control inspect
+sudo ncs-control dry-run</code></pre>
+        <p>Delete temporary local authorization files when no longer needed, or keep them only in protected credential storage. The service refreshes its Google token automatically and writes replacements atomically. On reauthorization, replace the token, retain SQLite and rerun inspection.</p>
+        <h3 id="existing-links">Link existing copies before applying creates</h3>
+        <p>For an existing third-party pair, obtain the actual Notion page UUID and Google event <code>id</code> in the selected calendar. The <a href="https://developers.google.com/workspace/calendar/api/v3/reference/events/list">Google events.list API Explorer</a> can retrieve it. <code>iCalUID</code> and a Google Calendar UI link are not the API event ID. Verify that both objects are the intended logical item, then preview and apply the exact pair:</p>
+        <pre tabindex="0" aria-label="Explicit stable identity linking"><code>sudo systemctl stop ncs
+sudo ncs-control link --mapping calendar --notion NOTION_PAGE_UUID --google GOOGLE_EVENT_ID
+sudo ncs-control link --mapping calendar --notion NOTION_PAGE_UUID --google GOOGLE_EVENT_ID --apply
+sudo ncs-control dry-run</code></pre>
+        <p>Repeat only for verified identities. Differences can become reviewable conflicts. The CLI's mapping name must equal your configured <code>name</code>. A new Google event on an already populated calendar also imports unless it is unsupported or protected by an <code>import_since</code> cutoff. The cutoff reports older unlinked items for explicit review; it does not infer links.</p>
+        <h3>Apply once, then enable continuous operation</h3>
+        <p>After reviewing the read-only dry run and resolving unwanted creates, run:</p>
+        <pre tabindex="0" aria-label="Start and manage the service"><code>sudo ncs-control sync
+sudo systemctl enable --now ncs
+sudo systemctl status ncs
+sudo ncs-control status
+sudo journalctl --namespace=ncs -u ncs -f
+
+# Later controls:
+sudo systemctl stop ncs
+sudo systemctl start ncs
+sudo systemctl restart ncs</code></pre>
+        <p>Unlike the desktop, the CLI does not have a confirmation dialog: <code>sync</code> and enabling the service authorize remote changes. Stop the service before running manual write commands or a dry run against its state. <code>ncs-control</code> loads the same protected environment and runs the CLI as the service account. For another installation the equivalent command is <code>ncs --config /PATH/config.toml COMMAND</code>.</p>
+        <h3>Schedule, efficiency and optional notifications</h3>
+        <p>Polling checks for changes every 45 seconds by default, with a full reconciliation every 900 seconds. Reconciliation means re-reading complete current membership to repair missed changes. Google normally uses an incremental change token; expired tokens trigger a full fetch without discarding item mappings. Notion's default full active/archived membership scans detect missing linked pages for a confirming read. <code>notion_incremental = true</code> uses edited-time queries to reduce transferred scan data, but Trash detection can then wait for reconciliation or a verified notification. Keep the default for prompt deletion checks.</p>
+        <p>The desktop exposes both intervals. The server uses <code>poll_seconds</code> and <code>reconcile_seconds</code>; polling must be at least 5 seconds and full checks no shorter than polling. A 45-second check interval is not a five-second end-to-end guarantee. Provider response time, notification delivery, throttling and outages affect completion. Compressed API responses, Google incremental listings, pagination, bounded backoff and durable retries reduce traffic and recover without losing the journal.</p>
+        <p>For one light mapping fitting each listing page, unchanged 45-second polling normally makes about 5,760 Notion and 3,840 Google requests per day, before writes, retries and extra pages. Normal use requires no paid hosting or tunnel. API quotas, workspace limits and Google policies can change; inspect your project's current quota before large imports. See <a href="https://developers.notion.com/reference/request-limits">Notion request limits</a> and <a href="https://developers.google.com/workspace/calendar/api/guides/quota">Google usage limits</a>.</p>
+        <details>
+          <summary>Optional advanced server webhooks</summary>
+          <p>A webhook is an incoming change notification. This server supports authenticated notifications as signals to fetch current data, while polling remains active. The desktop wizard uses polling and does not provision public hosting. Only configure this option if you already operate a stable, publicly reachable HTTPS reverse proxy. No paid tunnel is required or supplied.</p>
+          <p>Forward only <code>/webhooks/notion</code> and <code>/webhooks/google</code> to the Pi's default <code>127.0.0.1:8765</code> receiver. Terminate TLS at the proxy and limit request bodies to 256 KiB. Set <code>public_url = "https://YOUR_HOST"</code> in <code>[service]</code>; optional receiver keys are <code>webhook_host</code> and <code>webhook_port</code>.</p>
+          <p>Create the Notion subscription at <code>https://YOUR_HOST/webhooks/notion</code> for relevant page creation, content and property updates, move, deletion/restore and schema changes. With the normal worker stopped, run <code>sudo ncs-control webhook-verify --output /var/lib/ncs/notion-candidate.txt --timeout 300</code>. Trigger the subscription handshake. The new mode-600 candidate file is untrusted until its value is accepted in Notion's Verify form. Read it privately, complete verification, then set that verified value as <code>NOTION_WEBHOOK_SECRET</code>. Set <code>notion_webhook_subscription</code> and <code>notion_webhook_workspace</code> in <code>[service]</code> to the subscription/workspace IDs; remove the candidate file and restart.</p>
+          <p>When <code>public_url</code> is set, Google calendar watch channels are created and renewed automatically. Their persisted token, resource identity and expiration are validated. Notion notifications require a valid HMAC, a cryptographic signature made with the verified shared secret, and the configured subscription/workspace. Duplicate notifications are deduplicated. Neither payload directly edits an item. Failed delivery or renewal leaves polling and reconciliation available.</p>
+          <p>Hosting and TLS configuration depend on your network and proxy and are not automated by this package. Official references: <a href="https://developers.notion.com/reference/webhooks">Notion webhooks</a>, <a href="https://developers.notion.com/reference/webhooks-events-delivery">delivery behavior</a>, and <a href="https://developers.google.com/workspace/calendar/api/guides/push">Google push channels</a>.</p>
+        </details>
+      </section>
+
+      <section aria-labelledby="testing">
+        <h2 id="testing">9. Test the connection with disposable items.</h2>
+        <p>Run these checks in a dedicated source/calendar pair before applying the tool to your working calendar. Give every test item a unique name so you can inspect its identity, but do not use its name as proof that two records are linked.</p>
+        <ol>
+          <li>Connect and inspect access, map the required properties, preview and approve the empty test setup. If a participation Checkbox is mapped, check it on new Notion test entries.</li>
+          <li>Create one ordinary timed Notion entry with a title, Date and mapped notes. Wait for detection and processing. Confirm exactly one Google event, a filled event-ID marker and the expected link.</li>
+          <li>Edit that Google event's title, time and mapped location. Confirm the same Notion page changes and its event ID remains identical. Then edit Notion notes and verify the same Google event changes.</li>
+          <li>Create a second ordinary event directly in Google with no attendees. Confirm exactly one new Notion entry. Change it to a multi-day all-day event and check both end-date displays using the rules below. Test a time-zone change if you mapped the zone field.</li>
+          <li>Wait through repeated checks and a full reconciliation, then restart the application or service. Confirm both logical items remain single pairs, with no extra creates. Inspect the dashboard or <code>status</code> and <code>operations</code> for pending work.</li>
+          <li>Move the first test Notion page to Trash and verify the linked Google event is cancelled. Delete the second test event in Google and verify its linked Notion page is trashed. Do not substitute clearing a Date or hiding an entry in a view.</li>
+          <li>For conflict testing, pause the worker, edit the same mapped field differently on both sides, then resume. Confirm a conflict retains both versions. Review and deliberately choose a provider; other items should continue. Test only disposable data.</li>
+        </ol>
+        <p>If any step fails, pause before retrying a creation. Inspect the existing identity and pending operation rather than deleting state. These account-specific checks require your own credentials. Publishing this website does not execute them against your accounts.</p>
+      </section>
+
+      <section aria-labelledby="behavior">
+        <h2 id="behavior">10. Understand supported behavior.</h2>
+        <h3>Fields, dates and time zones</h3>
+        <p>Ordinary supported events synchronize title and the complete time range in both directions, plus configured description, location and recurrence. Peer links and stable identities are managed by the service. Unmapped optional fields are not imported or overwritten. Only changed mapped fields are patched; Notion page blocks are never edited.</p>
+        <p>Description mapping keeps literal source text. Google's <code>&lt;b&gt;Review&lt;/b&gt;</code> remains those literal characters in Notion Text, rather than being repeatedly converted between HTML and Markdown. Plain text works too. Rich formatting and mentions inside mapped Text/title properties are outside this format; partial/paginated rich content is reported instead of silently truncated.</p>
+        <p>Notion's all-day range includes its last date. Google's all-day end is exclusive. A Notion October 30–31 range becomes Google start October 30, end November 1; a single date becomes one day. Missing timed ends use the configured duration. A multi-day item remains one logical pair.</p>
+        <p>Timed events preserve instants and use a regional IANA zone. With a zone Text mapping, Notion endpoints are stored in UTC while the zone property retains the intended region, avoiding daylight-saving endpoint coercion. Notion's Date display may consequently show UTC. Invalid or nonexistent times, mixed date/timestamp ranges and ambiguous times without a usable offset are held and reported, rather than silently shifted. Start, end, all-day status, zone and recurrence are treated as one related conflict group.</p>
+        <h3>Duplicates, feedback loops and conflicts</h3>
+        <p>SQLite records each page/event pair, the last synchronized values and provider versions. Stable IDs, a durable operation journal, confirming reads and service-owned markers allow repeated checks and interrupted-write recovery without deliberately replaying a possibly successful create. Uncertain creates can remain blocked for review instead of risking a duplicate. A local single-worker lock does not coordinate separate computers or third-party tools.</p>
+        <p>Independent edits to different mapped fields merge. Incompatible edits to the same field, or to the related time/recurrence group, become persistent conflicts under the default <code>manual</code> policy. Both observations and their baseline are retained. In the desktop conflict view, choose the intended provider after reviewing the values; resolution pauses synchronization, so choose Resume afterward.</p>
+        <pre tabindex="0" aria-label="Server conflict review"><code>sudo ncs-control conflicts
+sudo ncs-control conflicts CONFLICT_ID
+sudo systemctl stop ncs
+sudo ncs-control resolve CONFLICT_ID --prefer notion
+# Or choose --prefer google after reviewing both versions.
+sudo systemctl start ncs</code></pre>
+        <p>Server alternatives <code>conflict_policy = "notion"</code> or <code>"google"</code> explicitly choose that provider for incompatible fields and can discard the competing value. They are not the default and are not exposed in the desktop wizard.</p>
+        <h3>Deletion and paused items</h3>
+        <p>A positively confirmed Notion Trash state or Google <code>status=cancelled</code> propagates to its supported, linked, in-scope peer. The tool keeps a <strong>tombstone</strong>, a retained record of the deleted pair, to prevent automatic recreation. Provider Trash retention and recovery limits still apply. A deletion concurrent with an edit becomes a manual conflict.</p>
+        <p>Permission loss, 401/403/404 responses, failed requests, incomplete pagination and an item missing from a query do not prove deletion. Clearing a Date, unchecking participation, changing category, moving out of scope or archiving from a data-source view suspends the relationship and retains its peer. Restoring one resource alone does not resurrect the pair. Restore both deliberately in their provider interfaces and explicitly relink the same live IDs through the CLI before reactivating; this release has no desktop restore/relink wizard.</p>
+        <h3 id="recurrence">Recurring series and exceptions</h3>
+        <p>Notion's Date property is not a recurrence-rule API. The optional Text property stores RFC 5545 recurrence source, a standard notation, with one <code>RRULE:</code>, <code>RDATE:</code> or <code>EXDATE:</code> line per line. For example, <code>RRULE:FREQ=WEEKLY;BYDAY=MO;COUNT=8</code> describes eight weekly Monday occurrences, starting from the mapped Date. Start/end belong in Date, not <code>DTSTART</code>/<code>DTEND</code> recurrence lines.</p>
+        <ul>
+          <li>One Notion page represents a Google recurring master. Supported series title, time, notes, location and rule edits synchronize in both directions.</li>
+          <li>Ordinary generated occurrences are not expanded into unlimited Notion entries. An explicitly modified Google occurrence can have its own linked page. Its immutable parent/original-start identity ensures edits affect only that occurrence.</li>
+          <li>Cancelling a linked occurrence trashes that occurrence's page; trashing its exception page cancels only that instance. A never-imported cancelled occurrence does not need a live Notion page.</li>
+          <li>Creating an unlinked exception in Notion is unsupported. Google's “this and following” operation can split a series into separate masters, which remain distinct identities.</li>
+          <li>Without a recurrence mapping, recurring items are reported and preserved. Unsupported rules or special provider semantics are held rather than flattened.</li>
+        </ul>
+        <p>See <a href="https://developers.google.com/workspace/calendar/api/guides/recurringevents">Google's series and exception model</a> and <a href="https://developers.google.com/workspace/calendar/api/v3/reference/events">event fields and all-day dates</a>.</p>
+        <h3>Meetings and other exclusions</h3>
+        <p>Events with attendees are excluded from default writes <strong>and deletions</strong>, including linked events that later gain attendees. Attendee invitations, RSVP changes, conference creation, locked events and special event types such as birthdays, focus time, out-of-office and working location are outside the default mapping. The server's <code>allow_attendees = true</code> is an explicit advanced opt-in to event-field writes using <code>sendUpdates=none</code>; it still does not map attendees or guarantee that Google sends no email. Keep it false for this setup.</p>
+        <p>Unrelated Google metadata is omitted from patches. A live provider check found one material normalization: converting timed events to all-day can turn inherited default reminders into explicit alarms. Current effective alerts were retained, but they might no longer follow later calendar-default changes. Do not assume every raw provider field remains byte-for-byte identical.</p>
+      </section>
+
+      <section aria-labelledby="maintenance">
+        <h2 id="maintenance">11. Operate, back up and upgrade.</h2>
+        <p>The dashboard shows health, last successful sync, pending work and conflicts. Closing the desktop window minimizes it; use Quit to stop background work. Optional Start at login runs for your user after login. A supervisor restarts crashes, and persisted work resumes after connectivity returns. Export redacted diagnostics for counts and sanitized errors; review any export before sharing it.</p>
+        <p>Desktop settings, SQLite and local backups live in <code>~/Library/Application Support/Notion Calendar Sync/</code> on macOS or <code>%LOCALAPPDATA%\Notion Calendar Sync\</code> on Windows. Credentials are separate in Keychain/Credential Manager. Pause and Quit before making a complete copy of this directory. Local state and conflict backups contain private event data. They are not provider-wide exports.</p>
+        <p>On the Pi, create a consistent SQLite backup with a new filename, and protect configuration/client/token copies separately. Do not copy only an actively changing SQLite file while ignoring its journal.</p>
+        <pre tabindex="0" aria-label="Pi backup commands"><code>sudo ncs-control backup /var/lib/ncs/backup-UNIQUE_DATE.sqlite3
+sudo tar -czf /var/lib/ncs/private-config-UNIQUE_DATE.tar.gz -C /etc ncs
+sudo chmod 600 /var/lib/ncs/private-config-UNIQUE_DATE.tar.gz
+# Also protect /var/lib/ncs/google-token.json in your credential backup.</code></pre>
+        <p>Keep encrypted/off-device copies with your existing backup system; this service does not automatically prune dated backups. Restore with the worker stopped, preserve the current database and any WAL/SHM files first, and restore a consistent state/configuration set with the documented owners and modes. A newly authorized token should not be needlessly replaced with an old one. Reconnect accounts on another computer, inspect and preview a full reconciliation before resuming. Deleting SQLite history while leaving both providers populated can defeat duplicate prevention.</p>
+        <p>For upgrades, pause/stop, back up, retain the old release, replace the desktop bundle or rerun the Pi installer from the new source, inspect and preview before restarting. Windows installer upgrades must run after all app copies quit. The installer stages the new program and retains recovery material. There is no automatic remote code updater.</p>
+        <p>The Pi service restarts after a crash and boots through systemd. Its namespaced journal is bounded to 50 MB persistent / 10 MB runtime and 14 days. View it using the <code>journalctl --namespace=ncs</code> command above. To uninstall, disable startup or <code>sudo systemctl disable --now ncs</code>, then remove the application/code and service files. Retain configuration, state and credential backups until you deliberately discard them. Uninstalling does not delete provider records. Revoke Google and Notion access separately if disconnecting permanently.</p>
+      </section>
+
+      <section aria-labelledby="troubleshooting">
+        <h2 id="troubleshooting">12. Troubleshoot setup.</h2>
+        <div class="jm-helper-table" role="region" aria-label="Setup troubleshooting" tabindex="0">
+          <table>
+            <caption>Common setup failures. Scroll horizontally on a narrow screen.</caption>
+            <thead><tr><th scope="col">Symptom</th><th scope="col">Check and recovery</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Notion connection validates but database is absent</th><td>Grant Content access to the actual database/parent. Check workspace, ID and the selected data source. A valid token does not imply database access.</td></tr>
+              <tr><th scope="row">Wrong property type or missing mapping</th><td>Use Title, Date and Text identity properties. Check exact names and types. A formula cannot serve as a writable Date. Omit unwanted optional mappings rather than using empty or invented types.</td></tr>
+              <tr><th scope="row">Google authorization blocked or API disabled</th><td>Enable Google Calendar API in the project owning the client. Use Desktop app JSON with an <code>installed</code> section, the correct account and test-user membership. Check organization policy and requested scopes.</td></tr>
+              <tr><th scope="row">Redirect mismatch or browser cannot finish</th><td>Use a Desktop client and authorize on the same computer as the callback listener. Do not substitute the website/privacy URL. Check local firewall restrictions; recreate an incorrect Web client as a Desktop client.</td></tr>
+              <tr><th scope="row">Stops after about seven days / <code>invalid_grant</code></th><td>Check External Testing status, switch to production where applicable and reauthorize. Revoked/expired grants also need reconnection. Keep existing SQLite state.</td></tr>
+              <tr><th scope="row">Calendar missing or read-only</th><td>Sign in to the account with owner/writer access. Refresh calendar discovery or set its stable Calendar ID on the server. An API key or read-only scope is insufficient.</td></tr>
+              <tr><th scope="row">No event appears</th><td>Check Date, Checkbox/category filters, attendees, recurrence mapping, special event type and unsupported diagnostics. Check that the host is awake and worker running. Wait for a check cycle; inspect queued work.</td></tr>
+              <tr><th scope="row">Date cleared but event remains</th><td>Expected paused behavior. Explicitly trash a supported linked page or cancel its event to propagate deletion.</td></tr>
+              <tr><th scope="row">429 / 529 / Google quota errors</th><td>Leave queued state intact; bounded retries and later cycles recover. Check provider quota/workspace capacity and reduce the participating workload or lengthen polling when required. Do not repeatedly restart to bypass backoff.</td></tr>
+              <tr><th scope="row">Access/404 or missing query result</th><td>Restore permissions or scope and reconcile. It is not deletion evidence and must not cause a manual peer deletion.</td></tr>
+              <tr><th scope="row">App lock, repeated creates or unexpected import preview</th><td>Stop other writers. Check exact event/page IDs and retained state before applying anything. Do not merge solely by title/date or delete the journal. Unlinked copies need explicit identity review.</td></tr>
+              <tr><th scope="row">Uncertain Notion create remains blocked</th><td>Use <code>operations</code> to inspect its recovery ID; check active entries and Trash for its exact marker. Do not blindly retry a possibly successful create. The advanced <code>retry-operation ID --acknowledge-no-remote-create</code> command is only for positively verified absent remote creates.</td></tr>
+              <tr><th scope="row">OS blocks app or secure storage</th><td>Check the download checksum and ordinary OS approval. Ensure Keychain/Credential Manager is available for your signed-in user. Use the Windows <code>.cmd</code> launcher if Script Host is disabled, subject to organization policy.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3 id="validation">What has actually been tested?</h3>
+        <p>Release 0.2.1 ran 266 passing tests on native Windows Server 2025 x64 and 265 passing tests plus one Windows-only skip on native Intel macOS 15.7.9. Each platform passed 43 controlled desktop setup/sync acceptance checks using the real controller, API adapters, journal and SQLite with controlled provider responses and a real local OAuth callback. Native credential stores, packaged windows and recovery were checked separately. Windows 10/11 client builds and every older macOS release were not separately executed.</p>
+        <p>A separate 23-check live API run on a Mac reused an existing grant and verified two disposable logical pairs through creation, updates, time changes, restart and deletion in both directions, followed by cleanup with no live test copies remaining. This was not fresh Google consent on every operating system. New users still need to complete their own grants and the connection checks above. See the <a href="downloads/validation-0.2.1.md">full release report</a>.</p>
+        <p>This website guide was checked separately for navigation, downloads and responsive layout. Those website checks do not test your credentials, hosting or live calendar synchronization. Optional public HTTPS/proxy provisioning, historical desktop state migration/relinking and account-administrator approvals are not automated setup flows in this release.</p>
+      </section>
+    </article>
+  </main>
+  <footer class="jm-record-footer">
+    <span>Julio M. Morales · Optional Notion Helper Tools</span>
+    <a href="../#templates-title">Back to Notion templates</a>
+    <a href="privacy.html">Privacy and data handling</a>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "artifact": "Notion-Calendar-Sync-0.2.1-macOS-universal2.dmg",
+  "sha256": "c15cf55fd2df6ca06f3b9126a154f021397b35c34d8c8f27375470bda0f24b2e",
+  "bytes": 27088753,
+  "version": "0.2.1",
+  "format": "macOS application disk image",
+  "architecture": "universal2",
+  "signed_and_notarized": false
+}

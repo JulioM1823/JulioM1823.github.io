@@ -1,0 +1,10 @@
+/* Keep reference tables readable inside the existing helper scroll regions. */
+.jm-calendar-guide .jm-helper-table table {
+  min-width: 42rem;
+}
+.jm-calendar-guide .jm-helper-table caption {
+  padding-bottom: .75rem;
+  color: var(--jm-muted);
+  text-align: left;
+  font-size: .88rem;
+}

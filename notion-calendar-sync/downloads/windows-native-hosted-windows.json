@@ -1,0 +1,30 @@
+{
+  "platform": "Windows-2025Server-10.0.26100-SP0",
+  "machine": "AMD64",
+  "python": "3.14.10",
+  "native_windows": true,
+  "checks": [
+    "native CREDENTIALW x64 ABI",
+    "isolated credential missing",
+    "native credential roundtrip",
+    "native chunked credential roundtrip",
+    "native credential replacement",
+    "native credential deleted",
+    "native OAuth refresh hook",
+    "no plaintext OAuth files",
+    "native second writer rejected",
+    "native lock released",
+    "native startup registration isolated key",
+    "native startup quoted private runtime",
+    "native startup removal isolated key",
+    "bundle runtime exists",
+    "portable native Tk setup window",
+    "installer fresh staging and promotion",
+    "installer retained full notices",
+    "installer failed promotion rollback",
+    "installer successful upgrade",
+    "installer recovery copy retained",
+    "installer temporary staging cleaned"
+  ],
+  "passed": true
+}

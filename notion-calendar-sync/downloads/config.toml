@@ -1,0 +1,37 @@
+# Pi example matching the online guide. Replace all placeholders and property names.
+[service]
+state_path = "/var/lib/ncs/sync.sqlite3"
+google_token_path = "/var/lib/ncs/google-token.json"
+google_client_path = "/etc/ncs/google-client.json"
+notion_token_env = "NOTION_TOKEN"
+log_level = "INFO"
+public_url = ""
+
+[[mappings]]
+name = "calendar"
+notion_data_source = "YOUR_DATA_SOURCE_UUID"
+google_calendar = "YOUR_CALENDAR_ID"
+timezone = "America/Denver"
+poll_seconds = 45
+reconcile_seconds = 900
+notion_incremental = false
+default_duration_minutes = 60
+conflict_policy = "manual"
+allow_attendees = false
+# Optional category filter; both keys are required together:
+# notion_select_property = "Type"
+# notion_select_value = "Research"
+# Optional cutoff for unlinked historical items, not linked records:
+# import_since = "2026-11-09T00:00:00Z"
+
+[mappings.properties]
+title = "Name"
+date = "Date"
+google_event_id = "NCS Event ID"
+description = "Notes"
+location = "Location"
+timezone = "NCS Time Zone"
+google_url = "Calendar Link"
+recurrence = "Recurrence"
+# Enable only if you created and checked this Checkbox:
+# sync_enabled = "Sync enabled"

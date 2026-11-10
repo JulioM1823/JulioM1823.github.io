@@ -1,0 +1,10 @@
+{
+  "artifact": "Notion-Calendar-Sync-0.2.1-Windows-x64.zip",
+  "sha256": "d6a5de952fb5399d67fbe318824fecfe387a27d02810921ce4c019bafd34c4bc",
+  "bytes": 30943607,
+  "version": "0.2.1",
+  "format": "Windows portable application plus optional per-user installer",
+  "runtime_sha256": "cc28026a650970cc1570bb127312f1f9634eb67abfe157ae6ca1acbbc627d091",
+  "tzdata_sha256": "0a10eec6e13ef16b627fabed9a5f2ba61a62b1c67f327305f4e7e412a70b4aec",
+  "windows_execution_tested": true
+}

@@ -1,0 +1,5 @@
+c15cf55fd2df6ca06f3b9126a154f021397b35c34d8c8f27375470bda0f24b2e  Notion-Calendar-Sync-0.2.1-macOS-universal2.dmg
+46b0c8a955bb02c5a3f62b9d50c11a71f31c9b02a1696238c9b205df369b7e87  Notion-Calendar-Sync-0.2.1-macOS-x86_64.dmg
+d6a5de952fb5399d67fbe318824fecfe387a27d02810921ce4c019bafd34c4bc  Notion-Calendar-Sync-0.2.1-Windows-x64.zip
+8e1dbd97d1b577f3f6bcb7ce582b8074107f596a3fccde5cde8647f320e9fbf3  Notion-Calendar-Sync-0.2.1-Windows-native-x64.zip
+7b6790827d600faaf5e87e2a09bf61e4f33c24dbf2cbee295c5e6960525ece1d  Notion-Calendar-Sync-0.2.1-Source.zip
