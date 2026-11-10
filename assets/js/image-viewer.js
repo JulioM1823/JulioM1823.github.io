@@ -28,7 +28,7 @@
          document.documentElement.dataset.jmReady !== 'true')) return;
     document.querySelectorAll('img').forEach(image => {
       // Navigation cards remain one native link across images, copy and padding.
-      if (processed.has(image) || image.closest('#bg, dialog, [data-astro-shot], .jm-about-card')) return;
+      if (processed.has(image) || image.closest('#bg, dialog, [data-astro-shot], .jm-about-card, .jm-shortcut-card')) return;
       processed.add(image);
       if (!image.getAttribute('src')) return;
       let parentLink = image.closest('a');
