@@ -1,0 +1,18 @@
+{
+  "native_windows": true,
+  "artifact": "Notion Calendar Sync.exe",
+  "executable_sha256": "bccde11cda5e19c1edda818ab9c6b62d5de5c0e267a880abacaa29bb2a617dc0",
+  "fresh_ci_profile": true,
+  "started_utc": "2026-11-10T04:04:04.4604419Z",
+  "checks": [
+    "frozen offline setup window opens and exits zero",
+    "fresh-profile frozen application displays real setup window",
+    "unconfigured launch creates no approved sync configuration",
+    "frozen guardian starts an owned application child",
+    "frozen guardian restarts crashed owned child",
+    "restarted frozen child remains alive"
+  ],
+  "passed": true,
+  "cleanup_errors": [],
+  "completed_utc": "2026-11-10T04:04:11.6444950Z"
+}

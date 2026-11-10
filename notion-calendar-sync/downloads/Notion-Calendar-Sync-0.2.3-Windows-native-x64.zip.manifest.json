@@ -1,0 +1,9 @@
+{
+  "artifact": "Notion-Calendar-Sync-0.2.3-Windows-native-x64.zip",
+  "sha256": "579d70241fbb01992250d6022f806135e0435ba2d93695278ad826e5d455969e",
+  "bytes": 16386128,
+  "version": "0.2.3",
+  "format": "Windows native frozen application",
+  "architecture": "AMD64",
+  "signed": false
+}

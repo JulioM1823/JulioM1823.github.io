@@ -9,6 +9,7 @@ from html.parser import HTMLParser
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path, PurePosixPath
 import json
+import posixpath
 import re
 import threading
 import unittest
@@ -125,7 +126,8 @@ class GuideChecks(unittest.TestCase):
         for item in [GUIDE, *DOWNLOADS.glob('*.md'), *DOWNLOADS.glob('*.toml'), *DOWNLOADS.glob('*.example'), *DOWNLOADS.glob('*.json')]:
             with self.subTest(file=item.name):
                 self.assertIsNone(pattern.search(item.read_text()))
-        with zipfile.ZipFile(DOWNLOADS/'Notion-Calendar-Sync-0.2.1-Source.zip') as bundle:
+        source = next(DOWNLOADS / PurePosixPath(unquote(urlsplit(href).path)).name for href in self.page.downloads if href.endswith('-Source.zip'))
+        with zipfile.ZipFile(source) as bundle:
             for item in bundle.namelist():
                 if item.endswith(('.md', '.json', '.toml', '.example')):
                     with self.subTest(source_item=item):
@@ -139,6 +141,21 @@ class GuideChecks(unittest.TestCase):
                     continue
                 with self.subTest(file=item.name, href=href):
                     self.assertTrue((item.parent/unquote(target.path)).exists())
+
+    def test_downloaded_source_has_no_missing_documentation_targets(self):
+        source = next(DOWNLOADS / PurePosixPath(unquote(urlsplit(href).path)).name for href in self.page.downloads if href.endswith('-Source.zip'))
+        with zipfile.ZipFile(source) as bundle:
+            names = set(bundle.namelist())
+            for name in names:
+                if not name.endswith('.md'):
+                    continue
+                for href in re.findall(r'\]\(([^)]+)\)', bundle.read(name).decode()):
+                    target = urlsplit(href)
+                    if target.scheme or target.netloc or not target.path:
+                        continue
+                    resolved = posixpath.normpath(posixpath.join(posixpath.dirname(name), unquote(target.path)))
+                    with self.subTest(document=name, href=href):
+                        self.assertIn(resolved, names)
 
     def test_http_guide_privacy_and_all_downloads(self):
         for href in ['notion-calendar-sync/', 'notion-calendar-sync/privacy.html', 'notion-research-diary/']:

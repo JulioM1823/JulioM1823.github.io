@@ -1,0 +1,67 @@
+{
+  "api_processing_seconds": {
+    "Initial unmapped metadata baseline reconciliation": 1.878235,
+    "Mapped edits synchronize in both directions": 6.864873,
+    "Reverse mapped field edits retain the same identities": 6.90272,
+    "Time-zone reschedule and multi-day all-day conversion synchronize": 6.728325
+  },
+  "architecture": "arm64",
+  "checks": [
+    "Actual Notion connection and fresh Google native grant validate",
+    "Exactly one writable non-production Personal calendar is available",
+    "Existing Personal category and unmapped Done checkbox are available",
+    "Actual database discovery resolves the selected data source",
+    "Actual typed schema mapping identifies title and date",
+    "Real schema, write access and exact field mappings validate",
+    "Read-only preview proposes exactly two counterpart creates",
+    "Repeated preview performs no remote writes",
+    "Exactly two logical pairs exist with no duplicate counterparts",
+    "Initial pair 1 mapped values agree",
+    "Initial pair 2 mapped values agree",
+    "Initial unmapped metadata baseline reconciliation completes a successful API batch",
+    "Initial unmapped metadata baseline reconciliation",
+    "Mapped edits synchronize in both directions completes a successful API batch",
+    "Mapped edits synchronize in both directions",
+    "Reverse mapped field edits retain the same identities completes a successful API batch",
+    "Reverse mapped field edits retain the same identities",
+    "Time-zone reschedule and multi-day all-day conversion synchronize completes a successful API batch",
+    "Time-zone reschedule and multi-day all-day conversion synchronize",
+    "Rescheduling preserves page blocks, Done and foreign Google metadata"
+  ],
+  "cleanup_error_count": 0,
+  "cleanup_verified_deleted_counts": {
+    "google": 2,
+    "notion": 2
+  },
+  "engine_remote_write_counts": {
+    "google": 7,
+    "notion": 7
+  },
+  "existing_provider_items_mutated": false,
+  "failure_type": "TimeoutError",
+  "fresh_google_browser_consent": true,
+  "generated_google_events": 2,
+  "generated_notion_pages": 2,
+  "logical_pair_count": 2,
+  "native_vault": true,
+  "original_credential_files_hashes_and_mtimes_unchanged": true,
+  "passed": false,
+  "phase_seconds": {
+    "Initial unmapped metadata baseline reconciliation": 2.187,
+    "Mapped edits synchronize in both directions": 7.179,
+    "Reverse mapped field edits retain the same identities": 7.133,
+    "Time-zone reschedule and multi-day all-day conversion synchronize": 6.854
+  },
+  "platform": "Darwin",
+  "post_cleanup_live_prefix_copy_counts": {
+    "google": 0,
+    "notion": 0
+  },
+  "production_service_modified": false,
+  "provider_mode": "actual official APIs",
+  "python": "3.14.0",
+  "scan_boundary": "only uniquely generated test IDs; this does not exercise complete account inventory or push delivery",
+  "temporary_vault_credentials_removed": true,
+  "timing_scope": "manually resumed cycle to successful completion; includes API processing, excludes real provider notification delay",
+  "version": "0.2.2"
+}

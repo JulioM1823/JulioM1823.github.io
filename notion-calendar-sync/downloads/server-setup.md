@@ -1,6 +1,6 @@
 # Notion-Google Calendar Sync: server setup
 
-Release 0.2.1. Instructions checked against the implementation and official provider documentation on November 9, 2026.
+Release 0.2.3. Instructions checked against the implementation and official provider documentation on November 9, 2026.
 
 This optional MIT-licensed helper connects the Calendar Database in the PhD Notion system with Google Calendar. The PhD Notion system works without it. You supply your own accounts, database access, credentials and host. This guide describes the Raspberry Pi service, rather than the desktop wizard. Never run independent synchronizers for the same data-source/calendar pair.
 
@@ -8,7 +8,7 @@ The full guide, desktop downloads and privacy policy are at:
 
 - [Integration guide](https://juliom1823.github.io/notion-calendar-sync/)
 - [Privacy and data handling](https://juliom1823.github.io/notion-calendar-sync/privacy.html)
-- [Source ZIP](https://juliom1823.github.io/notion-calendar-sync/downloads/Notion-Calendar-Sync-0.2.1-Source.zip)
+- [Source ZIP](https://juliom1823.github.io/notion-calendar-sync/downloads/Notion-Calendar-Sync-0.2.3-Source.zip)
 - [Download checksums](https://juliom1823.github.io/notion-calendar-sync/downloads/SHA256SUMS.txt)
 
 ## 1. Requirements and backups
@@ -73,10 +73,25 @@ Official references: [enable APIs](https://developers.google.com/workspace/guide
 
 ## 5. Install on the Pi
 
-Download and extract the source ZIP, or copy the extracted folder over SSH. Check its checksum against `SHA256SUMS.txt`. A checksum detects changed bytes; it is not a trusted code-signing identity. From the extracted directory:
+Download and extract the source ZIP, or copy the extracted folder over SSH. For a headless Pi, run these from a new installation folder:
 
 ```sh
-cd notion-calendar-sync-0.2.1
+sudo apt-get update
+sudo apt-get install -y curl unzip
+mkdir -p "$HOME/ncs-install-0.2.3"
+cd "$HOME/ncs-install-0.2.3"
+curl --fail --location --output Notion-Calendar-Sync-0.2.3-Source.zip \
+  https://juliom1823.github.io/notion-calendar-sync/downloads/Notion-Calendar-Sync-0.2.3-Source.zip
+curl --fail --location --output Notion-Calendar-Sync-0.2.3-Source.zip.sha256 \
+  https://juliom1823.github.io/notion-calendar-sync/downloads/Notion-Calendar-Sync-0.2.3-Source.zip.sha256
+sha256sum --check Notion-Calendar-Sync-0.2.3-Source.zip.sha256
+unzip Notion-Calendar-Sync-0.2.3-Source.zip
+```
+
+Confirm the checksum reports `OK` before extracting. If checking a desktop package instead, run `shasum -a 256 FILENAME.dmg` on macOS or `(Get-FileHash ".\FILENAME.zip" -Algorithm SHA256).Hash` in Windows PowerShell and compare the entire hash with the matching filename in `SHA256SUMS.txt`. Use your actual saved path. Uppercase and lowercase hexadecimal letters are equivalent. Check its checksum against `SHA256SUMS.txt`. A checksum detects changed bytes; it is not a trusted code-signing identity. From the directory containing the extracted `notion-calendar-sync-0.2.3` folder:
+
+```sh
+cd notion-calendar-sync-0.2.3
 cat /etc/os-release
 dpkg --print-architecture
 python3 --version
@@ -173,7 +188,7 @@ Edit `authorize.toml` before continuing. Set `google_client_path`, `google_token
 .venv/bin/ncs --config authorize.toml authorize
 ```
 
-Complete consent in the system browser on this same computer. The command creates the configured local token file. `--no-browser` only stops automatic browser launching; it does not enable authorization on another machine or a deprecated copy-and-paste code flow. `--port N` can select a particular free local callback port; otherwise a free port is chosen.
+Complete consent in the system browser on this same computer within five minutes while the command stays running. Choose the account with access to your intended calendar; the default browser may be signed into a different account from your Cloud Console browser. If the receiver times out, rerun authorization and use the new request. The command creates the configured local token file. `--no-browser` only stops automatic browser launching; it does not enable authorization on another machine or a deprecated copy-and-paste code flow. `--port N` can select a particular free local callback port; otherwise a free port is chosen.
 
 For Windows source authorization, install the desktop extra so Python can use its bundled regional time-zone database. The corresponding PowerShell commands are:
 
@@ -342,7 +357,7 @@ Run source tests from the extracted root without provider credentials:
 PYTHONPATH=src python3 -m unittest discover -s tests -v
 ```
 
-Logs rotate to about 8 MiB in `/var/lib/ncs/ncs.log` plus backups. The dedicated journald namespace is bounded to 50 MB persistent/10 MB runtime and 14 days; active journal files can temporarily exceed limits. Inspect with `sudo journalctl --namespace=ncs -u ncs --since '1 hour ago'`. Full conflict/operation details contain private event values and belong only in private terminals/files.
+`/var/lib/ncs/ncs.log` rotates at 2 MiB per file with up to three backups, approximately 8 MiB total. The dedicated journald namespace is bounded to 50 MB persistent/10 MB runtime and 14 days; active journal files can temporarily exceed limits. Inspect with `sudo journalctl --namespace=ncs -u ncs --since '1 hour ago'`. Full conflict/operation details contain private event values and belong only in private terminals/files.
 
 Uninstall code while preserving user data:
 
@@ -374,3 +389,9 @@ These commands retain `/etc/ncs`, `/var/lib/ncs`, the service account and provid
 | Webhook 401/403 | Verify TLS forwarding, protected token, signature, channel resource and configured subscription/workspace IDs. Polling continues. |
 
 This server guide is documentation for the released implementation. It does not itself authorize, deploy or smoke-test your accounts. See the website's release validation report for the platforms and provider checks actually executed.
+
+## Provider-changed save results
+
+Release 0.2.3 retains requested and returned mapped values when an API save changes them. The exact item IDs and completed operation are persisted together with an open manual conflict. Automatic conflict policies cannot override this hold. A lost response followed by different current values is also held for review because provider normalization and concurrent edits cannot be safely distinguished. Never clear SQLite state to bypass a hold.
+
+A live Google API probe changed an America/Denver 90-minute range spanning the two copies of the autumn repeated hour into 30 minutes, even when the named-zone request used UTC timestamps. The original Notion range is now retained and the provider result is exposed separately. Explicitly choosing a UTC event zone preserved the tested one-off interval. Do not silently convert a recurring series to UTC, since that could change its future daylight-saving behavior. Review both versions and make any time-zone choice deliberately. When a provider item changed after the conflict was recorded, inspect the refreshed conflict before resolving again.

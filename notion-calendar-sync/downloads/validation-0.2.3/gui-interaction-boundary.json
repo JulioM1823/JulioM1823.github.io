@@ -1,0 +1,8 @@
+{
+  "actual_release_ui": "0.2.2 (setup controls unchanged in 0.2.3)",
+  "window_rendering_verified": true,
+  "native_show_window_and_quit_menu_verified": true,
+  "full_wizard_clickthrough_completed": false,
+  "reason": "Computer-use mouse and keyboard events did not reliably reach Tk fields; passive diagnostics confirmed no modal grab and a responsive event loop. No product behavior failure was inferred from missing input delivery.",
+  "controlled_provider_and_native_window_tests_reported_separately": true
+}

@@ -1,0 +1,32 @@
+{
+  "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "python": "3.14.0",
+  "native_macos_apis": true,
+  "translated_x86": false,
+  "checks": [
+    "read process Keychain interaction flag",
+    "disable prompts in this probe process",
+    "isolated credential missing",
+    "native Keychain roundtrip",
+    "native long Unicode credential replacement",
+    "native credential deleted",
+    "native OAuth secure refresh hook",
+    "no plaintext OAuth files",
+    "native second writer rejected",
+    "native writer lock released",
+    "native SQLite integrity",
+    "native SQLite backup preserves state",
+    "native private state permissions",
+    "native atomic settings write",
+    "startup registration isolated home",
+    "startup private runtime arguments",
+    "startup removal isolated home",
+    "bundle executable exists",
+    "packaged native Tk setup window"
+  ],
+  "passed": true,
+  "existing_credentials_accessed": false,
+  "real_startup_preference_changed": false,
+  "secret_values_logged": false
+}

@@ -33,7 +33,7 @@
         <p>This is free, open-source software under the <a href="downloads/LICENSE.txt">MIT license</a>, using the official Notion and Google Calendar APIs. An API is the supported way for an application to read and change an account's data. <strong>You must configure your own accounts, credentials, database access and any required hosting.</strong> There is no hosted registration service, paid automation requirement or bundled access to my accounts.</p>
         <p>Choose the guided desktop application for macOS or Windows, or run the same synchronization engine continuously on your own Raspberry Pi. The selected host must be powered on, awake, connected to the internet and running the application. Desktop startup at login starts after you sign in. It cannot sync while a laptop is asleep.</p>
         <p><a href="privacy.html">Privacy and data handling</a> · Operator contact: <a href="mailto:juliomorales1823@gmail.com">juliomorales1823@gmail.com</a></p>
-        <p><small>Guide and implementation reviewed November 9, 2026. Release 0.2.1. Not affiliated with or endorsed by Google or Notion.</small></p>
+        <p><small>Guide and implementation reviewed November 9, 2026. Release 0.2.3. Not affiliated with or endorsed by Google or Notion.</small></p>
       </header>
 
       <nav class="jm-helper-steps jm-callout" aria-label="Setup steps">
@@ -125,29 +125,37 @@ https://www.googleapis.com/auth/calendar.calendarlist.readonly</code></pre>
       </section>
 
       <section aria-labelledby="downloads">
-        <h2 id="downloads">5. Download and install release 0.2.1.</h2>
+        <h2 id="downloads">5. Download and install release 0.2.3.</h2>
         <p>These permanent downloads are hosted on this website. They include no user credentials, private configuration or synchronization database. Keep the bundled third-party license notices with the application.</p>
         <ul class="jm-resource-list">
-          <li><a href="downloads/Notion-Calendar-Sync-0.2.1-macOS-universal2.dmg" download>macOS: Intel and Apple Silicon <span>Universal disk image · 27.1 MB →</span></a></li>
-          <li><a href="downloads/Notion-Calendar-Sync-0.2.1-macOS-x86_64.dmg" download>macOS: Intel only <span>Disk image · 18.9 MB →</span></a></li>
-          <li><a href="downloads/Notion-Calendar-Sync-0.2.1-Windows-x64.zip" download>Windows x64: portable app and optional installer <span>ZIP with private Python runtime · 30.9 MB →</span></a></li>
-          <li><a href="downloads/Notion-Calendar-Sync-0.2.1-Windows-native-x64.zip" download>Windows x64: native executable alternative <span>Complete app folder · 15.9 MB →</span></a></li>
-          <li><a href="downloads/Notion-Calendar-Sync-0.2.1-Source.zip" download>Source code, tests and Raspberry Pi deployment files <span>MIT source ZIP · 236 KB →</span></a></li>
+          <li><a href="downloads/Notion-Calendar-Sync-0.2.3-macOS-universal2.dmg" download>macOS: Intel and Apple Silicon <span>Universal disk image · 27.0 MB →</span></a></li>
+          <li><a href="downloads/Notion-Calendar-Sync-0.2.3-macOS-x86_64.dmg" download>macOS: Intel only <span>Disk image · 18.9 MB →</span></a></li>
+          <li><a href="downloads/Notion-Calendar-Sync-0.2.3-Windows-x64.zip" download>Windows x64: portable app and optional installer <span>ZIP with private Python runtime · 29.6 MB →</span></a></li>
+          <li><a href="downloads/Notion-Calendar-Sync-0.2.3-Windows-native-x64.zip" download>Windows x64: native executable alternative <span>Complete app folder · 16.4 MB →</span></a></li>
+          <li><a href="downloads/Notion-Calendar-Sync-0.2.3-Source.zip" download>Source code, tests and Raspberry Pi deployment files <span>MIT source ZIP · 247 KB →</span></a></li>
         </ul>
-        <p>Also available: <a href="downloads/SHA256SUMS.txt">SHA-256 checksums</a>, <a href="downloads/config.toml" download>example server configuration</a>, <a href="downloads/secrets.env.example" download>secret-file template</a>, <a href="downloads/server-setup.md" download>downloadable server setup notes</a>, and <a href="downloads/validation-0.2.1.md">release validation report</a>. SHA-256 detects a changed or damaged download; it is not a trusted code-signing identity.</p>
+        <p>Also available: <a href="downloads/SHA256SUMS.txt">SHA-256 checksums</a>, <a href="downloads/config.toml" download>example server configuration</a>, <a href="downloads/secrets.env.example" download>secret-file template</a>, <a href="downloads/server-setup.md" download>downloadable server setup notes</a>, and <a href="downloads/validation-0.2.3.md">release validation report</a>. SHA-256 detects a changed or damaged download; it is not a trusted code-signing identity.</p>
+        <h3>Check your download before opening it</h3>
+        <p>A checksum is a file's digital fingerprint. Open the checksum list above, find the exact downloaded filename and compare its full SHA-256 value with the command's output. Uppercase and lowercase hexadecimal letters mean the same thing. If they differ, download the file again before running it. The examples below assume your browser saved the file in Downloads; use your actual folder and filename if different.</p>
+        <pre tabindex="0" aria-label="Verify a Mac download"><code># macOS Terminal:
+cd "$HOME/Downloads"
+shasum -a 256 Notion-Calendar-Sync-0.2.3-macOS-universal2.dmg</code></pre>
+        <pre tabindex="0" aria-label="Verify a Windows download"><code># Windows PowerShell:
+Set-Location "$env:USERPROFILE\Downloads"
+(Get-FileHash ".\Notion-Calendar-Sync-0.2.3-Windows-x64.zip" -Algorithm SHA256).Hash</code></pre>
         <h3>macOS</h3>
-        <p>Open the disk image, drag <strong>Notion Calendar Sync.app</strong> to Applications, then open it. These builds are not Developer ID signed or notarized. macOS may require Finder's Open action or approval in <strong>System Settings → Privacy &amp; Security</strong>. Approve only a download you trust; do not disable system-wide protections. The universal image contains both CPU architectures.</p>
+        <p>Open the disk image, drag <strong>Notion Calendar Sync.app</strong> to Applications, then open it. These builds are not Developer ID signed or notarized. If macOS blocks the first launch, review the app's source and checksum, then use its per-app <strong>Open Anyway</strong> option in <strong>System Settings → Privacy &amp; Security</strong>, if available, and confirm the app name. Do not disable system-wide protections. Managed-device policy can prevent this approval. See <a href="https://support.apple.com/en-us/102445">Apple's instructions for opening downloaded apps</a>. The universal image contains both CPU architectures.</p>
         <h3>Windows</h3>
         <p>Extract the entire portable ZIP to a local folder before opening <strong>Start Notion Calendar Sync.vbs</strong>. Do not run it from inside the ZIP. The included runtime needs no administrator privileges, separate Python or PATH changes. <strong>Install.vbs</strong> optionally copies it to your user's Programs directory and creates shortcuts. If Windows Script Host is disabled, use <strong>Start Notion Calendar Sync.cmd</strong>; it briefly opens a console while launching the window.</p>
-        <p>The native alternative contains <strong>Notion Calendar Sync.exe</strong>. Extract and retain its entire app folder before running it. These Windows builds are unsigned, so download protection or organization policy may block them. Native Windows ARM builds are not supplied.</p>
+        <p>The native alternative contains <strong>Notion Calendar Sync.exe</strong>. Extract and retain its entire app folder before running it. These Windows builds are unsigned, so download protection or organization policy may block them. SmartScreen can offer an application-specific approval after you review its details; Smart App Control or managed policy may block unsigned apps without that option. Do not disable those protections. See <a href="https://learn.microsoft.com/windows/apps/package-and-deploy/smartscreen-reputation">Microsoft's explanation of app reputation and unsigned downloads</a>. Native Windows ARM builds are not supplied.</p>
         <h3>Source</h3>
-        <p>Extract the source ZIP to obtain <code>notion-calendar-sync-0.2.1/</code>. It includes the engine, desktop UI, tests, build instructions, <code>scripts/install-pi.sh</code> and <code>deploy/</code>. Personal deployment reports are intentionally omitted. Use the server instructions below rather than an account-specific configuration from another installation.</p>
+        <p>Extract the source ZIP to obtain <code>notion-calendar-sync-0.2.3/</code>. It includes the engine, desktop UI, tests, build instructions, <code>scripts/install-pi.sh</code> and <code>deploy/</code>. Personal deployment reports are intentionally omitted. Use the server instructions below rather than an account-specific configuration from another installation.</p>
       </section>
 
       <section aria-labelledby="desktop-setup">
         <h2 id="desktop-setup">6. Connect accounts, select data and map desktop fields.</h2>
         <ol>
-          <li>Open the desktop app. Paste the Notion internal token into its masked field and connect. Select your downloaded Google Desktop client JSON, choose <strong>Authorize Google</strong>, and complete consent in the browser. Return to the app when authorization finishes. The imported client, Notion token and Google access/refresh tokens are held in macOS Keychain or Windows Credential Manager.</li>
+          <li>Open the desktop app. Paste the Notion internal token into its masked field and connect. Select your downloaded Google Desktop client JSON, choose <strong>Authorize Google</strong>, and complete consent in the browser within five minutes. The system's default browser may have a different signed-in account from the browser where you configured Google Cloud. Sign in or choose the account that has access to your intended calendar. Return to the app when authorization finishes. The imported client, Notion token and Google access/refresh tokens are held in macOS Keychain or Windows Credential Manager.</li>
           <li>Search by the shared Notion database's name, or paste its database/data source ID or URL. Choose <strong>Find</strong>, then <strong>Use selected database / entered ID</strong>. When names repeat, compare the displayed identifiers. If the database has several sources, select the specific source with the Calendar Database's properties.</li>
           <li>Choose a writable Google calendar from the retrieved list. For the first test, choose your dedicated test calendar. To find a stable calendar ID manually, use <strong>Google Calendar → Settings and sharing → Integrate calendar → Calendar ID</strong>. An event's ID is a different identifier.</li>
           <li>Review each suggested field mapping. The dropdowns contain compatible properties from your actual schema. Required mappings are Title, Date range and Google event identity. Leave unwanted optional fields unselected. Separate start, end and all-day columns are not mapped.</li>
@@ -173,8 +181,19 @@ https://www.googleapis.com/auth/calendar.calendarlist.readonly</code></pre>
         <h2 id="pi-setup">8. Alternative: run the Raspberry Pi service.</h2>
         <p>Use this route instead of the desktop worker for the same pair. <strong>systemd</strong>, the Linux service manager, starts the worker at boot and restarts failures. <strong>SQLite</strong> is a local database that retains identities, pending operations, conflicts and deletion records across restarts.</p>
         <h3>Install the source on the Pi</h3>
-        <p>Download and extract the source ZIP on the Pi, or copy the extracted folder there over SSH. From its root directory, run:</p>
-        <pre tabindex="0" aria-label="Install the Raspberry Pi service"><code>cd notion-calendar-sync-0.2.1
+        <p>For a headless Pi, these commands obtain and check the source ZIP without a graphical file manager. Use a new installation folder, and confirm that <code>sha256sum</code> reports <code>OK</code> before extracting:</p>
+        <pre tabindex="0" aria-label="Download and extract source on the Pi"><code>sudo apt-get update
+sudo apt-get install -y curl unzip
+mkdir -p "$HOME/ncs-install-0.2.3"
+cd "$HOME/ncs-install-0.2.3"
+curl --fail --location --output Notion-Calendar-Sync-0.2.3-Source.zip \
+  https://juliom1823.github.io/notion-calendar-sync/downloads/Notion-Calendar-Sync-0.2.3-Source.zip
+curl --fail --location --output Notion-Calendar-Sync-0.2.3-Source.zip.sha256 \
+  https://juliom1823.github.io/notion-calendar-sync/downloads/Notion-Calendar-Sync-0.2.3-Source.zip.sha256
+sha256sum --check Notion-Calendar-Sync-0.2.3-Source.zip.sha256
+unzip Notion-Calendar-Sync-0.2.3-Source.zip</code></pre>
+        <p>Download and extract the source ZIP on the Pi, or copy the extracted folder there over SSH. From the directory containing the extracted <code>notion-calendar-sync-0.2.3</code> folder, run:</p>
+        <pre tabindex="0" aria-label="Install the Raspberry Pi service"><code>cd notion-calendar-sync-0.2.3
 cat /etc/os-release
 dpkg --print-architecture
 python3 --version
@@ -227,7 +246,7 @@ NOTION_WEBHOOK_SECRET=''</code></pre>
         <p><code>NOTION_TOKEN</code> is the default secret environment variable; <code>notion_token_env</code> can name another. <code>NOTION_WEBHOOK_SECRET</code> is unused in ordinary polling. A second mapping requires another <code>[[mappings]]</code> and its own <code>[mappings.properties]</code>. Mapping names and Google calendar IDs must be distinct. Sharing a Notion source is allowed only with distinct values of the same Select filter.</p>
         <h3>Authorize Google from a browser computer</h3>
         <p>On a Mac or Linux computer with Python 3.11+ and a browser, extract the same source release. Create a virtual environment and install the local package:</p>
-        <pre tabindex="0" aria-label="Authorize Google on the browser computer"><code>cd notion-calendar-sync-0.2.1
+        <pre tabindex="0" aria-label="Authorize Google on the browser computer"><code>cd notion-calendar-sync-0.2.3
 python3 -m venv .venv
 .venv/bin/python -m pip install .
 cp examples/config.toml authorize.toml
@@ -235,14 +254,14 @@ cp examples/config.toml authorize.toml
 # google_token_path and state_path, plus your real mapping IDs/names.
 .venv/bin/ncs --config authorize.toml authorize</code></pre>
         <p>On Windows, install Python 3.11+ from its official distributor for this source-based authorization route, then use PowerShell. The desktop extra supplies time-zone data that Windows does not provide in the same format as Unix:</p>
-        <pre tabindex="0" aria-label="Authorize from Windows PowerShell"><code>cd notion-calendar-sync-0.2.1
+        <pre tabindex="0" aria-label="Authorize from Windows PowerShell"><code>cd notion-calendar-sync-0.2.3
 py -3 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install ".[desktop]"
 Copy-Item examples\config.toml authorize.toml
 # Edit authorize.toml with absolute LOCAL paths and your mapping.
 # TOML Windows paths can use forward slashes, for example C:/Users/NAME/…
 .\.venv\Scripts\ncs.exe --config authorize.toml authorize</code></pre>
-        <p>Place the Google Desktop client JSON at the local <code>google_client_path</code>. The command opens the browser on this computer and creates the local <code>google_token_path</code> after consent. Do not open that authorization URL on a different computer from the receiver. <code>--no-browser</code> only suppresses launching the browser; it does not create a remote or copy-and-paste OAuth flow.</p>
+        <p>Place the Google Desktop client JSON at the local <code>google_client_path</code>. The command opens the browser on this computer and creates the local <code>google_token_path</code> after consent. Complete consent within five minutes while the command remains running. If it times out, run authorization again and use its new browser request. Do not open that authorization URL on a different computer from the receiver. <code>--no-browser</code> only suppresses launching the browser; it does not create a remote or copy-and-paste OAuth flow.</p>
         <p>Transfer both files over SSH. Replace every placeholder with your own file paths, SSH username and Pi host. SSH is an encrypted remote connection; these commands do not require publishing a web endpoint. The <code>chmod</code> line below is for macOS/Linux; on Windows keep the files inside your private user profile and use <code>scp</code> with Windows paths. Run the <code>sudo</code> installation lines on the Pi.</p>
         <pre tabindex="0" aria-label="Transfer Google authorization to the Pi"><code>chmod 600 /LOCAL/PATH/google-token.json /LOCAL/PATH/google-client.json
 scp /LOCAL/PATH/google-token.json PI_USER@PI_HOST:/tmp/ncs-google-token.json
@@ -311,16 +330,18 @@ sudo systemctl restart ncs</code></pre>
         <p>Description mapping keeps literal source text. Google's <code>&lt;b&gt;Review&lt;/b&gt;</code> remains those literal characters in Notion Text, rather than being repeatedly converted between HTML and Markdown. Plain text works too. Rich formatting and mentions inside mapped Text/title properties are outside this format; partial/paginated rich content is reported instead of silently truncated.</p>
         <p>Notion's all-day range includes its last date. Google's all-day end is exclusive. A Notion October 30–31 range becomes Google start October 30, end November 1; a single date becomes one day. Missing timed ends use the configured duration. A multi-day item remains one logical pair.</p>
         <p>Timed events preserve instants and use a regional IANA zone. With a zone Text mapping, Notion endpoints are stored in UTC while the zone property retains the intended region, avoiding daylight-saving endpoint coercion. Notion's Date display may consequently show UTC. Invalid or nonexistent times, mixed date/timestamp ranges and ambiguous times without a usable offset are held and reported, rather than silently shifted. Start, end, all-day status, zone and recurrence are treated as one related conflict group.</p>
+        <p>Some provider saves return a different mapped value from the requested one. The service retains the original request and the returned value as a manual conflict, including under automatic conflict policies. It keeps the existing item identities and does not treat that changed save result as a new user edit to copy back. Other items continue synchronizing.</p>
+        <p>A live Google API check exposed this for an <code>America/Denver</code> range spanning the two copies of the repeated autumn hour: a requested 90-minute interval was returned as 30 minutes. Sending UTC timestamps with that named zone did not prevent the change. The service preserves the original range and reports <strong>Provider changed a saved value</strong> for review. An explicitly reviewed UTC event zone can preserve the tested one-off interval; the integration does not silently change a recurring series to UTC or claim that every repeated-hour range is supported automatically.</p>
         <h3>Duplicates, feedback loops and conflicts</h3>
         <p>SQLite records each page/event pair, the last synchronized values and provider versions. Stable IDs, a durable operation journal, confirming reads and service-owned markers allow repeated checks and interrupted-write recovery without deliberately replaying a possibly successful create. Uncertain creates can remain blocked for review instead of risking a duplicate. A local single-worker lock does not coordinate separate computers or third-party tools.</p>
-        <p>Independent edits to different mapped fields merge. Incompatible edits to the same field, or to the related time/recurrence group, become persistent conflicts under the default <code>manual</code> policy. Both observations and their baseline are retained. In the desktop conflict view, choose the intended provider after reviewing the values; resolution pauses synchronization, so choose Resume afterward.</p>
+        <p>Independent edits to different mapped fields merge. Incompatible edits to the same field, or to the related time/recurrence group, become persistent conflicts under the default <code>manual</code> policy. A provider-changed save remains a manual hold even when an automatic conflict policy is configured. Both observations and their baseline are retained. In the desktop conflict view, choose the intended provider after reviewing the values; resolution pauses synchronization, so choose Resume afterward.</p>
         <pre tabindex="0" aria-label="Server conflict review"><code>sudo ncs-control conflicts
 sudo ncs-control conflicts CONFLICT_ID
 sudo systemctl stop ncs
 sudo ncs-control resolve CONFLICT_ID --prefer notion
 # Or choose --prefer google after reviewing both versions.
 sudo systemctl start ncs</code></pre>
-        <p>Server alternatives <code>conflict_policy = "notion"</code> or <code>"google"</code> explicitly choose that provider for incompatible fields and can discard the competing value. They are not the default and are not exposed in the desktop wizard.</p>
+        <p>Server alternatives <code>conflict_policy = "notion"</code> or <code>"google"</code> explicitly choose that provider for incompatible fields and can discard the competing value. They are not the default and are not exposed in the desktop wizard. They do not automatically accept a provider-changed save. If either item changes while a conflict is being reviewed, inspect the refreshed conflict before resolving again.</p>
         <h3>Deletion and paused items</h3>
         <p>A positively confirmed Notion Trash state or Google <code>status=cancelled</code> propagates to its supported, linked, in-scope peer. The tool keeps a <strong>tombstone</strong>, a retained record of the deleted pair, to prevent automatic recreation. Provider Trash retention and recovery limits still apply. A deletion concurrent with an edit becomes a manual conflict.</p>
         <p>Permission loss, 401/403/404 responses, failed requests, incomplete pagination and an item missing from a query do not prove deletion. Clearing a Date, unchecking participation, changing category, moving out of scope or archiving from a data-source view suspends the relationship and retains its peer. Restoring one resource alone does not resurrect the pair. Restore both deliberately in their provider interfaces and explicitly relink the same live IDs through the CLI before reactivating; this release has no desktop restore/relink wizard.</p>
@@ -363,7 +384,7 @@ sudo chmod 600 /var/lib/ncs/private-config-UNIQUE_DATE.tar.gz
               <tr><th scope="row">Notion connection validates but database is absent</th><td>Grant Content access to the actual database/parent. Check workspace, ID and the selected data source. A valid token does not imply database access.</td></tr>
               <tr><th scope="row">Wrong property type or missing mapping</th><td>Use Title, Date and Text identity properties. Check exact names and types. A formula cannot serve as a writable Date. Omit unwanted optional mappings rather than using empty or invented types.</td></tr>
               <tr><th scope="row">Google authorization blocked or API disabled</th><td>Enable Google Calendar API in the project owning the client. Use Desktop app JSON with an <code>installed</code> section, the correct account and test-user membership. Check organization policy and requested scopes.</td></tr>
-              <tr><th scope="row">Redirect mismatch or browser cannot finish</th><td>Use a Desktop client and authorize on the same computer as the callback listener. Do not substitute the website/privacy URL. Check local firewall restrictions; recreate an incorrect Web client as a Desktop client.</td></tr>
+              <tr><th scope="row">Redirect mismatch or browser cannot finish</th><td>Use a Desktop client and authorize on the same computer as the callback listener. Keep the app or authorization command running and finish within five minutes. A timed-out receiver needs a new authorization attempt. If the app already reports connected, refreshing its completed callback page can show a connection error because that temporary receiver has closed. Do not substitute the website/privacy URL. Check local firewall restrictions; recreate an incorrect Web client as a Desktop client.</td></tr>
               <tr><th scope="row">Stops after about seven days / <code>invalid_grant</code></th><td>Check External Testing status, switch to production where applicable and reauthorize. Revoked/expired grants also need reconnection. Keep existing SQLite state.</td></tr>
               <tr><th scope="row">Calendar missing or read-only</th><td>Sign in to the account with owner/writer access. Refresh calendar discovery or set its stable Calendar ID on the server. An API key or read-only scope is insufficient.</td></tr>
               <tr><th scope="row">No event appears</th><td>Check Date, Checkbox/category filters, attendees, recurrence mapping, special event type and unsupported diagnostics. Check that the host is awake and worker running. Wait for a check cycle; inspect queued work.</td></tr>
@@ -377,8 +398,8 @@ sudo chmod 600 /var/lib/ncs/private-config-UNIQUE_DATE.tar.gz
           </table>
         </div>
         <h3 id="validation">What has actually been tested?</h3>
-        <p>Release 0.2.1 ran 266 passing tests on native Windows Server 2025 x64 and 265 passing tests plus one Windows-only skip on native Intel macOS 15.7.9. Each platform passed 43 controlled desktop setup/sync acceptance checks using the real controller, API adapters, journal and SQLite with controlled provider responses and a real local OAuth callback. Native credential stores, packaged windows and recovery were checked separately. Windows 10/11 client builds and every older macOS release were not separately executed.</p>
-        <p>A separate 23-check live API run on a Mac reused an existing grant and verified two disposable logical pairs through creation, updates, time changes, restart and deletion in both directions, followed by cleanup with no live test copies remaining. This was not fresh Google consent on every operating system. New users still need to complete their own grants and the connection checks above. See the <a href="downloads/validation-0.2.1.md">full release report</a>.</p>
+        <p>Release 0.2.3 ran 282 passing tests on native Windows Server 2025 x64 and 281 passing tests plus one Windows-only skip on native Intel macOS 15.7.9. Each platform passed 43 controlled desktop setup/sync acceptance checks using the real controller, API adapters, journal and SQLite with controlled provider responses and a real local OAuth callback. Native credential stores, packaged windows and recovery were checked separately. An additional 43-check Windows run used actual Credential Manager with disposable values and positively removed them afterward. Windows 10/11 client builds and every older macOS release were not separately executed.</p>
+        <p>A new live Mac run passed 77 assertions across two disposable pairs, including both creation/edit/deletion directions, normal daylight-saving changes, conflict resolution, restarts, metadata preservation and the provider-changed-save safeguard. All four linked records were positively trashed/cancelled; final searches found no remaining live test copies. Real Google browser consent completed separately in the first run; the passing regression retest reused an existing grant. Windows used controlled provider responses, not private live account credentials. See the <a href="downloads/validation-0.2.3.md">full release report</a> for the initial failure, fixes, cleanup and exact platform/interaction boundaries.</p>
         <p>This website guide was checked separately for navigation, downloads and responsive layout. Those website checks do not test your credentials, hosting or live calendar synchronization. Optional public HTTPS/proxy provisioning, historical desktop state migration/relinking and account-administrator approvals are not automated setup flows in this release.</p>
       </section>
     </article>

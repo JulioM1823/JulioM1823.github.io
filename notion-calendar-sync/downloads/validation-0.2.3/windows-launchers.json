@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "checks": [
+    "public Start Notion Calendar Sync.vbs opens real fresh setup window",
+    "documented launcher creates no approved sync configuration",
+    "public cmd fallback opens real fresh setup window"
+  ],
+  "fresh_ci_profile": true,
+  "real_provider_accounts_accessed": false
+}
